@@ -16,12 +16,12 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-resource "aws_iam_role_policy_attachment" "capstone_model__AmazonSSMManagedInstanceCore" {
+resource "aws_iam_role_policy_attachment" "capstone_model_run__AmazonSSMManagedInstanceCore" {
   policy_arn = data.aws_iam_policy.AmazonSSMManagedInstanceCore.arn
-  role       = aws_iam_role.capstone_model.name
+  role       = aws_iam_role.capstone_model_run.name
 }
 
-resource "aws_iam_role_policy_attachment" "capstone_model__CloudWatchLogsFullAccess" {
+resource "aws_iam_role_policy_attachment" "capstone_model_run__CloudWatchLogsFullAccess" {
   policy_arn = data.aws_iam_policy.CloudWatchLogsFullAccess.arn
-  role       = aws_iam_role.capstone_model.name
+  role       = aws_iam_role.capstone_model_run.name
 }

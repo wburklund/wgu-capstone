@@ -35,8 +35,28 @@ resource "aws_iam_role" "capstone_ingest" {
 EOF  
 }
 
-resource "aws_iam_role" "capstone_model" {
-  name = "capstone_model_instance"
+resource "aws_iam_role" "capstone_clean" {
+  name = "capstone_clean"
+
+  assume_role_policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Action": "sts:AssumeRole",
+      "Principal": {
+        "Service": "lambda.amazonaws.com"
+      },
+      "Effect": "Allow"
+    }
+  ]
+}
+EOF
+}
+
+
+resource "aws_iam_role" "capstone_model_run" {
+  name = "capstone_model_run"
 
   assume_role_policy = <<EOF
 {

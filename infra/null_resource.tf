@@ -16,13 +16,13 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-resource "null_resource" "stop_model_instance" {
+resource "null_resource" "stop_model_run_instance" {
   depends_on = [
-    aws_instance.capstone_model
+    aws_instance.capstone_model_run
   ]
 
   provisioner "local-exec" {
-    command    = "aws ec2 stop-instances --instance-ids ${aws_instance.capstone_model.id} --region ${local.region}"
+    command    = "aws ec2 stop-instances --instance-ids ${aws_instance.capstone_model_run.id} --region ${local.region}"
     on_failure = fail
   }
 

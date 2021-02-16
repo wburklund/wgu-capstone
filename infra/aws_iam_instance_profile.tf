@@ -16,7 +16,7 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-resource "aws_iam_instance_profile" "capstone_model" {
-  name = "capstone_model"
-  role = aws_iam_role.capstone_model.name
+resource "aws_iam_instance_profile" "capstone_model_run" {
+  name = "capstone_model_run"
+  role = aws_iam_role.capstone_model_run.name
 }

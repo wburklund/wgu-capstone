@@ -16,10 +16,16 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-resource "aws_ssm_parameter" "capstone_model_instance_id" {
-  name  = "/capstone/model_instance_id"
+resource "aws_ssm_parameter" "capstone_clean_exclusion_list" {
+  name  = "/capstone/clean_exclusion_list"
+  type  = "StringList"
+  value = file("assets/exclusion_list.txt")
+}
+
+resource "aws_ssm_parameter" "capstone_model_run_instance_id" {
+  name  = "/capstone/model_run_instance_id"
   type  = "String"
-  value = aws_instance.capstone_model.id
+  value = aws_instance.capstone_model_run.id
 }
 
 resource "aws_ssm_parameter" "capstone_model_run_execution_id" {

@@ -54,9 +54,38 @@ resource "aws_iam_role_policy" "capstone_ingest_policy" {
   EOF
 }
 
-resource "aws_iam_role_policy" "capstone_model_policy" {
-  name = "capstone_model_policy"
-  role = aws_iam_role.capstone_model.id
+resource "aws_iam_role_policy" "capstone_clean_policy" {
+  name = "capstone_clean_policy"
+  role = aws_iam_role.capstone_clean.id
+
+  policy = <<EOF
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Action": "ssm:GetParameter",
+            "Effect": "Allow",
+            "Resource": "${aws_ssm_parameter.capstone_clean_exclusion_list.arn}"
+
+        },
+        {
+            "Effect": "Allow",
+            "Action": "s3:ListBucket",
+            "Resource": "${aws_s3_bucket.capstone_model_input.arn}"
+        },
+        {
+            "Effect": "Allow",
+            "Action": "s3:*",
+            "Resource": "${aws_s3_bucket.capstone_model_input.arn}/*"
+        }           
+    ]    
+}
+    EOF
+}
+
+resource "aws_iam_role_policy" "capstone_model_run_policy" {
+  name = "capstone_model_run_policy"
+  role = aws_iam_role.capstone_model_run.id
 
   policy = <<EOF
 {
@@ -140,7 +169,7 @@ resource "aws_iam_role_policy" "capstone_model_trigger_policy" {
         {
             "Action": "ssm:GetParameter",
             "Effect": "Allow",
-            "Resource": "${aws_ssm_parameter.capstone_model_instance_id.arn}"
+            "Resource": "${aws_ssm_parameter.capstone_model_run_instance_id.arn}"
 
         },
         {

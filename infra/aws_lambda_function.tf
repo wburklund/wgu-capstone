@@ -38,6 +38,25 @@ resource "aws_lambda_function" "stage1_ingest" {
   }
 }
 
+resource "aws_lambda_function" "stage2_clean" {
+  function_name = "capstone_stage2_clean"
+  handler       = "provided"
+  role          = aws_iam_role.capstone_clean.arn
+  runtime       = "provided.al2"
+  timeout       = 15
+  s3_bucket     = aws_s3_bucket.capstone_code_store.bucket
+  s3_key        = "stage2_clean.zip"
+  # TODO: SHA256 (see https://github.com/hashicorp/terraform/issues/12443#issuecomment-291922062)
+  # source_code_hash = "value"
+
+  environment {
+    variables = {
+      "S3_BUCKET"                = "capstone-model-input",
+      "EXCLUSION_LIST_PARAMETER" = aws_ssm_parameter.capstone_clean_exclusion_list.name
+    }
+  }
+}
+
 resource "aws_lambda_function" "stage3_model_status" {
   function_name = "capstone_stage3_model_status"
   handler       = "index.handler"
@@ -70,7 +89,7 @@ resource "aws_lambda_function" "stage3_model_trigger" {
   environment {
     variables = {
       "execution_parameter_key" = aws_ssm_parameter.capstone_model_run_execution_id.name,
-      "instance_parameter_key"  = aws_ssm_parameter.capstone_model_instance_id.name,
+      "instance_parameter_key"  = aws_ssm_parameter.capstone_model_run_instance_id.name,
       "model_run_document"      = aws_ssm_document.Start_ShellScript_Stop.arn
       "s3_bucket"               = aws_s3_bucket.capstone_code_store.bucket
       "s3_key"                  = "stage3_model_run"
