@@ -1,0 +1,22 @@
+[package]
+name = "clean"
+version = "0.1.0"
+authors = ["Will Burklund <waburklund@gmail.com>"]
+edition = "2018"
+
+[dependencies]
+futures = "0.3.12"
+lambda_runtime = "0.2.1"
+log = "0.4.14"
+serde = "1.0.123"
+serde_json = "1.0.62"
+serde_derive = "1.0.123"
+simple_logger = "1.11.0"
+rusoto_core = "0.46.0"
+rusoto_ssm = "0.46.0"
+rusoto_s3 = "0.46.0"
+tokio = "1.2.0"
+
+[[bin]]
+name = "bootstrap"
+path = "main.rs"
