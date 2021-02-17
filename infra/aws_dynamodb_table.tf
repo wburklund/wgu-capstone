@@ -1,4 +1,4 @@
-﻿(*
+/*
   WGU Capstone Project
   Copyright (C) 2021 Will Burklund
 
@@ -14,28 +14,8 @@
 
   You should have received a copy of the GNU Affero General Public License
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*)
+*/
 
-module MetadataRecord
-
-open System
-
-type Label = Normal | Pneumonia | Invalid
-type DataSet = Train | Test
-
-type MetadataRecord =
-      { ImageName: string
-        DataSet : DataSet
-        Label: Label
-        Date: DateTime }
-
-let labelToString label =
-    match label with
-    | Normal -> "Normal"
-    | Pneumonia -> "Pneumonia"
-    | Invalid -> "Invalid"
-
-let datasetToString dataset =
-    match dataset with
-    | Train -> "Train"
-    | Test -> "Test"
+data "aws_dynamodb_table" "capstone_metadatabase" {
+  name = "CapstoneMetadatabase"
+}

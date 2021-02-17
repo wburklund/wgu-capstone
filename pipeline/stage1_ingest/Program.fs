@@ -19,16 +19,19 @@
 module Program
 
 open MetadataRecord
+open Metadatabase
 open Parser
 open System
 open System.Threading.Tasks
 open Amazon.S3
 open Amazon.S3.Model
+open Amazon.DynamoDBv2
 
 let dataStoreBucket = Environment.GetEnvironmentVariable("dataStoreBucket")
 let metadataObjectKey = Environment.GetEnvironmentVariable("metadataObjectKey")
 let sourceKeyPrefix = Environment.GetEnvironmentVariable("sourceKeyPrefix")
 let destinationBucket = Environment.GetEnvironmentVariable("destinationBucket")
+let metadatabaseTableName = Environment.GetEnvironmentVariable("metadatabaseTableName")
 
 let get_source_path (record:MetadataRecord) =
     let dataset_directory =
@@ -88,6 +91,8 @@ let empty_bucket bucket =
     client.Dispose()
 
 let main =
+    let client = new AmazonDynamoDBClient()
+    reset_metadatabase client metadatabaseTableName
     empty_bucket destinationBucket
     let metadata = parse_metadata_csv dataStoreBucket metadataObjectKey
 
@@ -100,4 +105,8 @@ let main =
         copy_file_block current_block
         remaining_metadata <- remaining_metadata.[500..]
     copy_file_block remaining_metadata
+
+    load_metadatabase client metadatabaseTableName metadata
+    
+    client.Dispose()
     0

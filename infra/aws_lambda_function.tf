@@ -30,10 +30,11 @@ resource "aws_lambda_function" "stage1_ingest" {
 
   environment {
     variables = {
-      "dataStoreBucket"   = "capstone-data-store",
-      "metadataObjectKey" = "Chest_xray_Corona_Metadata.Augmented.csv",
-      "destinationBucket" = "capstone-model-input",
-      "sourceKeyPrefix"   = "Coronahack-Chest-XRay-Dataset/Coronahack-Chest-XRay-Dataset"
+      "dataStoreBucket"       = data.aws_s3_bucket.capstone_data_store.bucket,
+      "metadataObjectKey"     = "Chest_xray_Corona_Metadata.Augmented.csv",
+      "destinationBucket"     = aws_s3_bucket.capstone_model_input.bucket,
+      "sourceKeyPrefix"       = "Coronahack-Chest-XRay-Dataset/Coronahack-Chest-XRay-Dataset",
+      "metadatabaseTableName" = data.aws_dynamodb_table.capstone_metadatabase.name
     }
   }
 }
@@ -51,7 +52,7 @@ resource "aws_lambda_function" "stage2_clean" {
 
   environment {
     variables = {
-      "S3_BUCKET"                = "capstone-model-input",
+      "S3_BUCKET"                = aws_s3_bucket.capstone_model_input.bucket,
       "EXCLUSION_LIST_PARAMETER" = aws_ssm_parameter.capstone_clean_exclusion_list.name
     }
   }
