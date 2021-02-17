@@ -23,7 +23,7 @@ resource "aws_lambda_function" "stage1_ingest" {
   role          = aws_iam_role.capstone_ingest.arn
   runtime       = "dotnetcore3.1"
   timeout       = 60
-  s3_bucket     = aws_s3_bucket.capstone_code_store.bucket
+  s3_bucket     = data.aws_s3_bucket.capstone_code_store.bucket
   s3_key        = "stage1_ingest.zip"
   # TODO: SHA256 (see https://github.com/hashicorp/terraform/issues/12443#issuecomment-291922062)
   # source_code_hash = "value"
@@ -44,7 +44,7 @@ resource "aws_lambda_function" "stage2_clean" {
   role          = aws_iam_role.capstone_clean.arn
   runtime       = "provided.al2"
   timeout       = 15
-  s3_bucket     = aws_s3_bucket.capstone_code_store.bucket
+  s3_bucket     = data.aws_s3_bucket.capstone_code_store.bucket
   s3_key        = "stage2_clean.zip"
   # TODO: SHA256 (see https://github.com/hashicorp/terraform/issues/12443#issuecomment-291922062)
   # source_code_hash = "value"
@@ -62,7 +62,7 @@ resource "aws_lambda_function" "stage3_model_status" {
   handler       = "index.handler"
   role          = aws_iam_role.capstone_model_status.arn
   runtime       = "nodejs14.x"
-  s3_bucket     = aws_s3_bucket.capstone_code_store.bucket
+  s3_bucket     = data.aws_s3_bucket.capstone_code_store.bucket
   s3_key        = "stage3_model_status.zip"
   # TODO: SHA256 (see https://github.com/hashicorp/terraform/issues/12443#issuecomment-291922062)
   # source_code_hash = "value"
@@ -81,7 +81,7 @@ resource "aws_lambda_function" "stage3_model_trigger" {
   handler       = "lambda_function.lambda_handler"
   role          = aws_iam_role.capstone_model_trigger.arn
   runtime       = "ruby2.7"
-  s3_bucket     = aws_s3_bucket.capstone_code_store.bucket
+  s3_bucket     = data.aws_s3_bucket.capstone_code_store.bucket
   s3_key        = "stage3_model_trigger.zip"
   # TODO: SHA256 (see https://github.com/hashicorp/terraform/issues/12443#issuecomment-291922062)
   # source_code_hash = "value"
@@ -91,7 +91,7 @@ resource "aws_lambda_function" "stage3_model_trigger" {
       "execution_parameter_key" = aws_ssm_parameter.capstone_model_run_execution_id.name,
       "instance_parameter_key"  = aws_ssm_parameter.capstone_model_run_instance_id.name,
       "model_run_document"      = aws_ssm_document.Start_ShellScript_Stop.arn
-      "s3_bucket"               = aws_s3_bucket.capstone_code_store.bucket
+      "s3_bucket"               = data.aws_s3_bucket.capstone_code_store.bucket
       "s3_key"                  = "stage3_model_run"
       "status_function_name"    = aws_lambda_function.stage3_model_status.function_name
     }

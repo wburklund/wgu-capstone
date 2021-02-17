@@ -28,7 +28,7 @@ resource "aws_iam_role_policy" "capstone_ingest_policy" {
             "Effect": "Allow",
             "Action": "s3:ListBucket",
             "Resource": [
-                "${aws_s3_bucket.capstone_data_store.arn}",
+                "${data.aws_s3_bucket.capstone_data_store.arn}",
                 "${aws_s3_bucket.capstone_model_input.arn}",
                 "${aws_s3_bucket.capstone_test_answers.arn}"                
             ]
@@ -39,7 +39,7 @@ resource "aws_iam_role_policy" "capstone_ingest_policy" {
                 "s3:Get*",
                 "s3:List*"
             ],
-            "Resource": "${aws_s3_bucket.capstone_data_store.arn}/*"
+            "Resource": "${data.aws_s3_bucket.capstone_data_store.arn}/*"
         },        
         {
             "Effect": "Allow",
@@ -95,7 +95,7 @@ resource "aws_iam_role_policy" "capstone_model_run_policy" {
             "Effect": "Allow",
             "Action": "s3:ListBucket",
             "Resource": [
-                "${aws_s3_bucket.capstone_code_store.arn}",
+                "${data.aws_s3_bucket.capstone_code_store.arn}",
                 "${aws_s3_bucket.capstone_model_input.arn}",
                 "${aws_s3_bucket.capstone_model_output.arn}"                
             ]
@@ -107,7 +107,7 @@ resource "aws_iam_role_policy" "capstone_model_run_policy" {
                 "s3:List*"
             ],
             "Resource": [
-                "${aws_s3_bucket.capstone_code_store.arn}/stage3_model_run/*",
+                "${data.aws_s3_bucket.capstone_code_store.arn}/stage3_model_run/*",
                 "${aws_s3_bucket.capstone_model_input.arn}/*",
                 "${aws_s3_bucket.capstone_model_output.arn}/*"            
             ]

@@ -16,20 +16,12 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-resource "aws_s3_bucket" "capstone_code_store" {
+data "aws_s3_bucket" "capstone_code_store" {
   bucket = "capstone-code-store"
-
-  versioning {
-    enabled = true
-  }
 }
 
-resource "aws_s3_bucket" "capstone_data_store" {
+data "aws_s3_bucket" "capstone_data_store" {
   bucket = "capstone-data-store"
-
-  versioning {
-    enabled = true
-  }
 }
 
 resource "aws_s3_bucket" "capstone_model_input" {
