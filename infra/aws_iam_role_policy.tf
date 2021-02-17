@@ -48,6 +48,11 @@ resource "aws_iam_role_policy" "capstone_ingest_policy" {
                 "${aws_s3_bucket.capstone_model_input.arn}/*",
                 "${aws_s3_bucket.capstone_test_answers.arn}/*"
             ]
+        },
+        {
+            "Effect": "Allow",
+            "Action": "dynamodb:*",
+            "Resource": "${data.aws_dynamodb_table.capstone_metadatabase.arn}"
         }
     ]
 }
