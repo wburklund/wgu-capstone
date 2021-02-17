@@ -23,25 +23,3 @@ data "aws_iam_policy" "AmazonSSMManagedInstanceCore" {
 data "aws_iam_policy" "CloudWatchLogsFullAccess" {
   arn = "arn:aws:iam::aws:policy/CloudWatchLogsFullAccess"
 }
-
-resource "aws_iam_policy" "capstone_clean_policy" {
-  name = "capstone_clean_policy"
-
-  policy = <<EOF
-{
-    "Version": "2012-10-17",
-    "Statement": [
-        {
-            "Effect": "Allow",
-            "Action": "s3:ListBucket",
-            "Resource": "${aws_s3_bucket.capstone_model_input.arn}"               
-        },        
-        {
-            "Effect": "Allow",
-            "Action": "s3:*",
-            "Resource": "${aws_s3_bucket.capstone_model_input.arn}/*"
-        }
-    ]
-}
-  EOF    
-}
