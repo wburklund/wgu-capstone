@@ -25,3 +25,23 @@ resource "aws_iam_role_policy_attachment" "capstone_model_run__CloudWatchLogsFul
   policy_arn = data.aws_iam_policy.CloudWatchLogsFullAccess.arn
   role       = aws_iam_role.capstone_model_run.name
 }
+
+resource "aws_iam_role_policy_attachment" "capstone_ingest_logging" {
+  policy_arn = module.stage1_ingest_logging_policy.arn
+  role       = aws_iam_role.capstone_ingest.name
+}
+
+resource "aws_iam_role_policy_attachment" "capstone_clean_logging" {
+  policy_arn = module.stage2_clean_logging_policy.arn
+  role       = aws_iam_role.capstone_clean.name
+}
+
+resource "aws_iam_role_policy_attachment" "capstone_model_status_logging" {
+  policy_arn = module.stage3_model_status_logging_policy.arn
+  role       = aws_iam_role.capstone_model_status.name
+}
+
+resource "aws_iam_role_policy_attachment" "capstone_model_trigger_logging" {
+  policy_arn = module.stage3_model_trigger_logging_policy.arn
+  role       = aws_iam_role.capstone_model_trigger.name
+}
