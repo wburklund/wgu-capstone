@@ -1,4 +1,23 @@
+/*
+  WGU Capstone Project
+  Copyright (C) 2021 Will Burklund
+
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU Affero General Public License as published by
+  the Free Software Foundation, either version 3 of the License, or
+  (at your option) any later version.
+
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU Affero General Public License for more details.
+
+  You should have received a copy of the GNU Affero General Public License
+  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
 import com.opencsv.CSVReader;
+import com.opencsv.exceptions.CsvValidationException;
 import software.amazon.awssdk.services.dynamodb.DynamoDbClient;
 import software.amazon.awssdk.services.dynamodb.model.AttributeValue;
 import software.amazon.awssdk.services.dynamodb.model.ScanRequest;
@@ -6,6 +25,7 @@ import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.CopyObjectRequest;
 import software.amazon.awssdk.services.s3.model.GetObjectRequest;
 
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -39,7 +59,7 @@ public class TestRunner {
         this.destinationBucket = destinationBucket;
     }
 
-    public void Run() throws Exception {
+    public void Run() {
         var getObjectRequest =
                 GetObjectRequest.builder()
                         .bucket(sourceBucket)
@@ -48,27 +68,44 @@ public class TestRunner {
         var predictionsCsv = s3Client.getObject(getObjectRequest);
         var predictionsReader = new CSVReader(new InputStreamReader(predictionsCsv));
 
-        var labelDictionary = GetLabelDictionary(predictionsReader.readNext());
+        Dictionary<String, Integer> labelDictionary;
+        try {
+            labelDictionary = GetLabelDictionary(predictionsReader.readNext());
+        } catch (IOException e) {
+            throw new RuntimeException("IOException! " + e.toString());
+        } catch (CsvValidationException e) {
+            throw new RuntimeException("CsvValidationException! " + e.toString());
+        }
         var fileLabels = GetFileLabels();
 
         int totalPredictions = 0;
         double totalScore = 0.0;
         String [] nextLine;
-        while ((nextLine = predictionsReader.readNext()) != null)
-        {
-            String correctLabel = fileLabels.get(nextLine[0]);
-            int column = labelDictionary.get(correctLabel);
-            totalScore += Double.parseDouble(nextLine[column]);
-            totalPredictions += 1;
+        try {
+            while ((nextLine = predictionsReader.readNext()) != null)
+            {
+                String correctLabel = fileLabels.get(nextLine[0]);
+                int column = labelDictionary.get(correctLabel);
+                totalScore += Double.parseDouble(nextLine[column]);
+                totalPredictions += 1;
+            }
+        } catch (IOException e) {
+            throw new RuntimeException("IOException! " + e.toString());
+        } catch (CsvValidationException e) {
+            throw new RuntimeException("CsvValidationException! " + e.toString());
         }
 
         double accuracy = totalScore / totalPredictions;
 
         if (accuracy < 0.8) {
-            throw new Exception("Model accuracy of " + accuracy + " was below minimum threshold of 0.8!");
+            throw new RuntimeException("Model accuracy of " + accuracy + " was below minimum threshold of 0.8!");
         }
 
-        AcceptModel();
+        try {
+            AcceptModel();
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException("UnsupportedEncodingException! " + e.toString());
+        }
     }
 
     private Dictionary<String, String> GetFileLabels() {
