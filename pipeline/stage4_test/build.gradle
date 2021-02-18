@@ -1,0 +1,27 @@
+plugins {
+    id 'java'
+}
+
+group 'com.wburklund'
+version '1.0'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'com.amazonaws:aws-lambda-java-core:1.2.1'
+    implementation 'com.amazonaws:aws-lambda-java-events:2.2.9'
+    implementation 'com.opencsv:opencsv:5.3'
+    implementation 'software.amazon.awssdk:dynamodb:2.16.0'
+    implementation 'software.amazon.awssdk:s3:2.16.0'
+    runtimeOnly 'org.apache.logging.log4j:log4j-slf4j18-impl:2.13.0'
+}
+
+task buildZip(type: Zip) {
+    from compileJava
+    from processResources
+    into('lib') {
+        from configurations.runtimeClasspath
+    }
+}
