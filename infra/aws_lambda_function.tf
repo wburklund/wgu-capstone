@@ -98,3 +98,26 @@ resource "aws_lambda_function" "stage3_model_trigger" {
     }
   }
 }
+
+resource "aws_lambda_function" "stage4_test" {
+  function_name = "capstone_stage4_test"
+  handler       = "Handler"
+  memory_size   = 512
+  role          = aws_iam_role.capstone_test.arn
+  runtime       = "java11"
+  s3_bucket     = data.aws_s3_bucket.capstone_code_store.bucket
+  s3_key        = "stage4_test.zip"
+  timeout       = 60
+  # TODO: SHA256 (see https://github.com/hashicorp/terraform/issues/12443#issuecomment-291922062)
+  # source_code_hash = "value"
+
+  environment {
+    variables = {
+      "destinationBucket" = aws_s3_bucket.capstone_deploy_artifacts.bucket,
+      "metadatabaseTable" = data.aws_dynamodb_table.capstone_metadatabase.name,
+      "modelFileKey"      = "model.h5"
+      "predictionFileKey" = "predictions.csv"
+      "sourceBucket"      = aws_s3_bucket.capstone_model_output.bucket
+    }
+  }
+}

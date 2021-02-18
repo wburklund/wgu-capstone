@@ -187,3 +187,42 @@ resource "aws_iam_role_policy" "capstone_model_trigger_policy" {
 }
     EOF
 }
+
+resource "aws_iam_role_policy" "capstone_test_policy" {
+  name = "capstone_test_policy"
+  role = aws_iam_role.capstone_test.id
+
+  policy = <<EOF
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Action": "s3:ListBucket",
+            "Resource": [
+                "${aws_s3_bucket.capstone_model_output.arn}",
+                "${aws_s3_bucket.capstone_deploy_artifacts.arn}"
+            ]
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "s3:Get*",
+                "s3:List*"
+            ],
+            "Resource": "${aws_s3_bucket.capstone_model_output.arn}/*"
+        },        
+        {
+            "Effect": "Allow",
+            "Action": "s3:*",
+            "Resource": "${aws_s3_bucket.capstone_deploy_artifacts.arn}/*"
+        },
+        {
+            "Effect": "Allow",
+            "Action": "dynamodb:Scan",
+            "Resource": "${data.aws_dynamodb_table.capstone_metadatabase.arn}"
+        }
+    ]
+}
+  EOF
+}

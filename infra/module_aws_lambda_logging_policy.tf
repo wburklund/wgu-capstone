@@ -35,3 +35,8 @@ module "stage3_model_trigger_logging_policy" {
   source        = "./modules/aws_lambda_logging_policy"
   function_name = aws_lambda_function.stage3_model_trigger.function_name
 }
+
+module "stage4_test_logging_policy" {
+  source        = "./modules/aws_lambda_logging_policy"
+  function_name = aws_lambda_function.stage4_test.function_name
+}

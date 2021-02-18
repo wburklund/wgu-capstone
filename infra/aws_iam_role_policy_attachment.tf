@@ -45,3 +45,8 @@ resource "aws_iam_role_policy_attachment" "capstone_model_trigger__logging" {
   policy_arn = module.stage3_model_trigger_logging_policy.arn
   role       = aws_iam_role.capstone_model_trigger.name
 }
+
+resource "aws_iam_role_policy_attachment" "capstone_test__logging" {
+  policy_arn = module.stage4_test_logging_policy.arn
+  role       = aws_iam_role.capstone_test.name
+}
