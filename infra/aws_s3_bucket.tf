@@ -32,10 +32,6 @@ resource "aws_s3_bucket" "capstone_model_output" {
   bucket = "capstone-model-output"
 }
 
-resource "aws_s3_bucket" "capstone_test_answers" {
-  bucket = "capstone-test-answers"
-}
-
 resource "aws_s3_bucket" "capstone_deploy_artifacts" {
   bucket = "capstone-deploy-artifacts"
 }

@@ -29,8 +29,7 @@ resource "aws_iam_role_policy" "capstone_ingest_policy" {
             "Action": "s3:ListBucket",
             "Resource": [
                 "${data.aws_s3_bucket.capstone_data_store.arn}",
-                "${aws_s3_bucket.capstone_model_input.arn}",
-                "${aws_s3_bucket.capstone_test_answers.arn}"                
+                "${aws_s3_bucket.capstone_model_input.arn}"              
             ]
         },
         {
@@ -44,10 +43,7 @@ resource "aws_iam_role_policy" "capstone_ingest_policy" {
         {
             "Effect": "Allow",
             "Action": "s3:*",
-            "Resource": [
-                "${aws_s3_bucket.capstone_model_input.arn}/*",
-                "${aws_s3_bucket.capstone_test_answers.arn}/*"
-            ]
+            "Resource": "${aws_s3_bucket.capstone_model_input.arn}/*"
         },
         {
             "Effect": "Allow",
