@@ -28,8 +28,8 @@ input_dir = os.environ['INPUT_DIR']
 output_dir = os.environ['OUTPUT_DIR']
 
 image_size = (299, 299)
-batch_size = 8
-epochs = 50
+batch_size = 16
+epochs = 20
 
 train_ds = tf.keras.preprocessing.image_dataset_from_directory(
     f'{input_dir}/Train',
@@ -59,7 +59,7 @@ val_ds = val_ds.prefetch(buffer_size=batch_size)
 model = make_model(input_shape=image_size + (3,), num_classes=num_classes)
 
 callbacks = [
-    keras.callbacks.EarlyStopping(monitor='val_loss', mode='min', verbose=1, patience=5),
+   # keras.callbacks.EarlyStopping(monitor='val_loss', mode='min', verbose=1, patience=5),
 ]
 model.compile(
     optimizer=keras.optimizers.SGD(learning_rate=0.1, momentum=0.9),
