@@ -226,3 +226,37 @@ resource "aws_iam_role_policy" "capstone_test_policy" {
 }
   EOF
 }
+
+resource "aws_iam_role_policy" "capstone_deploy_policy" {
+  name = "capstone_deploy_policy"
+  role = aws_iam_role.capstone_deploy.id
+
+  policy = <<EOF
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Action": "s3:ListBucket",
+            "Resource": [
+                "${aws_s3_bucket.capstone_deploy_artifacts.arn}",
+                "${aws_s3_bucket.capstone_api_assets.arn}"
+            ]
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "s3:Get*",
+                "s3:List*"
+            ],
+            "Resource": "${aws_s3_bucket.capstone_deploy_artifacts.arn}/*"
+        },        
+        {
+            "Effect": "Allow",
+            "Action": "s3:*",
+            "Resource": "${aws_s3_bucket.capstone_api_assets.arn}/*"
+        }
+    ]
+}
+  EOF
+}

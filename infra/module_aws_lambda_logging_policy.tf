@@ -40,3 +40,8 @@ module "stage4_test_logging_policy" {
   source        = "./modules/aws_lambda_logging_policy"
   function_name = aws_lambda_function.stage4_test.function_name
 }
+
+module "stage5_deploy_logging_policy" {
+  source        = "./modules/aws_lambda_logging_policy"
+  function_name = aws_lambda_function.stage5_deploy.function_name
+}

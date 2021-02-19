@@ -50,3 +50,8 @@ resource "aws_iam_role_policy_attachment" "capstone_test__logging" {
   policy_arn = module.stage4_test_logging_policy.arn
   role       = aws_iam_role.capstone_test.name
 }
+
+resource "aws_iam_role_policy_attachment" "capstone_deploy__logging" {
+  policy_arn = module.stage5_deploy_logging_policy.arn
+  role       = aws_iam_role.capstone_deploy.name
+}

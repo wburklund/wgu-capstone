@@ -122,3 +122,23 @@ resource "aws_lambda_function" "stage4_test" {
     }
   }
 }
+
+resource "aws_lambda_function" "stage5_deploy" {
+  function_name = "capstone_stage5_deploy"
+  handler       = "deploy"
+  role          = aws_iam_role.capstone_deploy.arn
+  runtime       = "go1.x"
+  s3_bucket     = data.aws_s3_bucket.capstone_code_store.bucket
+  s3_key        = "stage5_deploy.zip"
+  timeout       = 10
+  # TODO: SHA256 (see https://github.com/hashicorp/terraform/issues/12443#issuecomment-291922062)
+  # source_code_hash = "value"
+
+  environment {
+    variables = {
+      "destination_bucket" = aws_s3_bucket.capstone_api_assets.bucket,
+      "model_key"          = "model.h5",
+      "source_bucket"      = aws_s3_bucket.capstone_deploy_artifacts.bucket
+    }
+  }
+}
