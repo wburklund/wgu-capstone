@@ -59,7 +59,7 @@ public class TestRunner {
         this.destinationBucket = destinationBucket;
     }
 
-    public void Run() {
+    public double Run() {
         var getObjectRequest =
                 GetObjectRequest.builder()
                         .bucket(sourceBucket)
@@ -106,6 +106,8 @@ public class TestRunner {
         } catch (UnsupportedEncodingException e) {
             throw new RuntimeException("UnsupportedEncodingException! " + e.toString());
         }
+
+        return accuracy;
     }
 
     private Dictionary<String, String> GetFileLabels() {

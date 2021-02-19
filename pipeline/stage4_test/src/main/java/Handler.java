@@ -23,9 +23,9 @@ import software.amazon.awssdk.services.s3.S3Client;
 
 import java.util.Map;
 
-public class Handler implements RequestHandler<Map<String,String>, String>{
+public class Handler implements RequestHandler<Object, String>{
     @Override
-    public String handleRequest(Map<String,String> event, Context context)
+    public String handleRequest(Object event, Context context)
     {
         var testRunner = new TestRunner(
                 DynamoDbClient.create(),
@@ -36,8 +36,8 @@ public class Handler implements RequestHandler<Map<String,String>, String>{
                 System.getenv("modelFileKey"),
                 System.getenv("destinationBucket"));
 
-        testRunner.Run();
-
-        return "Testing successful.";
+        double accuracy = testRunner.Run();
+        double accuracyPercent = accuracy * 100;
+        return String.format("Testing successful. Model accuracy = %.2f%%", accuracyPercent);
     }
 }
