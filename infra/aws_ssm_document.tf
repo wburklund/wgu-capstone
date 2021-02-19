@@ -43,7 +43,6 @@ mainSteps:
       InstanceIds: '{{ InstanceId }}'
       DocumentName: AWS-RunShellScript
       Parameters: '{{ RunShellScriptParameters }}'
-      timeoutSeconds: 30000
     description: ''
     onFailure: Continue
     timeoutSeconds: 30000    
