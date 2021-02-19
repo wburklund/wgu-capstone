@@ -31,12 +31,11 @@ import (
 )
 
 func HandleRequest(ctx context.Context, input string) (string, error) {
-	// TODO: Move hard-coded strings into environment variables
 	// TODO: Trigger model refresh on API server
 
-	sourceBucket := "capstone-deploy-artifacts"
-	key := "model.h5"
-	destinationBucket := "capstone-api-assets"
+	sourceBucket := os.Getenv("source_bucket")
+	key := os.Getenv("model_key")
+	destinationBucket := os.Getenv("destination_bucket")
 
 	sess, err := session.NewSession()
 	svc := s3.New(sess)
