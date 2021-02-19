@@ -91,10 +91,11 @@ resource "aws_lambda_function" "stage3_model_trigger" {
     variables = {
       "execution_parameter_key" = aws_ssm_parameter.capstone_model_run_execution_id.name,
       "instance_parameter_key"  = aws_ssm_parameter.capstone_model_run_instance_id.name,
-      "model_run_document"      = aws_ssm_document.Start_ShellScript_Stop.arn
-      "s3_bucket"               = data.aws_s3_bucket.capstone_code_store.bucket
-      "s3_key"                  = "stage3_model_run"
-      "status_function_name"    = aws_lambda_function.stage3_model_status.function_name
+      "model_run_document"      = aws_ssm_document.Start_ShellScript_Stop.arn,
+      "s3_bucket"               = data.aws_s3_bucket.capstone_code_store.bucket,
+      "s3_key"                  = "stage3_model_run",
+      "status_function_name"    = aws_lambda_function.stage3_model_status.function_name,
+      "timeout_seconds"         = 14400
     }
   }
 }
@@ -115,8 +116,8 @@ resource "aws_lambda_function" "stage4_test" {
     variables = {
       "destinationBucket" = aws_s3_bucket.capstone_deploy_artifacts.bucket,
       "metadatabaseTable" = data.aws_dynamodb_table.capstone_metadatabase.name,
-      "modelFileKey"      = "model.h5"
-      "predictionFileKey" = "predictions.csv"
+      "modelFileKey"      = "model.h5",
+      "predictionFileKey" = "predictions.csv",
       "sourceBucket"      = aws_s3_bucket.capstone_model_output.bucket
     }
   }

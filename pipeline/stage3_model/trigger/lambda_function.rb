@@ -40,7 +40,7 @@ def lambda_handler(event:, context:)
     resp = ssmClient.start_automation_execution({
         document_name: ENV['model_run_document'],
         parameters: { "InstanceId" => [instance_id],
-        "RunShellScriptParameters" => ['{ "commands": "%s", "executionTimeout": "30000" }' % command]
+        "RunShellScriptParameters" => ['{ "commands": "%s", "executionTimeout": "%s" }' % command, ENV['timeout_seconds']]
         }
     })
     ssmClient.put_parameter({ name: ENV['execution_parameter_key'], value: resp.automation_execution_id, type: "String", overwrite: true})
