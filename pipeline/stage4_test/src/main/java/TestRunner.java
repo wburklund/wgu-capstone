@@ -97,6 +97,8 @@ public class TestRunner {
 
         double accuracy = totalScore / totalPredictions;
 
+        System.out.println("Model accuracy: " + accuracy);
+
         if (accuracy < 0.8) {
             throw new RuntimeException("Model accuracy of " + accuracy + " was below minimum threshold of 0.8!");
         }
