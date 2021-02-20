@@ -24,13 +24,14 @@ import (
 	"net/url"
 	"os"
 
+	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/s3"
 )
 
-func HandleRequest(ctx context.Context, input string) (string, error) {
+func HandleRequest(ctx context.Context, request events.APIGatewayProxyRequest) (string, error) {
 	// TODO: Trigger model refresh on API server
 
 	sourceBucket := os.Getenv("source_bucket")
@@ -58,3 +59,4 @@ func HandleRequest(ctx context.Context, input string) (string, error) {
 func main() {
 	lambda.Start(HandleRequest)
 }
+
