@@ -16,22 +16,15 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-use lambda_runtime::{error::HandlerError, lambda, Context};
+use lambda_http::{lambda, IntoResponse, Request};
+use lambda_runtime::{error::HandlerError, Context};
 use log::LevelFilter;
 use rusoto_core::Region;
-use serde_derive::Serialize;
 use simple_logger::SimpleLogger;
 use std::env;
 use std::error::Error;
 
 mod execute;
-
-#[allow(non_snake_case)]
-#[derive(Serialize, Clone)]
-struct LambdaOutput {
-    statusCode: usize,
-    message: String,
-}
 
 fn main() -> Result<(), &'static dyn Error> {
     match SimpleLogger::new().with_level(LevelFilter::Info).init() {
@@ -44,15 +37,12 @@ fn main() -> Result<(), &'static dyn Error> {
     Ok(())
 }
 
-fn handler(_: String, _: Context) -> Result<LambdaOutput, HandlerError> {
-    let _region = env::var("AWS_REGION").unwrap();                              // This is read silently by rusoto_core::Region::default() (and set automatically by AWS Lambda)
+fn handler(_: Request, _: Context) -> Result<impl IntoResponse, HandlerError> {
+    let _region = env::var("AWS_REGION").unwrap(); // This is read silently by rusoto_core::Region::default() (and set automatically by AWS Lambda)
     let bucket = env::var("S3_BUCKET").unwrap();
     let parameter = env::var("EXCLUSION_LIST_PARAMETER").unwrap();
 
     execute::execute(bucket, parameter, Region::default());
 
-    Ok(LambdaOutput {
-        statusCode: 200,
-        message: format!("Clean successful."),
-    })
+    Ok("Clean successful.")
 }
