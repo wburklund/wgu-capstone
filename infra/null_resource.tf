@@ -27,6 +27,6 @@ resource "null_resource" "stop_model_run_instance" {
   }
 
   triggers = {
-    always_run = timestamp()
+    new_instance = aws_instance.capstone_model_run.id
   }
 }
