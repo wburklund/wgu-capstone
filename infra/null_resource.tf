@@ -27,6 +27,6 @@ resource "null_resource" "stop_model_run_instance" {
   }
 
   triggers = {
-    always_run = "${timestamp()}"
+    always_run = timestamp()
   }
 }
