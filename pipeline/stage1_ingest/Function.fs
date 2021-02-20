@@ -18,7 +18,7 @@
 
 namespace ingest
 
-
+open Amazon.Lambda.APIGatewayEvents
 open Amazon.Lambda.Core
 
 open Program
@@ -31,7 +31,7 @@ open Program
 type StatusCodeResponse = { statusCode: int; body: string }
 
 type Function() =
-    member __.FunctionHandler (input: string) (context: ILambdaContext) =
+    member __.FunctionHandler (request: APIGatewayHttpApiV2ProxyRequest) (context: ILambdaContext) =
         match main with
         | 0 -> { statusCode = 200; body = "Ingestion successful" }
         | _ -> { statusCode = 500; body = "Unknown error in ingestion" }
