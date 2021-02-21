@@ -2,5 +2,4 @@
 
 cd /github/workspace/pipeline/stage4_test/
 ./gradlew buildZip
-find
-cp build/distributions/stage4_test.zip /github/workspace/stage4_test.zip
+cp build/distributions/test-1.0.zip /github/workspace/stage4_test.zip
