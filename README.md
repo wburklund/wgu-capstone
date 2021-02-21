@@ -1,5 +1,5 @@
 # 🎓 [WGU](https://www.wgu.edu/) Capstone
-Pneumonia detection solution. Scans chest X-ray images for pneumonia using an Inception-v4 network and MLOps pipeline. *For demonstration purposes only.*
+Pneumonia detection system. Scans chest X-ray images for pneumonia using an Inception-v4 network and MLOps pipeline. *For demonstration purposes only.*
 
 ## MLOps Pipeline Diagram
 <p align="center">
