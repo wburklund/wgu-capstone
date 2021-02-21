@@ -7,10 +7,7 @@ jobs:
     steps:
       - uses: actions/checkout@v1
       - uses: ./.github/actions/build-ingest
-      - run: |
-          pwd
-          find .
       - uses: actions/upload-artifact@v2
         with:
           name: ingest
-          path: /home/runner/work/wgu-capstone/wgu-capstone/ingest.zip
+          path: ingest.zip
