@@ -41,3 +41,13 @@ jobs:
         with:
           name: stage4_test
           path: stage4_test.zip
+  build-deploy:
+    name: 'Build Stage 5: Deploy'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - uses: ./.github/actions/build-deploy
+      - uses: actions/upload-artifact@v2
+        with:
+          name: stage5_deploy
+          path: stage5_deploy.zip

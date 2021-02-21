@@ -1,0 +1,7 @@
+name: "Build Deploy Stage"
+description: "Builds the Deploy MLOps pipeline Lambda (Stage 5)"
+author: "waburklund@gmail.com"
+
+runs:
+  using: "docker"
+  image: "Dockerfile"
