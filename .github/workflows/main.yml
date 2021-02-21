@@ -21,3 +21,13 @@ jobs:
         with:
           name: stage2_clean
           path: stage2_clean.zip
+  build-model:
+    name: 'Build Stage 3: Model'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - uses: ./.github/actions/build-model
+      - uses: actions/upload-artifact@v2
+        with:
+          name: stage3_model
+          path: artifacts/*
