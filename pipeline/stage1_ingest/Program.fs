@@ -39,7 +39,7 @@ let get_source_path (record:MetadataRecord) =
         | DataSet.Train -> "train"
         | DataSet.Test -> "test"
 
-    $"{sourceKeyPrefix}/{dataset_directory}/{record.ImageName}"
+    sprintf "%s/%s/%s" sourceKeyPrefix dataset_directory record.ImageName
 
 let get_destination_path (record:MetadataRecord) =
     let dataset_directory =
@@ -54,7 +54,7 @@ let get_destination_path (record:MetadataRecord) =
         | (DataSet.Train, Label.Pneumonia) -> "Pneumonia"
         | (DataSet.Test, _) -> "Unlabeled"
 
-    $"{dataset_directory}/{label_directory}/{record.ImageName}"
+    sprintf "%s/%s/%s" dataset_directory label_directory record.ImageName
 
 let copy_file_block (metadata:List<MetadataRecord>) =
     let client = new AmazonS3Client()

@@ -50,7 +50,7 @@ let reset_table (client:AmazonDynamoDBClient) (create_table_request:CreateTableR
     try
         client.DeleteTableAsync(create_table_request.TableName).Wait()
     with
-    | _ -> printfn $"Warning: Table {create_table_request.TableName} did not exist"
+    | _ -> printf "Warning: Table %s did not exist" create_table_request.TableName
 
     // Wait for the table to be fully deleted
     Task.Delay(3000).Wait()
