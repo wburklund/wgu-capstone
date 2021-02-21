@@ -28,8 +28,8 @@ input_dir = os.environ['INPUT_DIR']
 output_dir = os.environ['OUTPUT_DIR']
 
 image_size = (299, 299)
-batch_size = 16
-epochs = 50
+batch_size = 8
+epochs = 20
 
 train_ds = tf.keras.preprocessing.image_dataset_from_directory(
     f'{input_dir}/Train',
