@@ -1,6 +1,6 @@
-FROM amazonlinux:2
+FROM alpine:3
 
-RUN yum install -y zip
+RUN apk add zip
 
 ADD entrypoint.sh /entrypoint.sh 
 RUN chmod +x /entrypoint.sh
