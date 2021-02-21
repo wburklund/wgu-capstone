@@ -16,6 +16,59 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+data "aws_iam_policy" "AmazonSSMManagedInstanceCore" {
+  arn = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
+}
+
+data "aws_iam_policy" "CloudWatchLogsFullAccess" {
+  arn = "arn:aws:iam::aws:policy/CloudWatchLogsFullAccess"
+}
+
+resource "aws_iam_instance_profile" "capstone_model_run" {
+  name = "capstone_model_run"
+  role = aws_iam_role.capstone_model_run.name
+}
+
+resource "aws_iam_role_policy_attachment" "capstone_model_run__AmazonSSMManagedInstanceCore" {
+  policy_arn = data.aws_iam_policy.AmazonSSMManagedInstanceCore.arn
+  role       = aws_iam_role.capstone_model_run.name
+}
+
+resource "aws_iam_role_policy_attachment" "capstone_model_run__CloudWatchLogsFullAccess" {
+  policy_arn = data.aws_iam_policy.CloudWatchLogsFullAccess.arn
+  role       = aws_iam_role.capstone_model_run.name
+}
+
+resource "aws_iam_role_policy_attachment" "capstone_ingest__logging" {
+  policy_arn = module.stage1_ingest_logging_policy.arn
+  role       = aws_iam_role.capstone_ingest.name
+}
+
+resource "aws_iam_role_policy_attachment" "capstone_clean__logging" {
+  policy_arn = module.stage2_clean_logging_policy.arn
+  role       = aws_iam_role.capstone_clean.name
+}
+
+resource "aws_iam_role_policy_attachment" "capstone_model_status__logging" {
+  policy_arn = module.stage3_model_status_logging_policy.arn
+  role       = aws_iam_role.capstone_model_status.name
+}
+
+resource "aws_iam_role_policy_attachment" "capstone_model_trigger__logging" {
+  policy_arn = module.stage3_model_trigger_logging_policy.arn
+  role       = aws_iam_role.capstone_model_trigger.name
+}
+
+resource "aws_iam_role_policy_attachment" "capstone_test__logging" {
+  policy_arn = module.stage4_test_logging_policy.arn
+  role       = aws_iam_role.capstone_test.name
+}
+
+resource "aws_iam_role_policy_attachment" "capstone_deploy__logging" {
+  policy_arn = module.stage5_deploy_logging_policy.arn
+  role       = aws_iam_role.capstone_deploy.name
+}
+
 resource "aws_iam_role_policy" "capstone_ingest_policy" {
   name = "capstone_ingest_policy"
   role = aws_iam_role.capstone_ingest.id
@@ -259,4 +312,138 @@ resource "aws_iam_role_policy" "capstone_deploy_policy" {
     ]
 }
   EOF
+}
+
+resource "aws_iam_role" "capstone_ingest" {
+  name = "capstone_ingest"
+
+  assume_role_policy = <<-EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Action": "sts:AssumeRole",
+      "Principal": {
+        "Service": "lambda.amazonaws.com"
+      },
+      "Effect": "Allow"
+    }
+  ]
+}
+EOF  
+}
+
+resource "aws_iam_role" "capstone_clean" {
+  name = "capstone_clean"
+
+  assume_role_policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Action": "sts:AssumeRole",
+      "Principal": {
+        "Service": "lambda.amazonaws.com"
+      },
+      "Effect": "Allow"
+    }
+  ]
+}
+EOF
+}
+
+
+resource "aws_iam_role" "capstone_model_run" {
+  name = "capstone_model_run"
+
+  assume_role_policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Action": "sts:AssumeRole",
+      "Principal": {
+        "Service": "ec2.amazonaws.com"
+      },
+      "Effect": "Allow"
+    }
+  ]
+}
+EOF
+}
+
+resource "aws_iam_role" "capstone_model_status" {
+  name = "capstone_model_status"
+
+  assume_role_policy = <<-EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Action": "sts:AssumeRole",
+      "Principal": {
+        "Service": "lambda.amazonaws.com"
+      },
+      "Effect": "Allow"
+    }
+  ]
+}
+EOF
+}
+
+resource "aws_iam_role" "capstone_model_trigger" {
+  name = "capstone_model_trigger"
+
+  assume_role_policy = <<-EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Action": "sts:AssumeRole",
+      "Principal": {
+        "Service": "lambda.amazonaws.com"
+      },
+      "Effect": "Allow"
+    }
+  ]
+}
+EOF
+}
+
+resource "aws_iam_role" "capstone_test" {
+  name = "capstone_test"
+
+  assume_role_policy = <<-EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Action": "sts:AssumeRole",
+      "Principal": {
+        "Service": "lambda.amazonaws.com"
+      },
+      "Effect": "Allow"
+    }
+  ]
+}
+EOF
+}
+
+resource "aws_iam_role" "capstone_deploy" {
+  name = "capstone_deploy"
+
+  assume_role_policy = <<-EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Action": "sts:AssumeRole",
+      "Principal": {
+        "Service": "lambda.amazonaws.com"
+      },
+      "Effect": "Allow"
+    }
+  ]
+}
+EOF
 }

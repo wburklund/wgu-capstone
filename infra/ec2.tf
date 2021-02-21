@@ -22,3 +22,36 @@ resource "aws_instance" "capstone_model_run" {
   instance_type        = "g4dn.4xlarge"
   security_groups      = [aws_security_group.capstone_no_ingress.name]
 }
+
+resource "aws_security_group" "capstone_no_ingress" {
+  name = "capstone_no_ingress"
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  ingress {
+    from_port   = 1
+    to_port     = 1
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/32"]
+  }
+}
+
+resource "null_resource" "stop_model_run_instance" {
+  depends_on = [
+    aws_instance.capstone_model_run
+  ]
+
+  provisioner "local-exec" {
+    command    = "aws ec2 stop-instances --instance-ids ${aws_instance.capstone_model_run.id} --region ${local.region}"
+    on_failure = fail
+  }
+
+  triggers = {
+    new_instance = aws_instance.capstone_model_run.id
+  }
+}

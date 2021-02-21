@@ -142,3 +142,45 @@ resource "aws_lambda_function" "stage5_deploy" {
     }
   }
 }
+
+resource "aws_lambda_permission" "capstone_ingest_permission" {
+  action        = "lambda:InvokeFunction"
+  function_name = aws_lambda_function.stage1_ingest.function_name
+  principal     = "apigateway.amazonaws.com"
+  source_arn = "${aws_apigatewayv2_api.capstone_pipeline_api.execution_arn}/*/*/*"
+}
+
+resource "aws_lambda_permission" "capstone_clean_permission" {
+  action        = "lambda:InvokeFunction"
+  function_name = aws_lambda_function.stage2_clean.function_name
+  principal     = "apigateway.amazonaws.com"
+  source_arn = "${aws_apigatewayv2_api.capstone_pipeline_api.execution_arn}/*/*/*"
+}
+
+resource "aws_lambda_permission" "capstone_model_status_permission" {
+  action        = "lambda:InvokeFunction"
+  function_name = aws_lambda_function.stage3_model_status.function_name
+  principal     = "apigateway.amazonaws.com"
+  source_arn = "${aws_apigatewayv2_api.capstone_pipeline_api.execution_arn}/*/*/*"
+}
+
+resource "aws_lambda_permission" "capstone_model_trigger_permission" {
+  action        = "lambda:InvokeFunction"
+  function_name = aws_lambda_function.stage3_model_trigger.function_name
+  principal     = "apigateway.amazonaws.com"
+  source_arn = "${aws_apigatewayv2_api.capstone_pipeline_api.execution_arn}/*/*/*"
+}
+
+resource "aws_lambda_permission" "capstone_test_permission" {
+  action        = "lambda:InvokeFunction"
+  function_name = aws_lambda_function.stage4_test.function_name
+  principal     = "apigateway.amazonaws.com"
+  source_arn = "${aws_apigatewayv2_api.capstone_pipeline_api.execution_arn}/*/*/*"
+}
+
+resource "aws_lambda_permission" "capstone_deploy_permission" {
+  action        = "lambda:InvokeFunction"
+  function_name = aws_lambda_function.stage5_deploy.function_name
+  principal     = "apigateway.amazonaws.com"
+  source_arn = "${aws_apigatewayv2_api.capstone_pipeline_api.execution_arn}/*/*/*"
+}

@@ -16,12 +16,22 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-resource "aws_apigatewayv2_domain_name" "capstone_pipeline" {
-  domain_name = "capstone-pipeline.${data.aws_acm_certificate.wildcard.domain}"
+data "aws_route53_zone" "domain" {
+    provider = aws.us_east_1
 
-  domain_name_configuration {
-    certificate_arn = data.aws_acm_certificate.wildcard.arn
-    endpoint_type = "REGIONAL"
-    security_policy = "TLS_1_2"
-  }
+    name = "wburklund.com"
+}
+
+resource "aws_route53_record" "capstone_pipeline" {
+    provider = aws.us_east_1
+
+    name = aws_apigatewayv2_domain_name.capstone_pipeline.domain_name
+    type = "A"
+    zone_id = data.aws_route53_zone.domain.zone_id
+
+    alias {
+      name = aws_apigatewayv2_domain_name.capstone_pipeline.domain_name_configuration[0].target_domain_name
+      zone_id = aws_apigatewayv2_domain_name.capstone_pipeline.domain_name_configuration[0].hosted_zone_id
+      evaluate_target_health = true
+    }
 }

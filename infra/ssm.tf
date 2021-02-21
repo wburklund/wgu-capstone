@@ -16,6 +16,44 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+resource "aws_ssm_document" "Start_ShellScript_Stop" {
+  document_format = "YAML"
+  document_type   = "Automation"
+  name            = "Start-ShellScript-Stop"
+
+  content = <<EOF
+description: ''
+schemaVersion: '0.3'
+assumeRole: 'arn:aws:iam::${local.account_id}:role/SSMAutomation'
+parameters:
+  InstanceId:
+    type: StringList
+  RunShellScriptParameters:
+    type: StringMap
+mainSteps:
+  - name: startInstance
+    action: 'aws:changeInstanceState'
+    inputs:
+      DesiredState: running
+      InstanceIds: '{{ InstanceId }}'
+    description: ''
+  - name: runShellScript
+    action: 'aws:runCommand'
+    inputs:
+      InstanceIds: '{{ InstanceId }}'
+      DocumentName: AWS-RunShellScript
+      Parameters: '{{ RunShellScriptParameters }}'
+    description: ''
+    onFailure: Continue
+    timeoutSeconds: 14400    
+  - name: stopInstance
+    action: 'aws:changeInstanceState'
+    inputs:
+      InstanceIds: '{{ InstanceId }}'
+      DesiredState: stopped
+EOF 
+}
+
 resource "aws_ssm_parameter" "capstone_clean_exclusion_list" {
   name  = "/capstone/clean_exclusion_list"
   type  = "StringList"
