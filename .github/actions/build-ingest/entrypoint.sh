@@ -2,4 +2,4 @@
 
 cd /github/workspace/pipeline/stage1_ingest/
 dotnet tool restore
-dotnet lambda package
+dotnet lambda package -o /artifacts/ingest.zip

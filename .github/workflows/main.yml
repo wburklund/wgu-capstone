@@ -3,7 +3,11 @@ on: push
 jobs:
   build-ingest:
     name: Build Ingest Stage
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
-      - uses: ./.github/actions/build-ingest
+      - uses: /.github/actions/build-ingest
+      - uses: actions/upload-artifact@v2
+        with:
+          name: ingest
+          path: /artifacts/ingest.zip
