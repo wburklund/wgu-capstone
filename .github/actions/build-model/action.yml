@@ -1,5 +1,5 @@
 name: "Build Model Stage"
-description: "Builds the Model MLOps pipeline Lambda (Stage 3)"
+description: "Builds the Model MLOps pipeline components (Stage 3)"
 author: "waburklund@gmail.com"
 
 runs:

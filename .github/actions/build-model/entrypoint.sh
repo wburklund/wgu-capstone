@@ -1,6 +1,5 @@
 #!/bin/sh
 
-pwd
 mkdir -p artifacts/stage3_model_run
 cd /github/workspace/pipeline/stage3_model/
 
