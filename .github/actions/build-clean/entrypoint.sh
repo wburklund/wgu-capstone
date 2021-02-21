@@ -1,5 +1,5 @@
 #!/bin/sh
 
 cd /github/workspace/pipeline/stage2_clean/
-cargo build --release
-zip /github/workspace/stage2_clean.zip target/release/bootstrap
+cargo build
+zip /github/workspace/stage2_clean.zip target/debug/bootstrap
