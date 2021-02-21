@@ -24,6 +24,15 @@ provider "aws" {
   }
 }
 
+provider "aws" {
+  alias = "us_east_1"
+  region = "us-east-1"
+
+  assume_role {
+    role_arn = "arn:aws:iam::551524640723:role/terraform"
+  }
+}
+
 data "aws_caller_identity" "current" {}
 data "aws_region" "current" {}
 
