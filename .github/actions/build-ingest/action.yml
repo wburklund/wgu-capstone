@@ -1,0 +1,11 @@
+name: "Build Ingest Stage"
+description: "Builds the Ingest MLOps pipeline Lambda (Stage 1)"
+author: "waburklund@gmail.com"
+
+runs:
+  using: "docker"
+  image: "Dockerfile"
+
+branding:
+  icon: "package"
+  color: "purple"
