@@ -10,4 +10,4 @@ jobs:
       - uses: actions/upload-artifact@v2
         with:
           name: ingest
-          path: ingest.zip
+          path: stage1_ingest.zip
