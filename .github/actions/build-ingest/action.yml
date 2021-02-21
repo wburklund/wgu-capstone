@@ -5,7 +5,3 @@ author: "waburklund@gmail.com"
 runs:
   using: "docker"
   image: "Dockerfile"
-
-branding:
-  icon: "package"
-  color: "purple"
