@@ -2,7 +2,7 @@ name: MLOps workflow
 on: push
 jobs:
   build-ingest:
-    name: Build Ingest Stage
+    name: 'Build Stage 1: Ingest'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
@@ -12,7 +12,7 @@ jobs:
           name: stage1_ingest
           path: stage1_ingest.zip
   build-clean:
-    name: Build Clean Stage
+    name: 'Build Stage 2: Clean'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
