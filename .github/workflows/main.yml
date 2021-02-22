@@ -92,6 +92,7 @@ jobs:
           name: stage5_deploy
           path: stage5_deploy.zip
   upload-artifacts:
+    environment: Production
     needs: [build-ingest, build-clean, build-model, build-test, build-deploy]
     name: 'Upload Build Artifacts to S3'
     runs-on: ubuntu-latest
