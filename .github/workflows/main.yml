@@ -38,7 +38,7 @@ jobs:
 
         
   build-ingest:
-    if: ${{ needs.configure-workflow.outputs.stage1-has-changed }}
+    if: ${{ needs.configure-workflow.outputs.stage1-has-changed == 'true' }}
     name: 'Build Stage 1: Ingest'
     needs: configure-workflow
     runs-on: ubuntu-latest
