@@ -20,8 +20,8 @@ data "aws_iam_policy" "AmazonSSMManagedInstanceCore" {
   arn = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
 }
 
-data "aws_iam_policy" "CloudWatchLogsFullAccess" {
-  arn = "arn:aws:iam::aws:policy/CloudWatchLogsFullAccess"
+data "aws_iam_policy" "CloudWatchAgentServerPolicy" {
+  arn = "arn:aws:iam::aws:policy/CloudWatchAgentServerPolicy"
 }
 
 resource "aws_iam_instance_profile" "capstone_model_run" {
@@ -34,8 +34,8 @@ resource "aws_iam_role_policy_attachment" "capstone_model_run__AmazonSSMManagedI
   role       = aws_iam_role.capstone_model_run.name
 }
 
-resource "aws_iam_role_policy_attachment" "capstone_model_run__CloudWatchLogsFullAccess" {
-  policy_arn = data.aws_iam_policy.CloudWatchLogsFullAccess.arn
+resource "aws_iam_role_policy_attachment" "capstone_model_run__CloudWatchAgentServerPolicy" {
+  policy_arn = data.aws_iam_policy.CloudWatchAgentServerPolicy.arn
   role       = aws_iam_role.capstone_model_run.name
 }
 
