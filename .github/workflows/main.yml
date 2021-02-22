@@ -1,8 +1,46 @@
 name: MLOps workflow
 on: push
 jobs:
+  configure-workflow:
+    name: 'Configure workflow'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 100
+      - uses: marceloprado/has-changed-path@v1
+        id: pipeline-has-changed
+        with:
+          paths: pipeline
+      - uses: marceloprado/has-changed-path@v1
+        id: stage1-has-changed
+        with:
+          paths: pipeline/stage1_ingest
+      - uses: marceloprado/has-changed-path@v1
+        id: stage2-has-changed
+        with:
+          paths: pipeline/stage2_clean
+      - uses: marceloprado/has-changed-path@v1
+        id: stage3-has-changed
+        with:
+          paths: pipeline/stage3_model
+      - uses: marceloprado/has-changed-path@v1
+        id: stage4-has-changed
+        with:
+          paths: pipeline/stage4_test
+      - uses: marceloprado/has-changed-path@v1
+        id: stage5-has-changed
+        with:
+          paths: pipeline/stage5_deploy
+    outputs:
+      pipeline-has-changed: ${{ steps.pipeline-has-changed.changed }}
+      stage1-has-changed: ${{ steps.stage1-has-changed.changed }}
+
+        
   build-ingest:
+    if: ${{ needs.configure-pipeline.outputs.stage1-has-changed }}
     name: 'Build Stage 1: Ingest'
+    needs: configure-pipeline
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
