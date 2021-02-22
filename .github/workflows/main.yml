@@ -38,11 +38,11 @@ jobs:
 
         
   build-ingest:
-    if: ${{ needs.configure-workflow.outputs.stage1Changed == 'true' }}
     name: 'Build Stage 1: Ingest'
     needs: configure-workflow
     runs-on: ubuntu-latest
     steps:
+      - run: echo ${{ needs.configure-workflow.outputs.stage1Changed }}
       - uses: actions/checkout@v2
         with:
           fetch-depth: 100
