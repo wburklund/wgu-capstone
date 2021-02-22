@@ -44,8 +44,14 @@ jobs:
       - uses: actions/checkout@v2
         with:
           fetch-depth: 100
+      - uses: marceloprado/has-changed-path@v1
+        id: has-changed
+        with:
+          paths: pipeline/stage3_model
       - uses: ./.github/actions/build-model
+        if: steps.has-changed.outputs.changed == 'true'
       - uses: actions/upload-artifact@v2
+        if: steps.has-changed.outputs.changed == 'true'
         with:
           name: stage3_model
           path: artifacts/*
@@ -56,8 +62,14 @@ jobs:
       - uses: actions/checkout@v2
         with:
           fetch-depth: 100
+      - uses: marceloprado/has-changed-path@v1
+        id: has-changed
+        with:
+          paths: pipeline/stage4_test
       - uses: ./.github/actions/build-test
+        if: steps.has-changed.outputs.changed == 'true'
       - uses: actions/upload-artifact@v2
+        if: steps.has-changed.outputs.changed == 'true'
         with:
           name: stage4_test
           path: stage4_test.zip
@@ -68,14 +80,19 @@ jobs:
       - uses: actions/checkout@v2
         with:
           fetch-depth: 100
+      - uses: marceloprado/has-changed-path@v1
+        id: has-changed
+        with:
+          paths: pipeline/stage5_deploy
       - uses: ./.github/actions/build-deploy
+        if: steps.has-changed.outputs.changed == 'true'
       - uses: actions/upload-artifact@v2
+        if: steps.has-changed.outputs.changed == 'true'
         with:
           name: stage5_deploy
           path: stage5_deploy.zip
   upload-artifacts:
-    if: always()
-    needs: [build-ingest, build-model, build-test, build-deploy]
+    needs: [build-ingest, build-clean, build-model, build-test, build-deploy]
     name: 'Upload Build Artifacts to S3'
     runs-on: ubuntu-latest
     steps:
