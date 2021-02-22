@@ -45,112 +45,70 @@ jobs:
     needs: configure-workflow
     runs-on: ubuntu-latest
     steps:
-      - run: echo "${{ needs.configure-workflow.outputs.stage1-has-changed }}"
       - uses: actions/checkout@v2
-        with:
-          fetch-depth: 100
-      - uses: marceloprado/has-changed-path@v1
-        id: has-changed
-        with:
-          paths: pipeline/stage1_ingest
       - uses: ./.github/actions/build-ingest
-        if: steps.has-changed.outputs.changed == 'true'
       - uses: actions/upload-artifact@v2
-        if: steps.has-changed.outputs.changed == 'true'
         with:
           name: stage1_ingest
           path: stage1_ingest.zip
   build-clean:
+    if: ${{ needs.configure-workflow.outputs.stage2-has-changed == 'true' }}
     name: 'Build Stage 2: Clean'
+    needs: configure-workflow
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-        with:
-          fetch-depth: 100
-      - uses: marceloprado/has-changed-path@v1
-        id: has-changed
-        with:
-          paths: pipeline/stage2_clean
       - uses: ./.github/actions/build-clean
-        if: steps.has-changed.outputs.changed == 'true'
       - uses: actions/upload-artifact@v2
-        if: steps.has-changed.outputs.changed == 'true'
         with:
           name: stage2_clean
           path: stage2_clean.zip
   build-model:
+    if: ${{ needs.configure-workflow.outputs.stage3-has-changed == 'true' }}
     name: 'Build Stage 3: Model'
+    needs: configure-workflow
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-        with:
-          fetch-depth: 100
-      - uses: marceloprado/has-changed-path@v1
-        id: has-changed
-        with:
-          paths: pipeline/stage3_model
       - uses: ./.github/actions/build-model
-        if: steps.has-changed.outputs.changed == 'true'
       - uses: actions/upload-artifact@v2
-        if: steps.has-changed.outputs.changed == 'true'
         with:
           name: stage3_model
           path: artifacts/*
   build-test:
+    if: ${{ needs.configure-workflow.outputs.stage4-has-changed == 'true' }}
     name: 'Build Stage 4: Test'
+    needs: configure-workflow
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-        with:
-          fetch-depth: 100
-      - uses: marceloprado/has-changed-path@v1
-        id: has-changed
-        with:
-          paths: pipeline/stage4_test
       - uses: ./.github/actions/build-test
-        if: steps.has-changed.outputs.changed == 'true'
       - uses: actions/upload-artifact@v2
-        if: steps.has-changed.outputs.changed == 'true'
         with:
           name: stage4_test
           path: stage4_test.zip
   build-deploy:
+    if: ${{ needs.configure-workflow.outputs.stage5-has-changed == 'true' }}
     name: 'Build Stage 5: Deploy'
+    needs: configure-workflow
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-        with:
-          fetch-depth: 100
-      - uses: marceloprado/has-changed-path@v1
-        id: has-changed
-        with:
-          paths: pipeline/stage5_deploy
       - uses: ./.github/actions/build-deploy
-        if: steps.has-changed.outputs.changed == 'true'
       - uses: actions/upload-artifact@v2
-        if: steps.has-changed.outputs.changed == 'true'
         with:
           name: stage5_deploy
           path: stage5_deploy.zip
   upload-artifacts:
+    if: ${{ needs.configure-workflow.outputs.pipeline-has-changed == 'true' }}
     environment: Production
-    needs: [build-ingest, build-clean, build-model, build-test, build-deploy]
+    needs: [configure-workflow, build-ingest, build-clean, build-model, build-test, build-deploy]
     name: 'Upload Build Artifacts to S3'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-        with:
-          fetch-depth: 100
-      - uses: marceloprado/has-changed-path@v1
-        id: has-changed
-        with:
-          paths: pipeline 
       - uses: actions/download-artifact@v2
-        if: steps.has-changed.outputs.changed == 'true'      
       - run: ./.github/scripts/collect-build-artifacts.sh
-        if: steps.has-changed.outputs.changed == 'true'
       - uses: jakejarvis/s3-sync-action@master
-        if: steps.has-changed.outputs.changed == 'true'
         env:
           AWS_S3_BUCKET: ${{ secrets.AWS_S3_BUCKET }}
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
