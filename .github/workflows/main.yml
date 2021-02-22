@@ -34,7 +34,7 @@ jobs:
           paths: pipeline/stage5_deploy
     outputs:
       pipeline-has-changed: ${{ steps.pipeline-has-changed.changed }}
-      stage1Changed: ${{ steps.stage1-has-changed.changed }}
+      stage1Changed: ${{ steps.stage1-has-changed.changed == 'true' }}
 
         
   build-ingest:
@@ -42,7 +42,7 @@ jobs:
     needs: configure-workflow
     runs-on: ubuntu-latest
     steps:
-      - run: echo ${{ needs.configure-workflow.outputs.stage1Changed }}
+      - run: echo "${{ needs.configure-workflow.outputs.stage1Changed }}"
       - uses: actions/checkout@v2
         with:
           fetch-depth: 100
