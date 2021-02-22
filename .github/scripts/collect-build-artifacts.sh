@@ -1,5 +1,7 @@
 #!/bin/sh
 
+set -x
+
 mkdir -p artifacts
 
 [ -d "stage1_ingest" ] && mv stage1_ingest/* artifacts/
