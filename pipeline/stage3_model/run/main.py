@@ -59,7 +59,7 @@ val_ds = val_ds.prefetch(buffer_size=batch_size)
 model = make_model(input_shape=image_size + (3,), num_classes=num_classes)
 
 callbacks = [
-    keras.callbacks.EarlyStopping(monitor='val_loss', mode='min', verbose=1, patience=10),
+    keras.callbacks.EarlyStopping(monitor='val_accuracy', verbose=1, patience=10),
 ]
 model.compile(
     optimizer=keras.optimizers.SGD(learning_rate=0.1, momentum=0.9),
