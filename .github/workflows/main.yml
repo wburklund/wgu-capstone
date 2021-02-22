@@ -2,7 +2,7 @@ name: MLOps workflow
 on: push
 jobs:
   configure-workflow:
-    name: 'Configure workflow'
+    name: 'Configure Workflow'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
