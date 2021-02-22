@@ -27,7 +27,7 @@ public class Handler implements RequestHandler<Object, String>{
     @Override
     public String handleRequest(Object event, Context context)
     {
-        final double accuracy_threshold = 0.8; 
+        final double accuracy_threshold = 0.8;
 
         var testRunner = new TestRunner(
                 DynamoDbClient.create(),
