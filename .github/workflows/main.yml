@@ -11,16 +11,17 @@ jobs:
         with:
           name: stage1_ingest
           path: stage1_ingest.zip
-  build-clean:
-    name: 'Build Stage 2: Clean'
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v1
-      - uses: ./.github/actions/build-clean
-      - uses: actions/upload-artifact@v2
-        with:
-          name: stage2_clean
-          path: stage2_clean.zip
+  # build-clean:
+  #   if: always()
+  #   name: 'Build Stage 2: Clean'
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v1
+  #     - uses: ./.github/actions/build-clean
+  #     - uses: actions/upload-artifact@v2
+  #       with:
+  #         name: stage2_clean
+  #         path: stage2_clean.zip
   build-model:
     name: 'Build Stage 3: Model'
     runs-on: ubuntu-latest
