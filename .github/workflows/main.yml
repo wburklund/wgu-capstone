@@ -59,4 +59,5 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/download-artifact@v2
-      - run: ls
+      - run: ./.github/scripts/collect-build-artifacts.sh
+
