@@ -103,6 +103,8 @@ jobs:
         id: has-changed
         with:
           paths: pipeline 
+      - uses: actions/download-artifact@v2
+        if: steps.has-changed.outputs.changed == 'true'      
       - run: ./.github/scripts/collect-build-artifacts.sh
         if: steps.has-changed.outputs.changed == 'true'
       - uses: jakejarvis/s3-sync-action@master
