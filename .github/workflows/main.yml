@@ -100,7 +100,7 @@ jobs:
           name: stage5_deploy
           path: stage5_deploy.zip
   upload-artifacts:
-    if: ${{ needs.configure-workflow.outputs.pipeline-has-changed == 'true' }}
+    if: always()
     environment: Production
     needs: [configure-workflow, build-ingest, build-clean, build-model, build-test, build-deploy]
     name: 'Upload Build Artifacts to S3'
