@@ -2,7 +2,6 @@ name: MLOps workflow
 on: push
 jobs:
   build-ingest:
-    environment: Production
     name: 'Build Stage 1: Ingest'
     runs-on: ubuntu-latest
     steps:
