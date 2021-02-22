@@ -32,7 +32,7 @@ jobs:
         id: stage5-has-changed
         with:
           paths: pipeline/stage5_deploy
-      - run: echo "${{ steps.stage1-has-changed.changed }}"
+      - run: echo "${{ steps.stage1-has-changed.outputs.changed }}"
     outputs:
       pipeline-has-changed: ${{ steps.pipeline-has-changed.changed == 'true' }}
       stage1-has-changed: ${{ steps.stage1-has-changed.changed == 'true' }}
