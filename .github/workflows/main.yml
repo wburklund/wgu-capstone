@@ -96,10 +96,17 @@ jobs:
     name: 'Upload Build Artifacts to S3'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v1      
-      - uses: actions/download-artifact@v2
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 100
+      - uses: marceloprado/has-changed-path@v1
+        id: has-changed
+        with:
+          paths: pipeline 
       - run: ./.github/scripts/collect-build-artifacts.sh
+        if: steps.has-changed.outputs.changed == 'true'
       - uses: jakejarvis/s3-sync-action@master
+        if: steps.has-changed.outputs.changed == 'true'
         env:
           AWS_S3_BUCKET: ${{ secrets.AWS_S3_BUCKET }}
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
