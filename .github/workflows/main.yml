@@ -33,14 +33,14 @@ jobs:
         with:
           paths: pipeline/stage5_deploy
     outputs:
-      pipeline-has-changed: ${{ steps.pipeline-has-changed.outputs.changed == 'true' }}
-      stage1-has-changed: ${{ steps.stage1-has-changed.outputs.changed == 'true' }}
-      stage2-has-changed: ${{ steps.stage2-has-changed.outputs.changed == 'true' }}
-      stage3-has-changed: ${{ steps.stage3-has-changed.outputs.changed == 'true' }}
-      stage4-has-changed: ${{ steps.stage4-has-changed.outputs.changed == 'true' }}
-      stage5-has-changed: ${{ steps.stage5-has-changed.outputs.changed == 'true' }}
+      pipeline-has-changed: ${{ steps.pipeline-has-changed.outputs.changed }}
+      stage1-has-changed: ${{ steps.stage1-has-changed.outputs.changed }}
+      stage2-has-changed: ${{ steps.stage2-has-changed.outputs.changed }}
+      stage3-has-changed: ${{ steps.stage3-has-changed.outputs.changed }}
+      stage4-has-changed: ${{ steps.stage4-has-changed.outputs.changed }}
+      stage5-has-changed: ${{ steps.stage5-has-changed.outputs.changed }}
   build-ingest:
-    if: ${{ needs.configure-workflow.outputs.stage1-has-changed == 'true' }}
+    if: ${{ needs.configure-workflow.outputs.stage1-has-changed }}
     name: 'Build Stage 1: Ingest'
     needs: configure-workflow
     runs-on: ubuntu-latest
