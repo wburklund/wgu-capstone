@@ -40,11 +40,12 @@ jobs:
       stage4-has-changed: ${{ steps.stage4-has-changed.changed == 'true' }}
       stage5-has-changed: ${{ steps.stage5-has-changed.changed == 'true' }}
   build-ingest:
-    if: ${{ needs.configure-workflow.outputs.stage1-has-changed }}
+    if: ${{ needs.configure-workflow.outputs.stage1-has-changed == 'true' }}
     name: 'Build Stage 1: Ingest'
     needs: configure-workflow
     runs-on: ubuntu-latest
     steps:
+      - run: echo "${{ needs.configure-workflow.outputs.stage1-has-changed }}"
       - uses: actions/checkout@v2
         with:
           fetch-depth: 100
