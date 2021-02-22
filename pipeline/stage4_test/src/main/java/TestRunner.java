@@ -59,7 +59,7 @@ public class TestRunner {
         this.destinationBucket = destinationBucket;
     }
 
-    public double Run() {
+    public double Run(double accuracy_threshold) {
         var getObjectRequest =
                 GetObjectRequest.builder()
                         .bucket(sourceBucket)
@@ -99,14 +99,12 @@ public class TestRunner {
 
         System.out.println("Model accuracy: " + accuracy);
 
-        if (accuracy < 0.8) {
-            throw new RuntimeException("Model accuracy of " + accuracy + " was below minimum threshold of 0.8!");
-        }
-
-        try {
-            AcceptModel();
-        } catch (UnsupportedEncodingException e) {
-            throw new RuntimeException("UnsupportedEncodingException! " + e.toString());
+        if (accuracy > accuracy_threshold) {
+            try {
+                AcceptModel();
+            } catch (UnsupportedEncodingException e) {
+                throw new RuntimeException("UnsupportedEncodingException! " + e.toString());
+            }
         }
 
         return accuracy;

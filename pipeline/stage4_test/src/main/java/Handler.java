@@ -27,6 +27,8 @@ public class Handler implements RequestHandler<Object, String>{
     @Override
     public String handleRequest(Object event, Context context)
     {
+        final double accuracy_threshold = 0.8;
+
         var testRunner = new TestRunner(
                 DynamoDbClient.create(),
                 S3Client.create(),
@@ -36,8 +38,13 @@ public class Handler implements RequestHandler<Object, String>{
                 System.getenv("modelFileKey"),
                 System.getenv("destinationBucket"));
 
-        double accuracy = testRunner.Run();
+        double accuracy = testRunner.Run(accuracy_threshold);
         double accuracyPercent = accuracy * 100;
-        return String.format("Testing successful. Model accuracy = %.2f%%", accuracyPercent);
+
+        if (accuracy > accuracy_threshold) {
+            return String.format("Testing successful. Model accuracy = %.2f%%", accuracyPercent);
+        } else {
+            return String.format("Model failed testing!. Model accuracy = %.2f%%", accuracyPercent);
+        }
     }
 }
