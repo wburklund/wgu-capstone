@@ -40,67 +40,76 @@ jobs:
       stage4-has-changed: ${{ steps.stage4-has-changed.outputs.changed }}
       stage5-has-changed: ${{ steps.stage5-has-changed.outputs.changed }}
   build-ingest:
-    if: ${{ needs.configure-workflow.outputs.stage1-has-changed == 'true' }}
     name: 'Build Stage 1: Ingest'
     needs: configure-workflow
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: ./.github/actions/build-ingest
-      - uses: actions/upload-artifact@v2
+      - if: ${{ needs.configure-workflow.outputs.stage1-has-changed == 'true' }}  
+        uses: actions/checkout@v2
+      - if: ${{ needs.configure-workflow.outputs.stage1-has-changed == 'true' }}  
+        uses: ./.github/actions/build-ingest
+      - if: ${{ needs.configure-workflow.outputs.stage1-has-changed == 'true' }}  
+        uses: actions/upload-artifact@v2
         with:
           name: stage1_ingest
           path: stage1_ingest.zip
   build-clean:
-    if: ${{ needs.configure-workflow.outputs.stage2-has-changed == 'true' }}
     name: 'Build Stage 2: Clean'
     needs: configure-workflow
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: ./.github/actions/build-clean
-      - uses: actions/upload-artifact@v2
+      - if: ${{ needs.configure-workflow.outputs.stage2-has-changed == 'true' }}
+        uses: actions/checkout@v2
+      - if: ${{ needs.configure-workflow.outputs.stage2-has-changed == 'true' }}
+        uses: ./.github/actions/build-clean
+      - if: ${{ needs.configure-workflow.outputs.stage2-has-changed == 'true' }}
+        uses: actions/upload-artifact@v2
         with:
           name: stage2_clean
           path: stage2_clean.zip
   build-model:
-    if: ${{ needs.configure-workflow.outputs.stage3-has-changed == 'true' }}
     name: 'Build Stage 3: Model'
     needs: configure-workflow
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: ./.github/actions/build-model
-      - uses: actions/upload-artifact@v2
+      - if: ${{ needs.configure-workflow.outputs.stage3-has-changed == 'true' }}
+        uses: actions/checkout@v2
+      - if: ${{ needs.configure-workflow.outputs.stage3-has-changed == 'true' }}
+        uses: ./.github/actions/build-model
+      - if: ${{ needs.configure-workflow.outputs.stage3-has-changed == 'true' }}
+        uses: actions/upload-artifact@v2
         with:
           name: stage3_model
           path: artifacts/*
   build-test:
-    if: ${{ needs.configure-workflow.outputs.stage4-has-changed == 'true' }}
     name: 'Build Stage 4: Test'
     needs: configure-workflow
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: ./.github/actions/build-test
-      - uses: actions/upload-artifact@v2
+      - if: ${{ needs.configure-workflow.outputs.stage4-has-changed == 'true' }}
+        uses: actions/checkout@v2
+      - if: ${{ needs.configure-workflow.outputs.stage4-has-changed == 'true' }}
+        uses: ./.github/actions/build-test
+      - if: ${{ needs.configure-workflow.outputs.stage4-has-changed == 'true' }}
+        uses: actions/upload-artifact@v2
         with:
           name: stage4_test
           path: stage4_test.zip
   build-deploy:
-    if: ${{ needs.configure-workflow.outputs.stage5-has-changed == 'true' }}
     name: 'Build Stage 5: Deploy'
     needs: configure-workflow
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: ./.github/actions/build-deploy
-      - uses: actions/upload-artifact@v2
+      - if: ${{ needs.configure-workflow.outputs.stage5-has-changed == 'true' }}
+        uses: actions/checkout@v2
+      - if: ${{ needs.configure-workflow.outputs.stage5-has-changed == 'true' }}
+        uses: ./.github/actions/build-deploy
+      - if: ${{ needs.configure-workflow.outputs.stage5-has-changed == 'true' }}
+        uses: actions/upload-artifact@v2
         with:
           name: stage5_deploy
           path: stage5_deploy.zip
   upload-artifacts:
-    if: always()
     needs: [configure-workflow, build-ingest, build-clean, build-model, build-test, build-deploy]
     name: 'Upload Build Artifacts to S3'
     runs-on: ubuntu-latest
@@ -117,7 +126,6 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           SOURCE_DIR: 'artifacts'
   terraform-plan:
-    if: always()
     name: 'Terraform Plan'
     needs: upload-artifacts
     runs-on: ubuntu-latest
@@ -133,7 +141,6 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
   terraform-apply:
     environment: Production
-    if: always()
     name: 'Terraform Apply'
     needs: terraform-plan
     runs-on: ubuntu-latest
