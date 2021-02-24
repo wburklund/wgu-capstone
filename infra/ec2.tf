@@ -19,7 +19,7 @@
 resource "aws_instance" "capstone_model_run" {
   ami                  = "ami-0a714e270d06489a9"
   iam_instance_profile = aws_iam_instance_profile.capstone_model_run.name
-  instance_type        = "g4dn.4xlarge"
+  instance_type        = "g4dn.xlarge"
   security_groups      = [aws_security_group.capstone_no_ingress.name]
 }
 
