@@ -46,4 +46,4 @@ def lambda_handler(event:, context:)
     ssmClient.put_parameter({ name: ENV['execution_parameter_key'], value: resp.automation_execution_id, type: "String", overwrite: true})
     
     { statusCode: 202, body: JSON.generate("Modeling stage started.") }
-end
+end 

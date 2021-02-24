@@ -16,7 +16,7 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-use lambda_http::{lambda, IntoResponse, Request}; 
+use lambda_http::{lambda, IntoResponse, Request};
 use lambda_runtime::{error::HandlerError, Context};
 use log::LevelFilter;
 use rusoto_core::Region;

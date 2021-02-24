@@ -21,7 +21,7 @@ namespace ingest
 open Amazon.Lambda.APIGatewayEvents
 open Amazon.Lambda.Core
 
-open Program 
+open Program
 
 
 // Assembly attribute to enable the Lambda function's JSON input to be converted into a .NET class.
