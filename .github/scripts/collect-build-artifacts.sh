@@ -1,7 +1,5 @@
 #!/bin/sh
 
-set -x
-
 mkdir -p artifacts
 
 if [ -d "stage1_ingest" ]; then
