@@ -32,103 +32,103 @@ resource "aws_apigatewayv2_domain_name" "capstone_pipeline" {
 
   domain_name_configuration {
     certificate_arn = data.aws_acm_certificate.wildcard.arn
-    endpoint_type = "REGIONAL"
+    endpoint_type   = "REGIONAL"
     security_policy = "TLS_1_2"
   }
 }
 
 resource "aws_apigatewayv2_integration" "ingest" {
-  api_id = aws_apigatewayv2_api.capstone_pipeline_api.id
-  integration_method = "POST"
-  integration_type = "AWS_PROXY"
-  integration_uri = aws_lambda_function.stage1_ingest.invoke_arn
+  api_id                 = aws_apigatewayv2_api.capstone_pipeline_api.id
+  integration_method     = "POST"
+  integration_type       = "AWS_PROXY"
+  integration_uri        = aws_lambda_function.stage1_ingest.invoke_arn
   payload_format_version = "2.0"
 }
 
 resource "aws_apigatewayv2_integration" "clean" {
-  api_id = aws_apigatewayv2_api.capstone_pipeline_api.id
+  api_id             = aws_apigatewayv2_api.capstone_pipeline_api.id
   integration_method = "POST"
-  integration_type = "AWS_PROXY"
-  integration_uri = aws_lambda_function.stage2_clean.invoke_arn
+  integration_type   = "AWS_PROXY"
+  integration_uri    = aws_lambda_function.stage2_clean.invoke_arn
   # Use payload format 1.0, as Rust's payload format 2.0 integration appears to be broken
 }
 
 resource "aws_apigatewayv2_integration" "model_status" {
-  api_id = aws_apigatewayv2_api.capstone_pipeline_api.id
-  integration_method = "POST"
-  integration_type = "AWS_PROXY"
-  integration_uri = aws_lambda_function.stage3_model_status.invoke_arn
+  api_id                 = aws_apigatewayv2_api.capstone_pipeline_api.id
+  integration_method     = "POST"
+  integration_type       = "AWS_PROXY"
+  integration_uri        = aws_lambda_function.stage3_model_status.invoke_arn
   payload_format_version = "2.0"
 }
 
 resource "aws_apigatewayv2_integration" "model_trigger" {
-  api_id = aws_apigatewayv2_api.capstone_pipeline_api.id
-  integration_method = "POST"
-  integration_type = "AWS_PROXY"
-  integration_uri = aws_lambda_function.stage3_model_trigger.invoke_arn
+  api_id                 = aws_apigatewayv2_api.capstone_pipeline_api.id
+  integration_method     = "POST"
+  integration_type       = "AWS_PROXY"
+  integration_uri        = aws_lambda_function.stage3_model_trigger.invoke_arn
   payload_format_version = "2.0"
 }
 
 resource "aws_apigatewayv2_integration" "test" {
-  api_id = aws_apigatewayv2_api.capstone_pipeline_api.id
-  integration_method = "POST"
-  integration_type = "AWS_PROXY"
-  integration_uri = aws_lambda_function.stage4_test.invoke_arn
+  api_id                 = aws_apigatewayv2_api.capstone_pipeline_api.id
+  integration_method     = "POST"
+  integration_type       = "AWS_PROXY"
+  integration_uri        = aws_lambda_function.stage4_test.invoke_arn
   payload_format_version = "2.0"
 }
 
 resource "aws_apigatewayv2_integration" "deploy" {
-  api_id = aws_apigatewayv2_api.capstone_pipeline_api.id
-  integration_method = "POST"
-  integration_type = "AWS_PROXY"
-  integration_uri = aws_lambda_function.stage5_deploy.invoke_arn
+  api_id                 = aws_apigatewayv2_api.capstone_pipeline_api.id
+  integration_method     = "POST"
+  integration_type       = "AWS_PROXY"
+  integration_uri        = aws_lambda_function.stage5_deploy.invoke_arn
   payload_format_version = "2.0"
 }
 
 resource "aws_apigatewayv2_route" "ingest" {
-  api_id    = aws_apigatewayv2_api.capstone_pipeline_api.id
+  api_id             = aws_apigatewayv2_api.capstone_pipeline_api.id
   authorization_type = "AWS_IAM"
-  route_key = "PUT /ingest"
-  target = "integrations/${aws_apigatewayv2_integration.ingest.id}"
+  route_key          = "PUT /ingest"
+  target             = "integrations/${aws_apigatewayv2_integration.ingest.id}"
 }
 
 resource "aws_apigatewayv2_route" "clean" {
-  api_id    = aws_apigatewayv2_api.capstone_pipeline_api.id
+  api_id             = aws_apigatewayv2_api.capstone_pipeline_api.id
   authorization_type = "AWS_IAM"
-  route_key = "PUT /clean"
-  target = "integrations/${aws_apigatewayv2_integration.clean.id}"
+  route_key          = "PUT /clean"
+  target             = "integrations/${aws_apigatewayv2_integration.clean.id}"
 }
 
 resource "aws_apigatewayv2_route" "model_status" {
-  api_id    = aws_apigatewayv2_api.capstone_pipeline_api.id
+  api_id             = aws_apigatewayv2_api.capstone_pipeline_api.id
   authorization_type = "AWS_IAM"
-  route_key = "GET /model"
-  target = "integrations/${aws_apigatewayv2_integration.model_status.id}"
+  route_key          = "GET /model"
+  target             = "integrations/${aws_apigatewayv2_integration.model_status.id}"
 }
 
 resource "aws_apigatewayv2_route" "model_trigger" {
-  api_id    = aws_apigatewayv2_api.capstone_pipeline_api.id
+  api_id             = aws_apigatewayv2_api.capstone_pipeline_api.id
   authorization_type = "AWS_IAM"
-  route_key = "POST /model"
-  target = "integrations/${aws_apigatewayv2_integration.model_trigger.id}"
+  route_key          = "POST /model"
+  target             = "integrations/${aws_apigatewayv2_integration.model_trigger.id}"
 }
 
 resource "aws_apigatewayv2_route" "test" {
-  api_id    = aws_apigatewayv2_api.capstone_pipeline_api.id
+  api_id             = aws_apigatewayv2_api.capstone_pipeline_api.id
   authorization_type = "AWS_IAM"
-  route_key = "PUT /test"
-  target = "integrations/${aws_apigatewayv2_integration.test.id}"
+  route_key          = "PUT /test"
+  target             = "integrations/${aws_apigatewayv2_integration.test.id}"
 }
 
 resource "aws_apigatewayv2_route" "deploy" {
-  api_id    = aws_apigatewayv2_api.capstone_pipeline_api.id
+  api_id             = aws_apigatewayv2_api.capstone_pipeline_api.id
   authorization_type = "AWS_IAM"
-  route_key = "PUT /deploy"
-  target = "integrations/${aws_apigatewayv2_integration.deploy.id}"
+  route_key          = "PUT /deploy"
+  target             = "integrations/${aws_apigatewayv2_integration.deploy.id}"
 }
 
 resource "aws_apigatewayv2_stage" "capstone_pipeline_api" {
-  api_id = aws_apigatewayv2_api.capstone_pipeline_api.id
+  api_id      = aws_apigatewayv2_api.capstone_pipeline_api.id
   auto_deploy = true
-  name   = "$default"
+  name        = "$default"
 }

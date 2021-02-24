@@ -17,15 +17,15 @@
 */
 
 resource "aws_lambda_function" "stage1_ingest" {
-  function_name = "capstone_stage1_ingest"
-  handler       = "ingest::ingest.Function::FunctionHandler"
-  memory_size   = 1024 # Lambda compute power is proportional to memory
-  role          = aws_iam_role.capstone_ingest.arn
-  runtime       = "dotnetcore3.1"
-  s3_bucket     = data.aws_s3_bucket.capstone_code_store.bucket
-  s3_key        = "stage1_ingest.zip"
+  function_name    = "capstone_stage1_ingest"
+  handler          = "ingest::ingest.Function::FunctionHandler"
+  memory_size      = 1024 # Lambda compute power is proportional to memory
+  role             = aws_iam_role.capstone_ingest.arn
+  runtime          = "dotnetcore3.1"
+  s3_bucket        = data.aws_s3_bucket.capstone_code_store.bucket
+  s3_key           = "stage1_ingest.zip"
   source_code_hash = chomp(data.aws_s3_bucket_object.stage1_ingest_hash.body)
-  timeout       = 60
+  timeout          = 60
 
   environment {
     variables = {
@@ -39,14 +39,14 @@ resource "aws_lambda_function" "stage1_ingest" {
 }
 
 resource "aws_lambda_function" "stage2_clean" {
-  function_name = "capstone_stage2_clean"
-  handler       = "provided"
-  role          = aws_iam_role.capstone_clean.arn
-  runtime       = "provided.al2"
-  s3_bucket     = data.aws_s3_bucket.capstone_code_store.bucket
-  s3_key        = "stage2_clean.zip"
+  function_name    = "capstone_stage2_clean"
+  handler          = "provided"
+  role             = aws_iam_role.capstone_clean.arn
+  runtime          = "provided.al2"
+  s3_bucket        = data.aws_s3_bucket.capstone_code_store.bucket
+  s3_key           = "stage2_clean.zip"
   source_code_hash = chomp(data.aws_s3_bucket_object.stage2_clean_hash.body)
-  timeout       = 15
+  timeout          = 15
 
   environment {
     variables = {
@@ -57,12 +57,12 @@ resource "aws_lambda_function" "stage2_clean" {
 }
 
 resource "aws_lambda_function" "stage3_model_status" {
-  function_name = "capstone_stage3_model_status"
-  handler       = "index.handler"
-  role          = aws_iam_role.capstone_model_status.arn
-  runtime       = "nodejs14.x"
-  s3_bucket     = data.aws_s3_bucket.capstone_code_store.bucket
-  s3_key        = "stage3_model_status.zip"
+  function_name    = "capstone_stage3_model_status"
+  handler          = "index.handler"
+  role             = aws_iam_role.capstone_model_status.arn
+  runtime          = "nodejs14.x"
+  s3_bucket        = data.aws_s3_bucket.capstone_code_store.bucket
+  s3_key           = "stage3_model_status.zip"
   source_code_hash = chomp(data.aws_s3_bucket_object.stage3_model_status_hash.body)
 
   environment {
@@ -75,12 +75,12 @@ resource "aws_lambda_function" "stage3_model_status" {
 }
 
 resource "aws_lambda_function" "stage3_model_trigger" {
-  function_name = "capstone_stage3_model_trigger"
-  handler       = "lambda_function.lambda_handler"
-  role          = aws_iam_role.capstone_model_trigger.arn
-  runtime       = "ruby2.7"
-  s3_bucket     = data.aws_s3_bucket.capstone_code_store.bucket
-  s3_key        = "stage3_model_trigger.zip"
+  function_name    = "capstone_stage3_model_trigger"
+  handler          = "lambda_function.lambda_handler"
+  role             = aws_iam_role.capstone_model_trigger.arn
+  runtime          = "ruby2.7"
+  s3_bucket        = data.aws_s3_bucket.capstone_code_store.bucket
+  s3_key           = "stage3_model_trigger.zip"
   source_code_hash = chomp(data.aws_s3_bucket_object.stage3_model_trigger_hash.body)
 
   environment {
@@ -97,15 +97,15 @@ resource "aws_lambda_function" "stage3_model_trigger" {
 }
 
 resource "aws_lambda_function" "stage4_test" {
-  function_name = "capstone_stage4_test"
-  handler       = "Handler"
-  memory_size   = 512
-  role          = aws_iam_role.capstone_test.arn
-  runtime       = "java11"
-  s3_bucket     = data.aws_s3_bucket.capstone_code_store.bucket
-  s3_key        = "stage4_test.zip"
+  function_name    = "capstone_stage4_test"
+  handler          = "Handler"
+  memory_size      = 512
+  role             = aws_iam_role.capstone_test.arn
+  runtime          = "java11"
+  s3_bucket        = data.aws_s3_bucket.capstone_code_store.bucket
+  s3_key           = "stage4_test.zip"
   source_code_hash = chomp(data.aws_s3_bucket_object.stage4_test_hash.body)
-  timeout       = 60
+  timeout          = 60
 
   environment {
     variables = {
@@ -119,14 +119,14 @@ resource "aws_lambda_function" "stage4_test" {
 }
 
 resource "aws_lambda_function" "stage5_deploy" {
-  function_name = "capstone_stage5_deploy"
-  handler       = "deploy"
-  role          = aws_iam_role.capstone_deploy.arn
-  runtime       = "go1.x"
-  s3_bucket     = data.aws_s3_bucket.capstone_code_store.bucket
-  s3_key        = "stage5_deploy.zip"
+  function_name    = "capstone_stage5_deploy"
+  handler          = "deploy"
+  role             = aws_iam_role.capstone_deploy.arn
+  runtime          = "go1.x"
+  s3_bucket        = data.aws_s3_bucket.capstone_code_store.bucket
+  s3_key           = "stage5_deploy.zip"
   source_code_hash = chomp(data.aws_s3_bucket_object.stage5_deploy_hash.body)
-  timeout       = 10
+  timeout          = 10
 
   environment {
     variables = {
@@ -141,40 +141,40 @@ resource "aws_lambda_permission" "capstone_ingest_permission" {
   action        = "lambda:InvokeFunction"
   function_name = aws_lambda_function.stage1_ingest.function_name
   principal     = "apigateway.amazonaws.com"
-  source_arn = "${aws_apigatewayv2_api.capstone_pipeline_api.execution_arn}/*/*/*"
+  source_arn    = "${aws_apigatewayv2_api.capstone_pipeline_api.execution_arn}/*/*/*"
 }
 
 resource "aws_lambda_permission" "capstone_clean_permission" {
   action        = "lambda:InvokeFunction"
   function_name = aws_lambda_function.stage2_clean.function_name
   principal     = "apigateway.amazonaws.com"
-  source_arn = "${aws_apigatewayv2_api.capstone_pipeline_api.execution_arn}/*/*/*"
+  source_arn    = "${aws_apigatewayv2_api.capstone_pipeline_api.execution_arn}/*/*/*"
 }
 
 resource "aws_lambda_permission" "capstone_model_status_permission" {
   action        = "lambda:InvokeFunction"
   function_name = aws_lambda_function.stage3_model_status.function_name
   principal     = "apigateway.amazonaws.com"
-  source_arn = "${aws_apigatewayv2_api.capstone_pipeline_api.execution_arn}/*/*/*"
+  source_arn    = "${aws_apigatewayv2_api.capstone_pipeline_api.execution_arn}/*/*/*"
 }
 
 resource "aws_lambda_permission" "capstone_model_trigger_permission" {
   action        = "lambda:InvokeFunction"
   function_name = aws_lambda_function.stage3_model_trigger.function_name
   principal     = "apigateway.amazonaws.com"
-  source_arn = "${aws_apigatewayv2_api.capstone_pipeline_api.execution_arn}/*/*/*"
+  source_arn    = "${aws_apigatewayv2_api.capstone_pipeline_api.execution_arn}/*/*/*"
 }
 
 resource "aws_lambda_permission" "capstone_test_permission" {
   action        = "lambda:InvokeFunction"
   function_name = aws_lambda_function.stage4_test.function_name
   principal     = "apigateway.amazonaws.com"
-  source_arn = "${aws_apigatewayv2_api.capstone_pipeline_api.execution_arn}/*/*/*"
+  source_arn    = "${aws_apigatewayv2_api.capstone_pipeline_api.execution_arn}/*/*/*"
 }
 
 resource "aws_lambda_permission" "capstone_deploy_permission" {
   action        = "lambda:InvokeFunction"
   function_name = aws_lambda_function.stage5_deploy.function_name
   principal     = "apigateway.amazonaws.com"
-  source_arn = "${aws_apigatewayv2_api.capstone_pipeline_api.execution_arn}/*/*/*"
+  source_arn    = "${aws_apigatewayv2_api.capstone_pipeline_api.execution_arn}/*/*/*"
 }

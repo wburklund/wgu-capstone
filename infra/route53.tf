@@ -17,21 +17,21 @@
 */
 
 data "aws_route53_zone" "domain" {
-    provider = aws.us_east_1
+  provider = aws.us_east_1
 
-    name = "wburklund.com"
+  name = "wburklund.com"
 }
 
 resource "aws_route53_record" "capstone_pipeline" {
-    provider = aws.us_east_1
+  provider = aws.us_east_1
 
-    name = aws_apigatewayv2_domain_name.capstone_pipeline.domain_name
-    type = "A"
-    zone_id = data.aws_route53_zone.domain.zone_id
+  name    = aws_apigatewayv2_domain_name.capstone_pipeline.domain_name
+  type    = "A"
+  zone_id = data.aws_route53_zone.domain.zone_id
 
-    alias {
-      name = aws_apigatewayv2_domain_name.capstone_pipeline.domain_name_configuration[0].target_domain_name
-      zone_id = aws_apigatewayv2_domain_name.capstone_pipeline.domain_name_configuration[0].hosted_zone_id
-      evaluate_target_health = true
-    }
+  alias {
+    name                   = aws_apigatewayv2_domain_name.capstone_pipeline.domain_name_configuration[0].target_domain_name
+    zone_id                = aws_apigatewayv2_domain_name.capstone_pipeline.domain_name_configuration[0].hosted_zone_id
+    evaluate_target_health = true
+  }
 }
