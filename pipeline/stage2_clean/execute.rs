@@ -16,7 +16,7 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-use std::collections::HashSet;
+use std::collections::HashSet; 
 use std::iter::Iterator;
 use std::path::Path;
 use rusoto_core::{Region, RusotoError};
