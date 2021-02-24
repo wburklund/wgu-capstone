@@ -41,6 +41,9 @@ jobs:
       upload-artifacts: ${{ steps.code-has-changed.outputs.changed }}
       run-stage-1: ${{ steps.stage1-has-changed.outputs.changed }}
       run-stage-2: ${{ steps.stage1-has-changed.outputs.changed || steps.stage2-has-changed.outputs.changed }}
+      run-stage-4: ${{ steps.stage1-has-changed.outputs.changed || steps.stage2-has-changed.outputs.changed || steps.stage3-has-changed.outputs.changed }}
+      run-stage-3: ${{ steps.stage1-has-changed.outputs.changed || steps.stage2-has-changed.outputs.changed || steps.stage3-has-changed.outputs.changed || steps.stage4-has-changed.outputs.changed }}
+      run-stage-5: ${{ steps.stage1-has-changed.outputs.changed || steps.stage2-has-changed.outputs.changed || steps.stage3-has-changed.outputs.changed || steps.stage4-has-changed.outputs.changed || stage5-has-changed.outputs.changed }}
   build-stage-1:
     name: 'Build Stage 1: Ingest'
     needs: configure-workflow
