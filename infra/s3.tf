@@ -24,6 +24,36 @@ data "aws_s3_bucket" "capstone_data_store" {
   bucket = "capstone-data-store"
 }
 
+data "aws_s3_bucket_object" "stage1_ingest_hash" {
+  bucket = data.aws_s3_bucket.capstone_code_store.bucket
+  key = "stage1_ingest.zip.sha256.txt"
+}
+
+data "aws_s3_bucket_object" "stage2_clean_hash" {
+  bucket = data.aws_s3_bucket.capstone_code_store.bucket
+  key = "stage2_clean.zip.sha256.txt"
+}
+
+data "aws_s3_bucket_object" "stage3_model_status_hash" {
+  bucket = data.aws_s3_bucket.capstone_code_store.bucket
+  key = "stage3_model_status.zip.sha256.txt"
+}
+
+data "aws_s3_bucket_object" "stage3_model_trigger_hash" {
+  bucket = data.aws_s3_bucket.capstone_code_store.bucket
+  key = "stage3_model_trigger.zip.sha256.txt"
+}
+
+data "aws_s3_bucket_object" "stage4_test_hash" {
+  bucket = data.aws_s3_bucket.capstone_code_store.bucket
+  key = "stage4_test.zip.sha256.txt"
+}
+
+data "aws_s3_bucket_object" "stage5_deploy_hash" {
+  bucket = data.aws_s3_bucket.capstone_code_store.bucket
+  key = "stage5_deploy.zip.sha256.txt"
+}
+
 resource "aws_s3_bucket" "capstone_model_input" {
   bucket = "capstone-model-input"
 }

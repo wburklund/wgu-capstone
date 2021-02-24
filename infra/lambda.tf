@@ -22,11 +22,10 @@ resource "aws_lambda_function" "stage1_ingest" {
   memory_size   = 1024 # Lambda compute power is proportional to memory
   role          = aws_iam_role.capstone_ingest.arn
   runtime       = "dotnetcore3.1"
-  timeout       = 60
   s3_bucket     = data.aws_s3_bucket.capstone_code_store.bucket
   s3_key        = "stage1_ingest.zip"
-  # TODO: SHA256 (see https://github.com/hashicorp/terraform/issues/12443#issuecomment-291922062)
-  # source_code_hash = "value"
+  source_code_hash = chomp(data.aws_s3_bucket_object.stage1_ingest_hash.body)
+  timeout       = 60
 
   environment {
     variables = {
@@ -44,11 +43,10 @@ resource "aws_lambda_function" "stage2_clean" {
   handler       = "provided"
   role          = aws_iam_role.capstone_clean.arn
   runtime       = "provided.al2"
-  timeout       = 15
   s3_bucket     = data.aws_s3_bucket.capstone_code_store.bucket
   s3_key        = "stage2_clean.zip"
-  # TODO: SHA256 (see https://github.com/hashicorp/terraform/issues/12443#issuecomment-291922062)
-  # source_code_hash = "value"
+  source_code_hash = chomp(data.aws_s3_bucket_object.stage2_clean_hash.body)
+  timeout       = 15
 
   environment {
     variables = {
@@ -65,8 +63,7 @@ resource "aws_lambda_function" "stage3_model_status" {
   runtime       = "nodejs14.x"
   s3_bucket     = data.aws_s3_bucket.capstone_code_store.bucket
   s3_key        = "stage3_model_status.zip"
-  # TODO: SHA256 (see https://github.com/hashicorp/terraform/issues/12443#issuecomment-291922062)
-  # source_code_hash = "value"
+  source_code_hash = chomp(data.aws_s3_bucket_object.stage3_model_status_hash.body)
 
   environment {
     variables = {
@@ -84,8 +81,7 @@ resource "aws_lambda_function" "stage3_model_trigger" {
   runtime       = "ruby2.7"
   s3_bucket     = data.aws_s3_bucket.capstone_code_store.bucket
   s3_key        = "stage3_model_trigger.zip"
-  # TODO: SHA256 (see https://github.com/hashicorp/terraform/issues/12443#issuecomment-291922062)
-  # source_code_hash = "value"
+  source_code_hash = chomp(data.aws_s3_bucket_object.stage3_model_trigger_hash.body)
 
   environment {
     variables = {
@@ -108,9 +104,8 @@ resource "aws_lambda_function" "stage4_test" {
   runtime       = "java11"
   s3_bucket     = data.aws_s3_bucket.capstone_code_store.bucket
   s3_key        = "stage4_test.zip"
+  source_code_hash = chomp(data.aws_s3_bucket_object.stage4_test_hash.body)
   timeout       = 60
-  # TODO: SHA256 (see https://github.com/hashicorp/terraform/issues/12443#issuecomment-291922062)
-  # source_code_hash = "value"
 
   environment {
     variables = {
@@ -130,9 +125,8 @@ resource "aws_lambda_function" "stage5_deploy" {
   runtime       = "go1.x"
   s3_bucket     = data.aws_s3_bucket.capstone_code_store.bucket
   s3_key        = "stage5_deploy.zip"
+  source_code_hash = chomp(data.aws_s3_bucket_object.stage5_deploy_hash.body)
   timeout       = 10
-  # TODO: SHA256 (see https://github.com/hashicorp/terraform/issues/12443#issuecomment-291922062)
-  # source_code_hash = "value"
 
   environment {
     variables = {
