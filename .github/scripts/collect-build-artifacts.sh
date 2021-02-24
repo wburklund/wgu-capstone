@@ -19,3 +19,4 @@ fi
 if [ -d "stage5_deploy" ]; then
     mv stage5_deploy/* artifacts/
 fi
+exit 0
