@@ -114,12 +114,12 @@ jobs:
     name: 'Upload Build Artifacts to S3'
     runs-on: ubuntu-latest
     steps:
-      #- if: ${{ needs.configure-workflow.outputs.pipeline-has-changed == 'true' }}
-      - uses: actions/checkout@v2
-      #- if: ${{ needs.configure-workflow.outputs.pipeline-has-changed == 'true' }}
-      - uses: actions/download-artifact@v2
-      #- if: ${{ needs.configure-workflow.outputs.pipeline-has-changed == 'true' }}
-      - name: Upload Build Artifacts to S3
+      - if: ${{ needs.configure-workflow.outputs.pipeline-has-changed == 'true' }}
+        uses: actions/checkout@v2
+      - if: ${{ needs.configure-workflow.outputs.pipeline-has-changed == 'true' }}
+        uses: actions/download-artifact@v2
+      - if: ${{ needs.configure-workflow.outputs.pipeline-has-changed == 'true' }}
+        name: Upload Build Artifacts to S3
         run: |
           ./.github/scripts/collect-build-artifacts.sh
           (cd artifacts; ../.github/scripts/hash-zips.sh)
