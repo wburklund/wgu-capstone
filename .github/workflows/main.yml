@@ -108,10 +108,9 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - uses: actions/download-artifact@v2
-      - run: |
-        ./.github/scripts/collect-build-artifacts.sh
-        cd artifacts
-        ../.github/scripts/hash-zips.sh
+      - run: ./.github/scripts/collect-build-artifacts.sh
+      - run: ../.github/scripts/hash-zips.sh
+        working-directory ./artifacts
       - uses: jakejarvis/s3-sync-action@master
         env:
           AWS_S3_BUCKET: ${{ secrets.AWS_S3_BUCKET }}
