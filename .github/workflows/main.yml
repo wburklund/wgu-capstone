@@ -117,6 +117,7 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           SOURCE_DIR: 'artifacts'
   terraform-plan:
+    name: 'Terraform Plan'
     needs: upload-artifacts
     runs-on: ubuntu-latest
     steps:
@@ -132,6 +133,7 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
   terraform-apply:  
     environment: Production
+    name: 'Terraform Apply'
     needs: terraform-plan
     steps:
       - uses: actions/checkout@v2
