@@ -24,7 +24,7 @@ resource "aws_lambda_function" "stage1_ingest" {
   runtime          = "dotnetcore3.1"
   s3_bucket        = data.aws_s3_bucket.capstone_code_store.bucket
   s3_key           = "stage1_ingest.zip"
-  source_code_hash = chomp(data.aws_s3_bucket_object.stage1_ingest_hash.body)
+  source_code_hash = chomp(data.aws_s3_bucket_object.stage1_ingest_hash.body) # Thanks to https://stackoverflow.com/a/64713147
   timeout          = 60
 
   environment {
