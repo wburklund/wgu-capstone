@@ -123,7 +123,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: chrislennon/action-aws-cli@v1.1
       - uses: hashicorp/setup-terraform@v1
       - working-directory: ./infra
         run: |
@@ -140,7 +139,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: chrislennon/action-aws-cli@v1.1
       - uses: hashicorp/setup-terraform@v1
       - working-directory: ./infra
         run: |
