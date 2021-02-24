@@ -119,7 +119,7 @@ jobs:
       #- if: ${{ needs.configure-workflow.outputs.pipeline-has-changed == 'true' }}
       - uses: actions/download-artifact@v2
       #- if: ${{ needs.configure-workflow.outputs.pipeline-has-changed == 'true' }}
-      - name: Upload Build Artifacts
+      - name: Upload Build Artifacts to S3
         run: |
           ./.github/scripts/collect-build-artifacts.sh
           (cd artifacts; ../.github/scripts/hash-zips.sh)
