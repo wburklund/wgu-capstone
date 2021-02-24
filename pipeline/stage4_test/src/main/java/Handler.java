@@ -44,7 +44,7 @@ public class Handler implements RequestHandler<Object, String>{
         if (accuracy > accuracy_threshold) {
             return String.format("Testing successful. Model accuracy = %.2f%%", accuracyPercent);
         } else {
-            return String.format("Model failed testing!. Model accuracy = %.2f%%", accuracyPercent);
+            return String.format("Model failed testing! Model accuracy = %.2f%%", accuracyPercent);
         }
     }
 }
