@@ -124,7 +124,7 @@ jobs:
       - uses: chrislennon/action-aws-cli@v1.1
       - uses: hashicorp/setup-terraform@v1
       - working-directory: ./infra
-      - run: |
+        run: |
           terraform init
           terraform plan
         env:
@@ -138,7 +138,7 @@ jobs:
       - uses: chrislennon/action-aws-cli@v1.1
       - uses: hashicorp/setup-terraform@v1
       - working-directory: ./infra
-      - run: |
+        run: |
           terraform init
           terraform apply -auto-approve
         env:
