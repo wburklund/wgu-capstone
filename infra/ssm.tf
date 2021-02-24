@@ -45,7 +45,7 @@ mainSteps:
       Parameters: '{{ RunShellScriptParameters }}'
     description: ''
     onFailure: Continue
-    timeoutSeconds: 14400    
+    timeoutSeconds: 7200    
   - name: stopInstance
     action: 'aws:changeInstanceState'
     inputs:
