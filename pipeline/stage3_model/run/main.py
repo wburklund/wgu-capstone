@@ -51,7 +51,7 @@ val_ds = tf.keras.preprocessing.image_dataset_from_directory(
 )
 
 class_names = train_ds.class_names
-num_classes = len(class_names)
+num_classes = len(class_names) 
 
 train_ds = train_ds.prefetch(buffer_size=batch_size)
 val_ds = val_ds.prefetch(buffer_size=batch_size)
