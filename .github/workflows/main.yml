@@ -9,10 +9,6 @@ jobs:
         with:
           fetch-depth: 100
       - uses: marceloprado/has-changed-path@v1
-        id: pipeline-has-changed
-        with:
-          paths: pipeline
-      - uses: marceloprado/has-changed-path@v1
         id: stage1-has-changed
         with:
           paths: pipeline/stage1_ingest
@@ -32,79 +28,85 @@ jobs:
         id: stage5-has-changed
         with:
           paths: pipeline/stage5_deploy
+      - uses: marceloprado/has-changed-path@v1
+        id: code-has-changed
+        with:
+          paths: pipeline
     outputs:
-      pipeline-has-changed: ${{ steps.pipeline-has-changed.outputs.changed }}
-      stage1-has-changed: ${{ steps.stage1-has-changed.outputs.changed }}
-      stage2-has-changed: ${{ steps.stage2-has-changed.outputs.changed }}
-      stage3-has-changed: ${{ steps.stage3-has-changed.outputs.changed }}
-      stage4-has-changed: ${{ steps.stage4-has-changed.outputs.changed }}
-      stage5-has-changed: ${{ steps.stage5-has-changed.outputs.changed }}
-  build-ingest:
+      build-stage-1: ${{ steps.stage1-has-changed.outputs.changed }}
+      build-stage-2: ${{ steps.stage2-has-changed.outputs.changed }}
+      build-stage-3: ${{ steps.stage3-has-changed.outputs.changed }}
+      build-stage-4: ${{ steps.stage4-has-changed.outputs.changed }}
+      build-stage-5: ${{ steps.stage5-has-changed.outputs.changed }}
+      upload-artifacts: ${{ steps.code-has-changed.outputs.changed }}
+      run-stage-1: ${{ steps.stage1-has-changed.outputs.changed }}
+      run-stage-2: ${{ steps.stage1-has-changed.outputs.changed || steps.stage2-has-changed.outputs.changed }}
+  build-stage-1:
     name: 'Build Stage 1: Ingest'
     needs: configure-workflow
     runs-on: ubuntu-latest
     steps:
-      - if: ${{ needs.configure-workflow.outputs.stage1-has-changed == 'true' }}  
+      - if: ${{ needs.configure-workflow.outputs.build-stage-1 == 'true' }}  
         uses: actions/checkout@v2
-      - if: ${{ needs.configure-workflow.outputs.stage1-has-changed == 'true' }}  
+      - if: ${{ needs.configure-workflow.outputs.build-stage-1 == 'true' }}  
         uses: ./.github/actions/build-ingest
-      - if: ${{ needs.configure-workflow.outputs.stage1-has-changed == 'true' }}  
+      - if: ${{ needs.configure-workflow.outputs.build-stage-1 == 'true' }}  
         uses: actions/upload-artifact@v2
         with:
           name: stage1_ingest
           path: stage1_ingest.zip
-  build-clean:
+  build-stage-2:
     name: 'Build Stage 2: Clean'
     needs: configure-workflow
     runs-on: ubuntu-latest
     steps:
-      - if: ${{ needs.configure-workflow.outputs.stage2-has-changed == 'true' }}
+      - if: ${{ needs.configure-workflow.outputs.build-stage-2 == 'true' }}
         uses: actions/checkout@v2
-      - if: ${{ needs.configure-workflow.outputs.stage2-has-changed == 'true' }}
+      - if: ${{ needs.configure-workflow.outputs.build-stage-2 == 'true' }}
         uses: ./.github/actions/build-clean
-      - if: ${{ needs.configure-workflow.outputs.stage2-has-changed == 'true' }}
+      - if: ${{ needs.configure-workflow.outputs.build-stage-2 == 'true' }}
         uses: actions/upload-artifact@v2
         with:
           name: stage2_clean
           path: stage2_clean.zip
-  build-model:
+  build-stage-3:
     name: 'Build Stage 3: Model'
     needs: configure-workflow
     runs-on: ubuntu-latest
     steps:
-      - if: ${{ needs.configure-workflow.outputs.stage3-has-changed == 'true' }}
+      - if: ${{ needs.configure-workflow.outputs.build-stage-3 == 'true' }}
         uses: actions/checkout@v2
-      - if: ${{ needs.configure-workflow.outputs.stage3-has-changed == 'true' }}
+      - if: ${{ needs.configure-workflow.outputs.build-stage-3 == 'true' }}
         uses: ./.github/actions/build-model
-      - if: ${{ needs.configure-workflow.outputs.stage3-has-changed == 'true' }}
+      - if: ${{ needs.configure-workflow.outputs.build-stage-3 == 'true' }}
         uses: actions/upload-artifact@v2
         with:
           name: stage3_model
           path: artifacts/*
-  build-test:
+  build-stage-4:
     name: 'Build Stage 4: Test'
     needs: configure-workflow
     runs-on: ubuntu-latest
     steps:
-      - if: ${{ needs.configure-workflow.outputs.stage4-has-changed == 'true' }}
+      - if: ${{ needs.configure-workflow.outputs.build-stage-4 == 'true' }}
         uses: actions/checkout@v2
-      - if: ${{ needs.configure-workflow.outputs.stage4-has-changed == 'true' }}
+      - if: ${{ needs.configure-workflow.outputs.build-stage-4 == 'true' }}
         uses: ./.github/actions/build-test
-      - if: ${{ needs.configure-workflow.outputs.stage4-has-changed == 'true' }}
+      - if: ${{ needs.configure-workflow.outputs.build-stage-4 == 'true' }}
         uses: actions/upload-artifact@v2
         with:
           name: stage4_test
           path: stage4_test.zip
-  build-deploy:
+  build-stage-5:
     name: 'Build Stage 5: Deploy'
     needs: configure-workflow
     runs-on: ubuntu-latest
     steps:
-      - if: ${{ needs.configure-workflow.outputs.stage5-has-changed == 'true' }}
+      - if: ${{ needs.configure-workflow.outputs.build-stage-5 == 'true' }}
         uses: actions/checkout@v2
-      - if: ${{ needs.configure-workflow.outputs.stage5-has-changed == 'true' }}
+      - if: ${{ needs.configure-workflow.outputs.build-stage-5 == 'true' }}
         uses: ./.github/actions/build-deploy
-      - if: ${{ needs.configure-workflow.outputs.stage5-has-changed == 'true' }}
+      - if: ${{ needs.configure-workflow.outputs.build-stage-5 == 'true' }}
         uses: actions/upload-artifact@v2
         with:
           name: stage5_deploy
@@ -114,11 +116,11 @@ jobs:
     name: 'Upload Build Artifacts to S3'
     runs-on: ubuntu-latest
     steps:
-      - if: ${{ needs.configure-workflow.outputs.pipeline-has-changed == 'true' }}
+      - if: ${{ needs.configure-workflow.outputs.upload-artifacts == 'true' }}
         uses: actions/checkout@v2
-      - if: ${{ needs.configure-workflow.outputs.pipeline-has-changed == 'true' }}
+      - if: ${{ needs.configure-workflow.outputs.upload-artifacts == 'true' }}
         uses: actions/download-artifact@v2
-      - if: ${{ needs.configure-workflow.outputs.pipeline-has-changed == 'true' }}
+      - if: ${{ needs.configure-workflow.outputs.upload-artifacts == 'true' }}
         name: Upload Build Artifacts to S3
         run: |
           ./.github/scripts/collect-build-artifacts.sh
