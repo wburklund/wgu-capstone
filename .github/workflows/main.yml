@@ -112,7 +112,7 @@ jobs:
           name: stage5_deploy
           path: stage5_deploy.zip
   upload-artifacts:
-    needs: [configure-workflow, build-ingest, build-clean, build-model, build-test, build-deploy]
+    needs: [configure-workflow, build-stage-1, build-stage-2, build-stage-3, build-stage-4, build-stage-5]
     name: 'Upload Build Artifacts to S3'
     runs-on: ubuntu-latest
     steps:
