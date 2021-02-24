@@ -91,7 +91,7 @@ resource "aws_lambda_function" "stage3_model_trigger" {
       "s3_bucket"               = data.aws_s3_bucket.capstone_code_store.bucket,
       "s3_key"                  = "stage3_model_run",
       "status_function_name"    = aws_lambda_function.stage3_model_status.function_name,
-      "timeout_seconds"         = 7200
+      "timeout_seconds"         = 14400
     }
   }
 }
