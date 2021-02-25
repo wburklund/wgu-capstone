@@ -1,5 +1,3 @@
 #!/bin/sh
 
-while timeout -k 10 $3 -- awscurl --service execute-api -X $1 $2; [ $? = 124 ]
-do sleep $4
-done
+timeout -k 10 "$3" sh -c 'until awscurl --service execute-api -X "$1" "$2"; do sleep "$3"; done'
