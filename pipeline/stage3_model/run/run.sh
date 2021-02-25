@@ -25,6 +25,10 @@ OUTPUT_DIR="../output"
 # Exit on error
 set -e
 
+# Ensure symbolic links exist for cross-user Python execution
+[ -d "~/anaconda3" ] || ln -s /home/ec2-user/anaconda3 ~/anaconda3
+[ -d "~/.dl_binaries" ] || ln -s /home/ec2-user/.dl_binaries ~/.dl_binaries
+
 # Ensure working directories exist
 mkdir -p $INPUT_DIR
 mkdir -p $OUTPUT_DIR
