@@ -38,7 +38,7 @@ if [ "$(ls -A $OUTPUT_DIR)" ]; then
 fi
 
 # Activate virtual environment
-../anaconda3/bin/source activate tensorflow2_latest_p37
+source ../anaconda3/bin/activate tensorflow2_latest_p37
 
 # Train deep learning model
 INPUT_DIR=$INPUT_DIR OUTPUT_DIR=$OUTPUT_DIR python main.py
