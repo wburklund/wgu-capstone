@@ -46,7 +46,7 @@ resource "aws_lambda_function" "stage2_clean" {
   s3_bucket        = data.aws_s3_bucket.capstone_code_store.bucket
   s3_key           = "stage2_clean.zip"
   source_code_hash = chomp(data.aws_s3_bucket_object.stage2_clean_hash.body)
-  timeout          = 15
+  timeout          = 60
 
   environment {
     variables = {
