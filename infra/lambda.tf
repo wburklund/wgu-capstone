@@ -85,7 +85,7 @@ resource "aws_lambda_function" "stage3_model_trigger" {
 
   environment {
     variables = {
-      "commands" = "aws s3 sync --delete s3://capstone-code-store/stage3_model_run/ ~/code; chmod +x ~/code/run.sh; cd ~/code; ./run.sh"
+      "commands" = "aws s3 sync --delete s3://capstone-code-store/stage3_model_run/ /home/ec2-user/code; cd /home/ec2-user/code; chmod +x run.sh; ./run.sh"
       "execution_parameter_key" = aws_ssm_parameter.capstone_model_run_execution_id.name,
       "instance_parameter_key"  = aws_ssm_parameter.capstone_model_run_instance_id.name,
       "model_run_document"      = aws_ssm_document.Start_ShellScript_Stop.arn,

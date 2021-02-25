@@ -25,11 +25,6 @@ OUTPUT_DIR="../output"
 # Exit on error
 set -e
 
-# Ensure environment is configured
-[ -r "/home/ec2-user" ] || sudo chmod -R 777 /home/ec2-user
-[ -d "~/anaconda3" ] || ln -s /home/ec2-user/anaconda3 ~/anaconda3
-[ -d "~/.dl_binaries" ] || ln -s /home/ec2-user/.dl_binaries ~/.dl_binaries
-
 # Ensure working directories exist
 mkdir -p $INPUT_DIR
 mkdir -p $OUTPUT_DIR
@@ -43,7 +38,7 @@ if [ "$(ls -A $OUTPUT_DIR)" ]; then
 fi
 
 # Activate virtual environment
-~/anaconda3/bin/source activate tensorflow2_latest_p37
+../anaconda3/bin/source activate tensorflow2_latest_p37
 
 # Train deep learning model
 INPUT_DIR=$INPUT_DIR OUTPUT_DIR=$OUTPUT_DIR python main.py
