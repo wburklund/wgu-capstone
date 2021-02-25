@@ -192,8 +192,26 @@ jobs:
       # - if: ${{ needs.configure-workflow.outputs.run-stage-2 == 'true' }}
       - run: |
           pip install awscurl
-          ./.github/scripts/awscurl-retry.sh PUT ${{ secrets.MLOPS_API_BASE_URL }}/clean 30
+          ./.github/scripts/awscurl-retry.sh PUT ${{ secrets.MLOPS_API_BASE_URL }}/clean 60
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  run-stage-3:
+    name: 'Run Stage 3: Model'
+    needs: run-stage-2
+    runs-on: ubuntu-latest
+    steps:
+      # - if: ${{ needs.configure-workflow.outputs.run-stage-3 == 'true' }}
+      - uses: actions/checkout@v2
+      # - if: ${{ needs.configure-workflow.outputs.run-stage-3 == 'true' }}
+      - uses: actions/setup-python@v2
+      # - if: ${{ needs.configure-workflow.outputs.run-stage-3 == 'true' }}
+      - run: |
+          pip install awscurl
+          ./.github/scripts/awscurl-retry.sh POST ${{ secrets.MLOPS_API_BASE_URL }}/model 60
+      # TODO: poll GET /model for completion
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}          
