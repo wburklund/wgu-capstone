@@ -169,11 +169,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       # - if: ${{ needs.configure-workflow.outputs.run-stage-1 == 'true' }}
+      - uses: actions/checkout@v2
+      # - if: ${{ needs.configure-workflow.outputs.run-stage-1 == 'true' }}
       - uses: actions/setup-python@v2
       # - if: ${{ needs.configure-workflow.outputs.run-stage-1 == 'true' }}
       - run: |
           pip install awscurl
-          awscurl --service execute-api -X PUT https://capstone-pipeline.wburklund.com/ingest
+          ./.github/scripts/awscurl-retry.sh PUT https://capstone-pipeline.wburklund.com/ingest 120 1
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
