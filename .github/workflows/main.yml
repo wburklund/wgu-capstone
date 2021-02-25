@@ -168,10 +168,10 @@ jobs:
     needs: terraform-apply
     runs-on: ubuntu-latest
     steps:
-      - if: ${{ needs.configure-workflow.outputs.run-stage-1 == 'true' }}
-        uses: actions/setup-python@v2
-      - if: ${{ needs.configure-workflow.outputs.run-stage-1 == 'true' }}
-        run: |
+      # - if: ${{ needs.configure-workflow.outputs.run-stage-1 == 'true' }}
+      - uses: actions/setup-python@v2
+      # - if: ${{ needs.configure-workflow.outputs.run-stage-1 == 'true' }}
+      - run: |
           pip install awscurl
           awscurl --service execute-api -X PUT https://capstone-pipeline.wburklund.com/ingest
         env:
