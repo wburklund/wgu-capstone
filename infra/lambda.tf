@@ -85,11 +85,10 @@ resource "aws_lambda_function" "stage3_model_trigger" {
 
   environment {
     variables = {
+      "commands" = file("assets/bootstrap_model.sh")
       "execution_parameter_key" = aws_ssm_parameter.capstone_model_run_execution_id.name,
       "instance_parameter_key"  = aws_ssm_parameter.capstone_model_run_instance_id.name,
       "model_run_document"      = aws_ssm_document.Start_ShellScript_Stop.arn,
-      "s3_bucket"               = data.aws_s3_bucket.capstone_code_store.bucket,
-      "s3_key"                  = "stage3_model_run",
       "status_function_name"    = aws_lambda_function.stage3_model_status.function_name,
       "timeout_seconds"         = 7200
     }

@@ -35,12 +35,11 @@ def lambda_handler(event:, context:)
     end
     
     instance_id = ssmClient.get_parameter({ name: ENV['instance_parameter_key'] }).parameter.value
-    command = "sudo runuser --login ec2-user -c \'mkdir -p code && aws s3 sync s3://%s/%s code --delete && cd code && sh run.sh\'" % [ENV['s3_bucket'], ENV['s3_key']]
     
     resp = ssmClient.start_automation_execution({
         document_name: ENV['model_run_document'],
         parameters: { "InstanceId" => [instance_id],
-        "RunShellScriptParameters" => ['{ "commands": "%s", "executionTimeout": "%s" }' % [command, ENV['timeout_seconds']]]
+        "RunShellScriptParameters" => ['{ "commands": "%s", "executionTimeout": "%s" }' % [ENV['commands'], ENV['timeout_seconds']]]
         }
     })
     ssmClient.put_parameter({ name: ENV['execution_parameter_key'], value: resp.automation_execution_id, type: "String", overwrite: true})
