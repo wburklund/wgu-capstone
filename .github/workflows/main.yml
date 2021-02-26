@@ -168,11 +168,11 @@ jobs:
     needs: terraform-apply
     runs-on: ubuntu-latest
     steps:
-      # - if: ${{ needs.configure-workflow.outputs.run-stage-1 == 'true' }}
+      - if: ${{ needs.configure-workflow.outputs.run-stage-1 == 'true' }}
       - uses: actions/checkout@v2
-      # - if: ${{ needs.configure-workflow.outputs.run-stage-1 == 'true' }}
+      - if: ${{ needs.configure-workflow.outputs.run-stage-1 == 'true' }}
       - uses: actions/setup-python@v2
-      # - if: ${{ needs.configure-workflow.outputs.run-stage-1 == 'true' }}
+      - if: ${{ needs.configure-workflow.outputs.run-stage-1 == 'true' }}
       - run: |
           pip install awscurl
           ./.github/scripts/awscurl-retry.sh PUT ${{ secrets.MLOPS_API_BASE_URL }}/ingest 180
@@ -185,11 +185,11 @@ jobs:
     needs: run-stage-1
     runs-on: ubuntu-latest
     steps:
-      # - if: ${{ needs.configure-workflow.outputs.run-stage-2 == 'true' }}
+      - if: ${{ needs.configure-workflow.outputs.run-stage-2 == 'true' }}
       - uses: actions/checkout@v2
-      # - if: ${{ needs.configure-workflow.outputs.run-stage-2 == 'true' }}
+      - if: ${{ needs.configure-workflow.outputs.run-stage-2 == 'true' }}
       - uses: actions/setup-python@v2
-      # - if: ${{ needs.configure-workflow.outputs.run-stage-2 == 'true' }}
+      - if: ${{ needs.configure-workflow.outputs.run-stage-2 == 'true' }}
       - run: |
           pip install awscurl
           ./.github/scripts/awscurl-retry.sh PUT ${{ secrets.MLOPS_API_BASE_URL }}/clean 60
@@ -220,11 +220,11 @@ jobs:
     needs: run-stage-3
     runs-on: ubuntu-latest
     steps:
-      # - if: ${{ needs.configure-workflow.outputs.run-stage-4 == 'true' }}
+      - if: ${{ needs.configure-workflow.outputs.run-stage-4 == 'true' }}
       - uses: actions/checkout@v2
-      # - if: ${{ needs.configure-workflow.outputs.run-stage-4 == 'true' }}
+      - if: ${{ needs.configure-workflow.outputs.run-stage-4 == 'true' }}
       - uses: actions/setup-python@v2
-      # - if: ${{ needs.configure-workflow.outputs.run-stage-4 == 'true' }}
+      - if: ${{ needs.configure-workflow.outputs.run-stage-4 == 'true' }}
       - run: |
           pip install awscurl
           ./.github/scripts/awscurl-retry.sh PUT ${{ secrets.MLOPS_API_BASE_URL }}/test 60
