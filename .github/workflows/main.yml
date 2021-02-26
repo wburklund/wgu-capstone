@@ -173,6 +173,7 @@ jobs:
       - if: ${{ needs.configure-workflow.outputs.run-stage-1 == 'true' }}
         uses: actions/setup-python@v2
       - if: ${{ needs.configure-workflow.outputs.run-stage-1 == 'true' }}
+        name: 'Run Stage 1: Ingest'
         run: |
           pip install awscurl
           ./.github/scripts/awscurl-retry.sh PUT ${{ secrets.MLOPS_API_BASE_URL }}/ingest 180
@@ -190,6 +191,7 @@ jobs:
       - if: ${{ needs.configure-workflow.outputs.run-stage-2 == 'true' }}
         uses: actions/setup-python@v2
       - if: ${{ needs.configure-workflow.outputs.run-stage-2 == 'true' }}
+        name: 'Run Stage 2: Clean'
         run: |
           pip install awscurl
           ./.github/scripts/awscurl-retry.sh PUT ${{ secrets.MLOPS_API_BASE_URL }}/clean 60
@@ -207,7 +209,8 @@ jobs:
       # - if: ${{ needs.configure-workflow.outputs.run-stage-3 == 'true' }}
       - uses: actions/setup-python@v2
       # - if: ${{ needs.configure-workflow.outputs.run-stage-3 == 'true' }}
-      - run: |
+      - name: 'Run Stage 3: Model'
+        run: |
           pip install awscurl
           ./.github/scripts/awscurl-retry.sh POST ${{ secrets.MLOPS_API_BASE_URL }}/model 60
           timeout 2h ./.github/scripts/poll-model-stage.sh GET ${{ secrets.MLOPS_API_BASE_URL }}/model
@@ -225,6 +228,7 @@ jobs:
       - if: ${{ needs.configure-workflow.outputs.run-stage-4 == 'true' }}
         uses: actions/setup-python@v2
       - if: ${{ needs.configure-workflow.outputs.run-stage-4 == 'true' }}
+        name: 'Run Stage 4: Test'      
         run: |
           pip install awscurl
           ./.github/scripts/awscurl-retry.sh PUT ${{ secrets.MLOPS_API_BASE_URL }}/test 60
@@ -243,7 +247,8 @@ jobs:
       # - if: ${{ needs.configure-workflow.outputs.run-stage-5 == 'true' }}
       - uses: actions/setup-python@v2
       # - if: ${{ needs.configure-workflow.outputs.run-stage-5 == 'true' }}
-      - run: |
+      - name: 'Run Stage 5: Deploy'      
+        run: |
           pip install awscurl
           ./.github/scripts/awscurl-retry.sh PUT ${{ secrets.MLOPS_API_BASE_URL }}/deploy 60
         env:
