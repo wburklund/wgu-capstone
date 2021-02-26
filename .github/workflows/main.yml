@@ -233,6 +233,7 @@ jobs:
           AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
   run-stage-5:
+    environment: Production
     name: 'Run Stage 5: Deploy'
     needs: run-stage-4
     runs-on: ubuntu-latest
