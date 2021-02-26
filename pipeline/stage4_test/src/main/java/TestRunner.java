@@ -146,5 +146,5 @@ public class TestRunner {
                         .destinationKey(modelFileKey)
                         .build();
         s3Client.copyObject(copyRequest);
-    }
+    } 
 }
