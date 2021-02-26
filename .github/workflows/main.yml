@@ -256,16 +256,14 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
   run-stage-5:
     environment: Production
+    if: ${{ needs.configure-workflow.outputs.run-stage-5 == 'true' }}
     name: 'Run Stage 5: Deploy'
-    needs: run-stage-4
+    needs: [configure-workflow, run-stage-4]
     runs-on: ubuntu-latest
     steps:
-      - if: ${{ needs.configure-workflow.outputs.run-stage-5 == 'true' }}
-        uses: actions/checkout@v2
-      - if: ${{ needs.configure-workflow.outputs.run-stage-5 == 'true' }}
-        uses: actions/setup-python@v2
-      - if: ${{ needs.configure-workflow.outputs.run-stage-5 == 'true' }}
-        name: 'Run Stage 5: Deploy'      
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+      - name: 'Run Stage 5: Deploy'      
         run: |
           pip install awscurl
           ./.github/scripts/awscurl-retry.sh PUT ${{ secrets.MLOPS_API_BASE_URL }}/deploy 60
