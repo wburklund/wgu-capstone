@@ -215,7 +215,7 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-  run-stage-2:
+  run-stage-4:
     name: 'Run Stage 4: Test'
     needs: run-stage-3
     runs-on: ubuntu-latest
@@ -232,7 +232,7 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-  run-stage-2:
+  run-stage-5:
     name: 'Run Stage 5: Deploy'
     needs: run-stage-4
     runs-on: ubuntu-latest
