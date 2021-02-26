@@ -93,7 +93,7 @@ resource "aws_lambda_function" "stage3_model_trigger" {
       "timeout_seconds"         = 7200
     }
   }
-}
+} 
 
 resource "aws_lambda_function" "stage4_test" {
   function_name    = "capstone_stage4_test"
