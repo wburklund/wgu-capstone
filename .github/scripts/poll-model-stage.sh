@@ -1,13 +1,13 @@
 #!/bin/sh
 
-$Status = 'InProgress'
+Status = 'InProgress'
 while [ $Status -eq 'InProgress']
 do
     sleep 60
-    $Status = awscurl -X $1 $2
+    Status = awscurl -X $1 $2
 done
 
-[ $Result -eq 'Failed' ] && exit 1
-[ $Result -eq 'Success' ] && exit 0
+[ $Status -eq 'Failed' ] && exit 1
+[ $Status -eq 'Success' ] && exit 0
 
 exit -1
