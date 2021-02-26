@@ -1,8 +1,11 @@
 #!/bin/sh
 
-timeout "$3" sh -c "until awscurl -X $1 $2 != 'InProgress'; do sleep 60; done"
-
-$Result = awscurl -X $1 $2
+$Status = 'InProgress'
+while [ $Status -eq 'InProgress']
+do
+    sleep 60
+    $Status = awscurl -X $1 $2
+done
 
 [ $Result -eq 'Failed' ] && exit 1
 [ $Result -eq 'Success' ] && exit 0
