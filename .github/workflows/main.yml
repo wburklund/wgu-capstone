@@ -222,12 +222,12 @@ jobs:
     needs: run-stage-2
     runs-on: ubuntu-latest
     steps:
-      # - if: ${{ needs.configure-workflow.outputs.run-stage-3 == 'true' }}
-      - uses: actions/checkout@v2
-      # - if: ${{ needs.configure-workflow.outputs.run-stage-3 == 'true' }}
-      - uses: actions/setup-python@v2
-      # - if: ${{ needs.configure-workflow.outputs.run-stage-3 == 'true' }}
-      - name: 'Run Stage 3: Model'
+      - if: ${{ needs.configure-workflow.outputs.run-stage-3 == 'true' }}
+        uses: actions/checkout@v2
+      - if: ${{ needs.configure-workflow.outputs.run-stage-3 == 'true' }}
+        uses: actions/setup-python@v2
+      - if: ${{ needs.configure-workflow.outputs.run-stage-3 == 'true' }}
+        name: 'Run Stage 3: Model'
         run: |
           pip install awscurl
           ./.github/scripts/awscurl-retry.sh POST ${{ secrets.MLOPS_API_BASE_URL }}/model 60
@@ -260,12 +260,12 @@ jobs:
     needs: run-stage-4
     runs-on: ubuntu-latest
     steps:
-      # - if: ${{ needs.configure-workflow.outputs.run-stage-5 == 'true' }}
-      - uses: actions/checkout@v2
-      # - if: ${{ needs.configure-workflow.outputs.run-stage-5 == 'true' }}
-      - uses: actions/setup-python@v2
-      # - if: ${{ needs.configure-workflow.outputs.run-stage-5 == 'true' }}
-      - name: 'Run Stage 5: Deploy'      
+      - if: ${{ needs.configure-workflow.outputs.run-stage-5 == 'true' }}
+        uses: actions/checkout@v2
+      - if: ${{ needs.configure-workflow.outputs.run-stage-5 == 'true' }}
+        uses: actions/setup-python@v2
+      - if: ${{ needs.configure-workflow.outputs.run-stage-5 == 'true' }}
+        name: 'Run Stage 5: Deploy'      
         run: |
           pip install awscurl
           ./.github/scripts/awscurl-retry.sh PUT ${{ secrets.MLOPS_API_BASE_URL }}/deploy 60
