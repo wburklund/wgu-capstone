@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 STATUS='InProgress'
 while [[ "$STATUS" == 'InProgress' ]]
@@ -7,7 +7,7 @@ do
     STATUS=$(awscurl -X $1 $2)
 done
 
-[ "$STATUS" == 'Failed' ] && exit 1
-[ "$STATUS" == 'Success' ] && exit 0
+[[ "$STATUS" == 'Failed' ]] && exit 1
+[[ "$STATUS" == 'Success' ]] && exit 0
 
 exit 42
