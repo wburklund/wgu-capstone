@@ -40,11 +40,13 @@ class Login extends React.Component {
         
         let command = new GetCallerIdentityCommand()
         sts.send(command).then(
-            (data) => {
-                console.log(data)
+            () => {
+                // TODO: Transfer login to rest of the application 
+                // TODO: Redirect properly
+                window.location.assign('/home')
             },
-            (error) => {
-                console.log(error)
+            () => {
+                alert("Authentication failed!")
             }
         )
     }
