@@ -19,19 +19,23 @@
 import React from 'react';
 import { Button, Header, Form, Segment } from 'semantic-ui-react';
 
-const Login = () => (
-    <div style={{ margin: 'auto', width: '500px' }}>
-        <Header as='h2' color='blue'>
-            Login to Helios
-        </Header>
-        <Form size='large'>
-            <Segment>
-                <Form.Input fluid icon='user' iconPosition='left' placeholder='Username' />
-                <Form.Input fluid icon='lock' iconPosition='left' placeholder='Password' type='password' />
-            </Segment>
-            <Button color='primary' fluid size='large'>Submit</Button>
-        </Form>
-    </div>
-)
+class Login extends React.Component {
+    render() {
+        return (
+            <div style={{ margin: 'auto', width: '500px' }}>
+                <Header as='h2' color='blue'>
+                    Login to Helios
+                </Header>
+                <Form size='large'>
+                    <Segment>
+                        <Form.Input fluid icon='user' iconPosition='left' placeholder='Username' />
+                        <Form.Input fluid icon='lock' iconPosition='left' placeholder='Password' type='password' />
+                    </Segment>
+                    <Button color='primary' fluid size='large'>Submit</Button>
+                </Form>
+            </div>
+        )
+    }
+}
 
 export default Login;
