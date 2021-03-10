@@ -20,16 +20,29 @@ import React from 'react';
 import { Button, Header, Form, Segment } from 'semantic-ui-react';
 
 class Login extends React.Component {
+    state = {}
+
+    handleChange = (e) => {
+        let mutation = {}
+        mutation[e.target.name] = e.target.value
+
+        this.setState(mutation)
+    }
+
+    handleSubmit = (e) => {
+        
+    }
+
     render() {
         return (
             <div style={{ margin: 'auto', width: '500px' }}>
                 <Header as='h2' color='blue'>
                     Login to Helios
                 </Header>
-                <Form size='large'>
+                <Form size='large' onSubmit={this.handleSubmit}>
                     <Segment>
-                        <Form.Input fluid icon='user' iconPosition='left' placeholder='Username' required />
-                        <Form.Input fluid icon='lock' iconPosition='left' placeholder='Password' type='password' required />
+                        <Form.Input fluid icon='user' iconPosition='left' placeholder='Username' name='username' onChange={this.handleChange} required />
+                        <Form.Input fluid icon='lock' iconPosition='left' placeholder='Password' type='password' name='password' onChange={this.handleChange} required />
                         <Button color='primary' fluid size='large'>Submit</Button>
                     </Segment>
                 </Form>
