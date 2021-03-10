@@ -18,6 +18,7 @@
 
 import React from 'react';
 import { Button, Header, Form, Segment } from 'semantic-ui-react';
+import { GetCallerIdentityCommand, STSClient } from '@aws-sdk/client-sts';
 
 class Login extends React.Component {
     state = {}
@@ -30,7 +31,22 @@ class Login extends React.Component {
     }
 
     handleSubmit = (e) => {
+        const creds = {
+            accessKeyId: this.state.username,
+            secretAccessKey: this.state.password
+        }
+
+        const sts = new STSClient({ region: 'us-east-2', credentials: creds })
         
+        let command = new GetCallerIdentityCommand()
+        sts.send(command).then(
+            (data) => {
+                console.log(data)
+            },
+            (error) => {
+                console.log(error)
+            }
+        )
     }
 
     render() {
