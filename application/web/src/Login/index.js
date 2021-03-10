@@ -17,22 +17,21 @@
 */
 
 import React from 'react';
-import { Card } from 'semantic-ui-react';
+import { Button, Header, Form, Segment } from 'semantic-ui-react';
 
 const Login = () => (
-    <React.Fragment>
-        <Card>
-            <Card.Content>
-                <Card.Header>Login</Card.Header>
-                <Card.Meta>
-                    <span>Example meta text</span>
-                </Card.Meta>
-                <Card.Description>
-                    This is a Semantic UI React example.
-                </Card.Description>
-            </Card.Content>
-        </Card>
-    </React.Fragment>
+    <div style={{ margin: 'auto', width: '500px' }}>
+        <Header as='h2' color='blue'>
+            Login to Helios
+        </Header>
+        <Form size='large'>
+            <Segment>
+                <Form.Input fluid icon='user' iconPosition='left' placeholder='Username' />
+                <Form.Input fluid icon='lock' iconPosition='left' placeholder='Password' type='password' />
+            </Segment>
+            <Button color='primary' fluid size='large'>Submit</Button>
+        </Form>
+    </div>
 )
 
 export default Login;
