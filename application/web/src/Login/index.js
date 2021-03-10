@@ -17,7 +17,7 @@
 */
 
 import React from 'react';
-import { Button, Header, Form, Segment } from 'semantic-ui-react';
+import { Button, Header, Form, Segment, Message } from 'semantic-ui-react';
 import { GetCallerIdentityCommand, STSClient } from '@aws-sdk/client-sts';
 
 class Login extends React.Component {
@@ -30,7 +30,7 @@ class Login extends React.Component {
         this.setState(mutation)
     }
 
-    handleSubmit = (e) => {
+    handleSubmit = () => {
         const creds = {
             accessKeyId: this.state.username,
             secretAccessKey: this.state.password
@@ -45,9 +45,7 @@ class Login extends React.Component {
                 // TODO: Redirect properly
                 window.location.assign('/home')
             },
-            () => {
-                alert("Authentication failed!")
-            }
+            () => this.setState({ authError: true })
         )
     }
 
@@ -63,6 +61,11 @@ class Login extends React.Component {
                         <Form.Input fluid icon='lock' iconPosition='left' placeholder='Password' type='password' name='password' onChange={this.handleChange} required />
                         <Button color='primary' fluid size='large'>Submit</Button>
                     </Segment>
+                    {this.state.authError &&
+                        <Message negative>
+                            Incorrect username or password.
+                        </Message>
+                    }
                 </Form>
             </div>
         )
