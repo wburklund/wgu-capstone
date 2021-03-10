@@ -17,15 +17,20 @@
 */
 
 import './App.css';
-import { Route } from 'react-router-dom'
+import { Switch, Route, Redirect } from 'react-router-dom'
 import Login from './Login'
 
 function App() {
   return (
     <div className="App">
-      <Route exact path="/">
-        <Login />
-      </Route>
+      <Switch>
+        <Route exact path="/">
+          <Redirect exact from="/" to="login" />
+        </Route>
+        <Route path="/login">
+          <Login />
+        </Route>
+      </Switch>
     </div>
   );
 }
