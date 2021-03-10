@@ -16,30 +16,13 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-import logo from './logo.svg';
 import './App.css';
-import { Button } from 'semantic-ui-react'
 import { Route } from 'react-router-dom'
 import Login from './Login'
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-        <Button>Click Here</Button>
-      </header>
       <Route exact path="/">
         <Login />
       </Route>
