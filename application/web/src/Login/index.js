@@ -30,8 +30,8 @@ class Login extends React.Component {
                     <Segment>
                         <Form.Input fluid icon='user' iconPosition='left' placeholder='Username' />
                         <Form.Input fluid icon='lock' iconPosition='left' placeholder='Password' type='password' />
+                        <Button color='primary' fluid size='large'>Submit</Button>
                     </Segment>
-                    <Button color='primary' fluid size='large'>Submit</Button>
                 </Form>
             </div>
         )
