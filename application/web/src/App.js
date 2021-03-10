@@ -19,6 +19,8 @@
 import logo from './logo.svg';
 import './App.css';
 import { Button } from 'semantic-ui-react'
+import { Route } from 'react-router-dom'
+import Login from './Login'
 
 function App() {
   return (
@@ -38,6 +40,9 @@ function App() {
         </a>
         <Button>Click Here</Button>
       </header>
+      <Route exact path="/">
+        <Login />
+      </Route>
     </div>
   );
 }

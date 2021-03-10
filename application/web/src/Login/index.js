@@ -17,17 +17,22 @@
 */
 
 import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
-import 'semantic-ui-css/semantic.min.css'
-import App from './App';
-import { BrowserRouter } from 'react-router-dom';
+import { Card } from 'semantic-ui-react';
 
-ReactDOM.render(
-  <React.StrictMode>
-    <BrowserRouter>
-      <App />
-    </BrowserRouter>
-  </React.StrictMode>,
-  document.getElementById('root')
-);
+const Login = () => (
+    <React.Fragment>
+        <Card>
+            <Card.Content>
+                <Card.Header>Login</Card.Header>
+                <Card.Meta>
+                    <span>Example meta text</span>
+                </Card.Meta>
+                <Card.Description>
+                    This is a Semantic UI React example.
+                </Card.Description>
+            </Card.Content>
+        </Card>
+    </React.Fragment>
+)
+
+export default Login;
