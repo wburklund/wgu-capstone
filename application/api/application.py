@@ -33,7 +33,7 @@ test_dir = os.listdir(f'{input_dir}/Coronahack-Chest-XRay-Dataset/Coronahack-Che
 image_name = sorted(test_dir)[0]
 
 path = f'{input_dir}/Coronahack-Chest-XRay-Dataset/Coronahack-Chest-XRay-Dataset/test/{image_name}'
-im = Image.open(path)
+im = Image.open(path)   # TODO: Load byte stream from API call
 im = im.convert('RGB')
 im = im.resize(image_size, Image.NEAREST)
 im = image.img_to_array(im)
