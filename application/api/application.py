@@ -17,27 +17,47 @@
 #
 
 import os
+import io
 import numpy as np
 import tensorflow as tf
 from tensorflow import keras
 from tensorflow.keras.preprocessing import image
 from PIL import Image
+import flask
+from flask import Flask
+import boto3
 
-image_size = (299, 299)
+model = None
 
-input_dir = os.environ['INPUT_DIR']
+def has_pneumonia(image_data):
+    im = Image.open(io.BytesIO(image_data))
+    im = im.convert('RGB')
+    im = im.resize((299, 299), Image.NEAREST)
+    im = image.img_to_array(im)
+    im = np.expand_dims(im, axis=0)
 
-model = keras.models.load_model('model.h5')
+    prediction = model.predict(im, batch_size=1)[0]
+    return prediction[1] > 0.5
 
-test_dir = os.listdir(f'{input_dir}/Coronahack-Chest-XRay-Dataset/Coronahack-Chest-XRay-Dataset/test/')
-image_name = sorted(test_dir)[0]
+app = Flask(__name__)
 
-path = f'{input_dir}/Coronahack-Chest-XRay-Dataset/Coronahack-Chest-XRay-Dataset/test/{image_name}'
-im = Image.open(path)   # TODO: Load byte stream from API call
-im = im.convert('RGB')
-im = im.resize(image_size, Image.NEAREST)
-im = image.img_to_array(im)
-im = np.expand_dims(im, axis=0)
+# Refresh deep learning model
+@app.route('/refresh', methods=["PUT"])
+def refresh():
+    s3 = boto3.client('s3')
+    s3.download_file('capstone-api-assets', 'model.h5', 'model.h5')
+    model = keras.models.load_model('model.h5')
+    return "Success"
 
-prediction = model.predict(im, batch_size=1)[0]
-has_pneumonia = prediction[1] > 0.5
+# Detect pneumonia in a given chest X-ray image
+# This endpoint expects the body to be binary image data
+@app.route('/predict', methods=["GET"])
+def predict():
+    image_data = flask.request.get_data()
+    if has_pneumonia(image_data):
+        return "Pneumonia"
+    else:
+        return "Normal"
+
+refresh()
+app.run()
