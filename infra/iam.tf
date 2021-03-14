@@ -24,6 +24,15 @@ data "aws_iam_policy" "CloudWatchAgentServerPolicy" {
   arn = "arn:aws:iam::aws:policy/CloudWatchAgentServerPolicy"
 }
 
+data "aws_iam_role" "ecs_instance" {
+  name = "ecsInstanceRole"
+}
+
+resource "aws_iam_instance_profile" "capstone_api" {
+  name = "capstone_api"
+  role = data.aws_iam_role.ecs_instance.name
+}
+
 resource "aws_iam_instance_profile" "capstone_model_run" {
   name = "capstone_model_run"
   role = aws_iam_role.capstone_model_run.name

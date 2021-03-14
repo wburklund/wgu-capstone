@@ -16,11 +16,37 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+resource "aws_autoscaling_group" "capstone_api" {
+  availability_zones = ["us-east-2a"]
+  desired_capacity = 1
+  max_size = 1
+  min_size = 1
+  name = "capstone"
+  launch_configuration = aws_launch_configuration.capstone_api.name
+
+  tag {
+    key                 = "AmazonECSManaged"
+    value               = ""
+    propagate_at_launch = true
+  }
+}
+
 resource "aws_instance" "capstone_model_run" {
   ami                  = "ami-0a714e270d06489a9"
   iam_instance_profile = aws_iam_instance_profile.capstone_model_run.name
   instance_type        = "g4dn.4xlarge"
   security_groups      = [aws_security_group.capstone_no_ingress.name]
+}
+
+resource "aws_launch_configuration" "capstone_api" {
+  iam_instance_profile = aws_iam_instance_profile.capstone_api.name
+  image_id = "ami-02ef98ccecbf47e86"
+  instance_type = "t3.micro"  
+  name = "capstone_api"
+  user_data = <<EOF
+#!/bin/sh
+echo "ECS_CLUSTER=capstone_api" > /etc/ecs/ecs.config
+EOF
 }
 
 resource "aws_security_group" "capstone_no_ingress" {
