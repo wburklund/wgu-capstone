@@ -39,11 +39,12 @@ def has_pneumonia(image_data):
     prediction = model.predict(im, batch_size=1)[0]
     return prediction[1] > 0.5
 
-app = Flask(__name__)
+application = Flask(__name__)
 
 # Refresh deep learning model
-@app.route('/refresh', methods=["PUT"])
+@application.route('/refresh', methods=["PUT"])
 def refresh():
+    global model
     s3 = boto3.client('s3')
     s3.download_file('capstone-api-assets', 'model.h5', 'model.h5')
     model = keras.models.load_model('model.h5')
@@ -51,7 +52,7 @@ def refresh():
 
 # Detect pneumonia in a given chest X-ray image
 # This endpoint expects the body to be binary image data
-@app.route('/predict', methods=["GET"])
+@application.route('/predict', methods=["GET"])
 def predict():
     image_data = flask.request.get_data()
     if has_pneumonia(image_data):
@@ -59,5 +60,9 @@ def predict():
     else:
         return "Normal"
 
-refresh()
-app.run()
+@application.route('/hello', methods=["GET"])
+def hello():
+    return "Hello, world!"
+
+# refresh()
+application.run(host='0.0.0.0', port=80)
