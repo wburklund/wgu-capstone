@@ -24,9 +24,10 @@ from tensorflow import keras
 from tensorflow.keras.preprocessing import image
 from PIL import Image
 import flask
-from flask import Flask
+from flask import Flask, abort, request
 import boto3
 
+api_key = os.environ['API_KEY']
 model_filename = 'model.h5'
 model = None
 
@@ -46,6 +47,8 @@ application = Flask(__name__)
 @application.route('/refresh', methods=["PUT"])
 def refresh():
     global model
+    if request.headers.get('X-API-KEY') != api_key:
+        abort(403)
 
     model = None
     if os.path.exists(model_filename):
@@ -60,6 +63,9 @@ def refresh():
 # This endpoint expects the body to be binary image data
 @application.route('/predict', methods=["GET"])
 def predict():
+    if request.headers.get('X-API-KEY') != api_key:
+        abort(403)
+
     image_data = flask.request.get_data()
     if has_pneumonia(image_data):
         return "Pneumonia"
@@ -68,6 +74,8 @@ def predict():
 
 @application.route('/hello', methods=["GET"])
 def hello():
+    if request.headers.get('X-API-KEY') != api_key:
+        abort(403)
     return "Hello, world!"
 
 # refresh()
