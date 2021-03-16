@@ -25,6 +25,12 @@ resource "aws_ecs_task_definition" "capstone_api" {
   container_definitions = <<EOF
 [
   {
+    "environment": [
+      {
+        "name": "API_KEY",
+        "value": "${var.api_key}"
+      }
+    ],
     "entryPoint": [
       "python3"
     ],
