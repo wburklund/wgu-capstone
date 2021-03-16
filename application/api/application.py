@@ -46,10 +46,15 @@ application = Flask(__name__)
 # Refresh deep learning model
 @application.route('/refresh', methods=["PUT"])
 def refresh():
-    global model
     if request.headers.get('X-API-KEY') != api_key:
         abort(403)
 
+    _refresh()
+
+    return "Success"
+
+def _refresh():
+    global model
     model = None
     if os.path.exists(model_filename):
         os.remove(model_filename)
@@ -57,7 +62,6 @@ def refresh():
     s3 = boto3.client('s3')
     s3.download_file('capstone-api-assets', model_filename, model_filename)
     model = keras.models.load_model(model_filename)
-    return "Success"
 
 # Detect pneumonia in a given chest X-ray image
 # This endpoint expects the body to be binary image data
@@ -78,5 +82,5 @@ def hello():
         abort(403)
     return "Hello, world!"
 
-refresh()
+_refresh()
 application.run(host='0.0.0.0', port=80)
