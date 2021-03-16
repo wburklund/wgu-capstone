@@ -78,5 +78,5 @@ def hello():
         abort(403)
     return "Hello, world!"
 
-# refresh()
+refresh()
 application.run(host='0.0.0.0', port=80)
