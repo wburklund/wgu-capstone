@@ -27,6 +27,7 @@ import flask
 from flask import Flask
 import boto3
 
+model_filename = 'model.h5'
 model = None
 
 def has_pneumonia(image_data):
@@ -45,9 +46,14 @@ application = Flask(__name__)
 @application.route('/refresh', methods=["PUT"])
 def refresh():
     global model
+
+    model = None
+    if os.path.exists(model_filename):
+        os.remove(model_filename)
+
     s3 = boto3.client('s3')
-    s3.download_file('capstone-api-assets', 'model.h5', 'model.h5')
-    model = keras.models.load_model('model.h5')
+    s3.download_file('capstone-api-assets', model_filename, model_filename)
+    model = keras.models.load_model(model_filename)
     return "Success"
 
 # Detect pneumonia in a given chest X-ray image
