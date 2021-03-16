@@ -323,6 +323,32 @@ resource "aws_iam_role_policy" "capstone_deploy_policy" {
   EOF
 }
 
+resource "aws_iam_role_policy" "capstone_api_policy" {
+  name = "capstone_api_policy"
+  role = aws_iam_role.capstone_api.id
+
+  policy = <<EOF
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Action": "s3:ListBucket",
+            "Resource": "${aws_s3_bucket.capstone_api_assets.arn}"
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "s3:Get*",
+                "s3:List*"
+            ],
+            "Resource": "${aws_s3_bucket.capstone_api_assets.arn}/*"
+        }
+    ]
+}
+  EOF
+}
+
 resource "aws_iam_role" "capstone_ingest" {
   name = "capstone_ingest"
 
@@ -449,6 +475,25 @@ resource "aws_iam_role" "capstone_deploy" {
       "Action": "sts:AssumeRole",
       "Principal": {
         "Service": "lambda.amazonaws.com"
+      },
+      "Effect": "Allow"
+    }
+  ]
+}
+EOF
+}
+
+resource "aws_iam_role" "capstone_api" {
+  name = "capstone_api"
+
+  assume_role_policy = <<-EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Action": "sts:AssumeRole",
+      "Principal": {
+        "Service": "ecs-tasks.amazonaws.com"
       },
       "Effect": "Allow"
     }

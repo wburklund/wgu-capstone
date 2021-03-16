@@ -17,11 +17,11 @@
 */
 
 resource "aws_autoscaling_group" "capstone_api" {
-  availability_zones = ["us-east-2a"]
-  desired_capacity = 1
-  max_size = 1
-  min_size = 1
-  name = "capstone"
+  availability_zones   = ["us-east-2a"]
+  desired_capacity     = 1
+  max_size             = 1
+  min_size             = 1
+  name                 = "capstone"
   launch_configuration = aws_launch_configuration.capstone_api.name
 
   tag {
@@ -40,10 +40,10 @@ resource "aws_instance" "capstone_model_run" {
 
 resource "aws_launch_configuration" "capstone_api" {
   iam_instance_profile = aws_iam_instance_profile.capstone_api.name
-  image_id = "ami-02ef98ccecbf47e86"
-  instance_type = "t3.micro"  
-  name = "capstone_api"
-  user_data = <<EOF
+  image_id             = "ami-02ef98ccecbf47e86"
+  instance_type        = "t3.micro"
+  name                 = "capstone_api"
+  user_data            = <<EOF
 #!/bin/sh
 echo "ECS_CLUSTER=capstone_api" > /etc/ecs/ecs.config
 EOF
