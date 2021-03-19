@@ -34,7 +34,7 @@ resource "aws_ecs_task_definition" "capstone_api" {
     "entryPoint": [ "python3" ],
     "name": "capstone_api",
     "command": [ "application.py" ],
-    "image": "551524640723.dkr.ecr.us-east-2.amazonaws.com/capstone:latest",
+    "image": "${local.account_id}.dkr.ecr.${local.region}.amazonaws.com/capstone:latest",
     "cpu": 0,
     "memoryReservation": 900,
     "essential": true,

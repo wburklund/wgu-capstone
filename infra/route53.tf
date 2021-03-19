@@ -26,7 +26,7 @@ resource "aws_route53_record" "capstone_api" {
   provider = aws.us_east_1
 
   zone_id = data.aws_route53_zone.domain.zone_id
-  name    = "capstone-api.wburklund.com"
+  name    = "capstone-api.${data.aws_route53_zone.domain.name}"
   records = ["0.0.0.0"]
   ttl     = 60
   type    = "A"
