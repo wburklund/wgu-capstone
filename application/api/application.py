@@ -69,7 +69,7 @@ def _refresh():
 
 # Detect pneumonia in a given chest X-ray image
 # This endpoint expects the body to be binary image data
-@application.route('/predict', methods=["GET"])
+@application.route('/predict', methods=["POST"])
 @cross_origin()
 def predict():
     if request.headers.get('X-API-KEY') != api_key:
