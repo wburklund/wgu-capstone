@@ -41,7 +41,10 @@ class Login extends React.Component {
 
     handleSubmit = () => {
         hello(this.state.accessKey).then(
-            () => this.setState({ authSuccess: true }),
+            () => {
+                this.props.setAccessKey(this.state.accessKey)
+                this.setState({ authSuccess: true })
+            },
             () => this.setState({ authError: true })
         )
     }

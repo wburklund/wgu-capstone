@@ -9,7 +9,7 @@ async function predict(accessKey, file) {
       },
       method: 'POST',
       body: fullFile
-  })
+  });
   return response;
 }
 
