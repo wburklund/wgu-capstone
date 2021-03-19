@@ -42,6 +42,6 @@ locals {
 }
 
 variable "api_key" {
-  sensitive   = true
-  type        = string
+  sensitive = true
+  type      = string
 }

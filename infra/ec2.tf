@@ -39,14 +39,34 @@ resource "aws_instance" "capstone_model_run" {
 }
 
 resource "aws_launch_configuration" "capstone_api" {
-  iam_instance_profile = aws_iam_instance_profile.capstone_api.name
-  image_id             = "ami-02ef98ccecbf47e86"
-  instance_type        = "t3.micro"
-  name                 = "capstone_api"
-  user_data            = <<EOF
+  associate_public_ip_address = true
+  iam_instance_profile        = aws_iam_instance_profile.capstone_api.name
+  image_id                    = "ami-02ef98ccecbf47e86"
+  instance_type               = "t3.small"
+  name                        = "capstone_api"
+  security_groups             = [aws_security_group.capstone_api.id]
+  user_data                   = <<EOF
 #!/bin/sh
 echo "ECS_CLUSTER=capstone_api" > /etc/ecs/ecs.config
 EOF
+}
+
+resource "aws_security_group" "capstone_api" {
+  name = "capstone_api"
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  ingress {
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
 }
 
 resource "aws_security_group" "capstone_no_ingress" {

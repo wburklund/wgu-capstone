@@ -18,7 +18,16 @@
 
 import React from 'react';
 import { Button, Header, Form, Segment, Message } from 'semantic-ui-react';
-import { GetCallerIdentityCommand, STSClient } from '@aws-sdk/client-sts';
+import { Redirect } from 'react-router-dom';
+
+async function hello(accessKey) {
+    const response = await fetch("http://capstone-api.wburklund.com/hello", {
+        headers: {
+            'X-API-KEY': accessKey
+        }
+    })
+    return response
+}
 
 class Login extends React.Component {
     state = {}
@@ -31,20 +40,8 @@ class Login extends React.Component {
     }
 
     handleSubmit = () => {
-        const creds = {
-            accessKeyId: this.state.username,
-            secretAccessKey: this.state.password
-        }
-
-        const sts = new STSClient({ region: 'us-east-2', credentials: creds })
-        
-        let command = new GetCallerIdentityCommand()
-        sts.send(command).then(
-            () => {
-                // TODO: Transfer login to rest of the application 
-                // TODO: Redirect properly
-                window.location.assign('/home')
-            },
+        hello(this.state.accessKey).then(
+            () => this.setState({ authSuccess: true }),
             () => this.setState({ authError: true })
         )
     }
@@ -53,20 +50,20 @@ class Login extends React.Component {
         return (
             <div style={{ margin: 'auto', width: '500px' }}>
                 <Header as='h2' color='blue'>
-                    Login to Helios
+                    Enter Access Key
                 </Header>
                 <Form size='large' onSubmit={this.handleSubmit}>
                     <Segment>
-                        <Form.Input fluid icon='user' iconPosition='left' placeholder='Username' name='username' onChange={this.handleChange} required />
-                        <Form.Input fluid icon='lock' iconPosition='left' placeholder='Password' type='password' name='password' onChange={this.handleChange} required />
+                        <Form.Input fluid icon='lock' iconPosition='left' placeholder='Access Key' type='password' name='accessKey' onChange={this.handleChange} required />
                         <Button color='primary' fluid size='large'>Submit</Button>
                     </Segment>
                     {this.state.authError &&
                         <Message negative>
-                            Incorrect username or password.
+                            Incorrect access key.
                         </Message>
                     }
                 </Form>
+                {this.state.authSuccess && <Redirect to={"/scan"} />}
             </div>
         )
     }

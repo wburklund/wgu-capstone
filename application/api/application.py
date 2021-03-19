@@ -25,9 +25,12 @@ from tensorflow.keras.preprocessing import image
 from PIL import Image
 import flask
 from flask import Flask, abort, request
+import flask_cors
+from flask_cors import cross_origin
 import boto3
 
 api_key = os.environ['API_KEY']
+
 model_filename = 'model.h5'
 model = None
 
@@ -45,6 +48,7 @@ application = Flask(__name__)
 
 # Refresh deep learning model
 @application.route('/refresh', methods=["PUT"])
+@cross_origin()
 def refresh():
     if request.headers.get('X-API-KEY') != api_key:
         abort(403)
@@ -66,6 +70,7 @@ def _refresh():
 # Detect pneumonia in a given chest X-ray image
 # This endpoint expects the body to be binary image data
 @application.route('/predict', methods=["GET"])
+@cross_origin()
 def predict():
     if request.headers.get('X-API-KEY') != api_key:
         abort(403)
@@ -77,6 +82,7 @@ def predict():
         return "Normal"
 
 @application.route('/hello', methods=["GET"])
+@cross_origin()
 def hello():
     if request.headers.get('X-API-KEY') != api_key:
         abort(403)

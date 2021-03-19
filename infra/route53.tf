@@ -22,6 +22,20 @@ data "aws_route53_zone" "domain" {
   name = "wburklund.com"
 }
 
+resource "aws_route53_record" "capstone_api" {
+  provider = aws.us_east_1
+
+  zone_id = data.aws_route53_zone.domain.zone_id
+  name    = "capstone-api.wburklund.com"
+  records = ["0.0.0.0"]
+  ttl     = 60
+  type    = "A"
+
+  lifecycle {
+    ignore_changes = [records]
+  }
+}
+
 resource "aws_route53_record" "capstone_pipeline" {
   provider = aws.us_east_1
 

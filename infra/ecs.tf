@@ -31,16 +31,12 @@ resource "aws_ecs_task_definition" "capstone_api" {
         "value": "${var.api_key}"
       }
     ],
-    "entryPoint": [
-      "python3"
-    ],
+    "entryPoint": [ "python3" ],
     "name": "capstone_api",
-    "command": [
-      "application.py"
-    ],
+    "command": [ "application.py" ],
     "image": "551524640723.dkr.ecr.us-east-2.amazonaws.com/capstone:latest",
     "cpu": 0,
-    "memoryReservation": 650,
+    "memoryReservation": 900,
     "essential": true,
     "portMappings": [
       {
