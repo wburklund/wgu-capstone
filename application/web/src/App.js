@@ -20,23 +20,28 @@ import './App.css';
 import { Switch, Route, Redirect } from 'react-router-dom'
 import Login from './Login'
 import Scan from './Scan'
+import React from 'react';
 
-function App() {
-  return (
-    <div className="App">
-      <Switch>
-        <Route exact path="/">
-          <Redirect to="/login" />
-        </Route>
-        <Route path="/login">
-          <Login />
-        </Route>
-        <Route path="/scan">
-          <Scan />
-        </Route>
-      </Switch>
-    </div>
-  );
+class App extends React.Component {
+  setAccessKey = (accessKey) => this.setState({'accessKey': accessKey});
+
+  render() {
+    return (
+      <div className="App">
+        <Switch>
+          <Route exact path="/">
+            <Redirect to="/login" />
+          </Route>
+          <Route path="/login">
+            <Login setAccessKey={this.setAccessKey} />
+          </Route>
+          <Route path="/scan">
+            <Scan accessKey={this.state?.accessKey} />
+          </Route>
+        </Switch>
+      </div>
+    );
+  }
 }
 
 export default App;
