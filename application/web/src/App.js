@@ -19,6 +19,7 @@
 import './App.css';
 import { Switch, Route, Redirect } from 'react-router-dom'
 import Login from './Login'
+import Scan from './Scan'
 
 function App() {
   return (
@@ -29,6 +30,9 @@ function App() {
         </Route>
         <Route path="/login">
           <Login />
+        </Route>
+        <Route path="/scan">
+          <Scan />
         </Route>
       </Switch>
     </div>
