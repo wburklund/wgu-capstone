@@ -17,7 +17,7 @@
 */
 
 import React from 'react';
-import { Button, Header, Image, Segment, Grid, Input } from 'semantic-ui-react';
+import { Button, Header, Image, Segment, Grid, Input, Dimmer, Loader } from 'semantic-ui-react';
 import Xray from './x-ray.png'
 
 async function predict(accessKey, file) {
@@ -39,9 +39,10 @@ class Scan extends React.Component {
     this.setState({'image': file, 'imageUrl': url, 'scanResult': null})
   }
 
-  handlePredictButtonClick = async () => {
+  handleScanButtonClick = async () => {
+    this.setState({'scanning': true})
     let resp = await predict(this.props.accessKey, this.state.image)
-    this.setState({'scanResult': resp})
+    this.setState({'scanResult': resp, 'scanning': false})
   }
 
   render() {
@@ -73,13 +74,16 @@ class Scan extends React.Component {
               this.state?.image != null &&
               <Grid columns={2} style={{ height: '100%' }}>
                 <Grid.Column style={{position: 'relative'}}>
+                  <Dimmer active={this.state.scanning}>
+                    <Loader />
+                  </Dimmer>
                   <Image src={this.state.imageUrl} fluid style={{position: 'absolute', left: '50%', top: '50%', transform: 'translate(-50%, -50%)'}} />
                 </Grid.Column>
                 <Grid.Column style={{position: 'relative'}}>
                   <div style={{position: 'absolute', left: '50%', top: '50%', transform: 'translate(-50%, -50%)'}}>
                   <Header>{getScanMessage()}</Header>
                   {this.state?.scanResult == null ?
-                    <Button onClick={this.handlePredictButtonClick}>
+                    <Button onClick={this.handleScanButtonClick}>
                       Scan Image
                     </Button> :
                     <Button as='label' color='blue' htmlFor='fileInput'>Select New Image</Button>
