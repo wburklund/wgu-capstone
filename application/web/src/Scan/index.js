@@ -36,7 +36,7 @@ class Scan extends React.Component {
   handleFileChange = async (event) => {
     let file = event.target.files[0]
     let url = URL.createObjectURL(file);
-    this.setState({'image': file, 'imageUrl': url})
+    this.setState({'image': file, 'imageUrl': url, 'scanResult': null})
   }
 
   handlePredictButtonClick = async () => {
@@ -72,14 +72,19 @@ class Scan extends React.Component {
             {
               this.state?.image != null &&
               <Grid columns={2} style={{ height: '100%' }}>
-                <Grid.Column>
-                  <Image src={this.state.imageUrl} fluid />
+                <Grid.Column style={{position: 'relative'}}>
+                  <Image src={this.state.imageUrl} fluid style={{position: 'absolute', left: '50%', top: '50%', transform: 'translate(-50%, -50%)'}} />
                 </Grid.Column>
-                <Grid.Column>
+                <Grid.Column style={{position: 'relative'}}>
+                  <div style={{position: 'absolute', left: '50%', top: '50%', transform: 'translate(-50%, -50%)'}}>
                   <Header>{getScanMessage()}</Header>
-                  <Button onClick={this.handlePredictButtonClick}>
-                    Scan Image
-                  </Button>
+                  {this.state?.scanResult == null ?
+                    <Button onClick={this.handlePredictButtonClick}>
+                      Scan Image
+                    </Button> :
+                    <Button as='label' color='blue' htmlFor='fileInput'>Select New Image</Button>
+                  }
+                  </div>
                 </Grid.Column>
               </Grid>
             }
