@@ -62,7 +62,7 @@ class App extends React.Component {
             </Switch>
 
           </Grid.Row>
-          <Grid.Row centered style={{padding: 0}}>
+          <Grid.Row centered>
             <span>
               Athena icon made by <a href="https://thenounproject.com/pxLens/" title="pxLens">pxLens</a>
               &nbsp;—&nbsp;
