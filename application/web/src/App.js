@@ -17,28 +17,59 @@
 */
 
 import './App.css';
-import { Switch, Route, Redirect } from 'react-router-dom'
+import { Switch, Link, Route, Redirect } from 'react-router-dom'
+import { Menu, Grid } from 'semantic-ui-react';
 import Login from './Login'
 import Scan from './Scan'
 import React from 'react';
+import { ReactComponent as Athena } from './athena.svg'
 
 class App extends React.Component {
-  setAccessKey = (accessKey) => this.setState({'accessKey': accessKey});
+  setAccessKey = (accessKey) => this.setState({ 'accessKey': accessKey });
 
   render() {
     return (
       <div className="App">
-        <Switch>
-          <Route exact path="/">
-            <Redirect to="/login" />
-          </Route>
-          <Route path="/login">
-            <Login setAccessKey={this.setAccessKey} />
-          </Route>
-          <Route path="/scan">
-            <Scan accessKey={this.state?.accessKey} />
-          </Route>
-        </Switch>
+        <Grid style={{ width: '100vw' }}>
+          <Grid.Row style={{ width: '100vw', height: '95vh', paddingTop: 0, paddingBottom: 0 }}>
+            {/* {this.state?.accessKey && */
+              <span style={{ position: 'relative' }}>
+                <Menu size="large" className="fixed" style={{ height: '52px' }}>
+                  <Athena style={{ width: '50px', height: '50px', position: 'absolute', left: '50vw', transform: 'translate(-50%, 0)' }} />
+                  <Menu className="left">
+                    <Link className="item" to="/scan">Scan</Link>
+                    <Link className="item" to="/report">Report</Link>
+                  </Menu>
+                  <Menu className="right">
+                    <Link className="item" to="/about">About</Link>
+                    <a className="item" href="mailto:waburklund@gmail.com">Contact</a>
+                    <Link className="item" to="/" onClick={() => this.setAccessKey(null)}>Logout</Link>
+                  </Menu>
+                </Menu>
+              </span>
+            }
+            <Switch>
+              <Route path="/login">
+                <Login setAccessKey={this.setAccessKey} />
+              </Route>
+              <Route path="/scan">
+                {/* {this.state?.accessKey == null && <Redirect to={"/login"} />} */}
+                <Scan accessKey={this.state?.accessKey} />
+              </Route>
+              <Route>
+                <Redirect to="/login" />
+              </Route>
+            </Switch>
+
+          </Grid.Row>
+          <Grid.Row centered style={{padding: 0}}>
+            <span>
+              Athena icon made by <a href="https://thenounproject.com/pxLens/" title="pxLens">pxLens</a>
+              &nbsp;—&nbsp;
+              X-ray icon made by <a href="https://www.flaticon.com/authors/icon-pond" title="Icon Pond">Icon Pond</a>
+            </span>
+          </Grid.Row>
+        </Grid>
       </div>
     );
   }
