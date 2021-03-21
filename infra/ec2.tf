@@ -45,10 +45,7 @@ resource "aws_launch_configuration" "capstone_api" {
   instance_type               = "t3.small"
   name                        = "capstone_api"
   security_groups             = [aws_security_group.capstone_api.id]
-  user_data                   = <<EOF
-#!/bin/sh
-echo "ECS_CLUSTER=capstone_api" > /etc/ecs/ecs.config
-EOF
+  user_data                   = file("assets/capstone_api_user_data.sh")
 }
 
 resource "aws_security_group" "capstone_api" {
