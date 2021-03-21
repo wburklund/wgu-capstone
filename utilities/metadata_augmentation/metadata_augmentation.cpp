@@ -31,8 +31,8 @@ unsigned int rand32();
 time_t round_next_day(time_t time);
 
 // Relative paths to input and output files from the project root
-const char* input_csv_path = "/data/input/Chest_xray_Corona_Metadata.csv";
-const char* output_csv_path = "/data/working/Chest_xray_Corona_Metadata.Augmented.csv";
+const char* input_csv_path = "/input/Chest_xray_Corona_Metadata.csv";
+const char* output_csv_path = "/Chest_xray_Corona_Metadata.Augmented.csv";
 
 const int SECONDS_PER_DAY = 86400;
 
