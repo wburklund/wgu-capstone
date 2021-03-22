@@ -84,6 +84,9 @@ def predict():
 
 @application.route('/statistics', methods=['GET'])
 def statistics():
+    if request.headers.get('X-API-KEY') != api_key:
+        abort(403)
+
     dynamodb = boto3.resource('dynamodb')
     table = dynamodb.Table('CapstoneMetadatabase')
     response = table.scan(
