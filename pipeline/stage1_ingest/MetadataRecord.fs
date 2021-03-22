@@ -22,20 +22,30 @@ open System
 
 type Label = Normal | Pneumonia | Invalid
 type DataSet = Train | Test
+type Cause = Normal | Virus | Bacteria | Smoking | Invalid
 
 type MetadataRecord =
       { ImageName: string
         DataSet : DataSet
         Label: Label
+        Cause: Cause
         Date: DateTime }
 
 let labelToString label =
     match label with
-    | Normal -> "Normal"
-    | Pneumonia -> "Pneumonia"
-    | Invalid -> "Invalid"
+    | Label.Normal -> "Normal"
+    | Label.Pneumonia -> "Pneumonia"
+    | Label.Invalid -> "Invalid"
 
 let datasetToString dataset =
     match dataset with
     | Train -> "Train"
     | Test -> "Test"
+
+let causeToString cause =
+    match cause with
+    | Normal -> "Normal"
+    | Virus -> "Virus"
+    | Bacteria -> "Bacteria"
+    | Smoking -> "Smoking"
+    | Invalid -> "Invalid"

@@ -46,15 +46,25 @@ let private parse_metadata_record (record:string) : MetadataRecord =
         | "Normal" -> Label.Normal
         | "Pnemonia" -> Label.Pneumonia
         | _ -> Label.Invalid
-    if label = Invalid then printfn "Invalid label (%s, %s) found for image '%s'. Skipping..." tokens.[2] tokens.[5] image_name
+    if label = Label.Invalid then printfn "Invalid label %s found for image '%s'. Skipping..." tokens.[2] image_name
+
+    let cause =
+        match tokens.[2], tokens.[5] with
+        | _, "bacteria" -> Cause.Bacteria
+        | _, "Virus" -> Cause.Virus
+        | _, "Stress-Smoking" -> Cause.Smoking
+        | "Normal", _ -> Cause.Normal
+        | _ -> Cause.Invalid
+    if cause = Cause.Invalid then printfn "Invalid cause (%s, %s) found for image '%s'. Skipping..." tokens.[2] tokens.[5] image_name
 
     let date = DateTime.Parse tokens.[6]
 
-    { ImageName = image_name; DataSet = dataset; Label = label; Date = date }
+    { ImageName = image_name; DataSet = dataset; Label = label; Cause = cause; Date = date }
 
 let parse_metadata_csv bucket key =
     lines_of_s3_file bucket key
     |> Seq.skip 1
     |> Seq.map parse_metadata_record
-    |> Seq.filter (fun record -> record.Label <> Invalid)
+    |> Seq.filter (fun record -> record.Label <> Label.Invalid)
+    |> Seq.filter (fun record -> record.Cause <> Cause.Invalid)
     |> List.ofSeq

@@ -26,13 +26,14 @@ open System.Threading.Tasks
 
 open MetadataRecord
 
-type MetadatabaseRecord(filename:string, label:string, dataset:string, date:DateTime) =
+type MetadatabaseRecord(filename:string, label:string, dataset:string, cause:string, date:DateTime) =
     member val Filename = filename with get, set
     member val Label = label with get, set
     member val DataSet = dataset with get, set
+    member val Cause = cause with get, set
     member val Date = date.ToString("yyyy-MM-dd") with get, set
-    new() = MetadatabaseRecord(null, null, null, DateTime.MinValue)
-    new(record:MetadataRecord) = MetadatabaseRecord(record.ImageName, (labelToString record.Label), (datasetToString record.DataSet), record.Date)
+    new() = MetadatabaseRecord(null, null, null, null, DateTime.MinValue)
+    new(record:MetadataRecord) = MetadatabaseRecord(record.ImageName, (labelToString record.Label), (datasetToString record.DataSet), (causeToString record.Cause), record.Date)
 
 let get_create_metadatabase_table_request table_name =
     new CreateTableRequest(
