@@ -18,6 +18,7 @@
 
 import os
 import io
+import json
 import numpy as np
 import tensorflow as tf
 from tensorflow import keras
@@ -47,7 +48,7 @@ def has_pneumonia(image_data):
 application = Flask(__name__)
 
 # Refresh deep learning model
-@application.route('/refresh', methods=["PUT"])
+@application.route('/refresh', methods=['PUT'])
 @cross_origin()
 def refresh():
     if request.headers.get('X-API-KEY') != api_key:
@@ -55,7 +56,7 @@ def refresh():
 
     _refresh()
 
-    return "Success"
+    return 'Success'
 
 def _refresh():
     global model
@@ -69,7 +70,7 @@ def _refresh():
 
 # Detect pneumonia in a given chest X-ray image
 # This endpoint expects the body to be binary image data
-@application.route('/predict', methods=["POST"])
+@application.route('/predict', methods=['POST'])
 @cross_origin()
 def predict():
     if request.headers.get('X-API-KEY') != api_key:
@@ -77,16 +78,32 @@ def predict():
 
     image_data = flask.request.get_data()
     if has_pneumonia(image_data):
-        return "Pneumonia"
+        return 'Pneumonia'
     else:
-        return "Normal"
+        return 'Normal'
 
-@application.route('/hello', methods=["GET"])
+@application.route('/statistics', methods=['GET'])
+def statistics():
+    dynamodb = boto3.resource('dynamodb')
+    table = dynamodb.Table('CapstoneMetadatabase')
+    response = table.scan(
+        ProjectionExpression = '#d, Cause',
+        ExpressionAttributeNames = {'#d': 'Date'})
+
+    data = response['Items']
+
+    while 'LastEvaluatedKey' in response:
+        response = table.scan(ExclusiveStartKey=response['LastEvaluatedKey'])
+        data.extend(response['Items'])
+
+    return json.dumps(data)
+
+@application.route('/hello', methods=['GET'])
 @cross_origin()
 def hello():
     if request.headers.get('X-API-KEY') != api_key:
         abort(403)
-    return "Hello, world!"
+    return 'Hello, world!'
 
 _refresh()
 application.run(host='0.0.0.0', port=80)
