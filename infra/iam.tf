@@ -343,7 +343,12 @@ resource "aws_iam_role_policy" "capstone_api_policy" {
                 "s3:List*"
             ],
             "Resource": "${aws_s3_bucket.capstone_api_assets.arn}/*"
-        }
+        },
+        {
+            "Effect": "Allow",
+            "Action": "dynamodb:Scan",
+            "Resource": "${data.aws_dynamodb_table.capstone_metadatabase.arn}"     
+        }        
     ]
 }
   EOF

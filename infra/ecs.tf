@@ -29,6 +29,10 @@ resource "aws_ecs_task_definition" "capstone_api" {
       {
         "name": "API_KEY",
         "value": "${var.api_key}"
+      },
+      {
+        "name": "AWS_DEFAULT_REGION",
+        "value": "${local.region}"
       }
     ],
     "entryPoint": [ "python3" ],
