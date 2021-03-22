@@ -41,7 +41,7 @@ let get_source_path (record:MetadataRecord) =
 
     sprintf "%s/%s/%s" sourceKeyPrefix dataset_directory record.ImageName
 
-let get_destination_path (record:MetadataRecord) =
+let get_destination_path (record:MetadataRecord) = 
     let dataset_directory =
         match record.DataSet with
         | DataSet.Train -> "Train"
