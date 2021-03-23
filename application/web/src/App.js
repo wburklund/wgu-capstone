@@ -19,8 +19,9 @@
 import './App.css';
 import { Switch, Link, Route, Redirect } from 'react-router-dom'
 import { Menu, Grid } from 'semantic-ui-react';
-import Login from './Login'
-import Scan from './Scan'
+import Login from './Login';
+import Report from './Report'
+import Scan from './Scan';
 import React from 'react';
 import { ReactComponent as Athena } from './athena.svg'
 
@@ -55,6 +56,9 @@ class App extends React.Component {
               <Route path="/scan">
                 {/* {this.state?.accessKey == null && <Redirect to={"/login"} />} */}
                 <Scan accessKey={this.state?.accessKey} />
+              </Route>
+              <Route path="/report">
+                <Report accessKey={this.state?.accessKey} />
               </Route>
               <Route>
                 <Redirect to="/login" />
