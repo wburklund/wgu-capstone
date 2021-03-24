@@ -17,15 +17,58 @@
 */
 
 import React from 'react';
-import { Header, Segment } from 'semantic-ui-react';
+import { Header, Segment, Button } from 'semantic-ui-react';
+import {
+  XYPlot,
+  XAxis,
+  YAxis,
+  ChartLabel,
+  HorizontalGridLines,
+  VerticalGridLines,
+  LineSeriesCanvas
+} from 'react-vis';
+
+const Line = LineSeriesCanvas;
 
 class Report extends React.Component {
     render() {
         return (
             <Segment placeholder style={{ height: '100%', width: '100%', paddingTop: '15px' }}>
-                <Header as='h2' color='blue'>
-                    Enter Access Key
-                </Header>
+        <XYPlot width={800} height={600}>
+          <HorizontalGridLines />
+          <VerticalGridLines />
+          <XAxis />
+          <YAxis />
+          <ChartLabel 
+            text="Time"
+            className="alt-x-label"
+            includeMargin={false}
+            xPercent={0.5}
+            yPercent={1.01}
+            />
+
+          <ChartLabel 
+            text="Stock Price"
+            className="alt-y-label"
+            includeMargin={false}
+            xPercent={0.02}
+            yPercent={0.5}
+            style={{
+              transform: 'rotate(-90)',
+            }}
+            />
+          <Line
+            className="first-series"
+            data={[{x: 1, y: 30}, {x: 2, y: 40}, {x: 3, y: 60}, {x: 4, y: 120}]}
+          />
+          <Line className="second-series" data={null} />
+          <Line
+            className="third-series"
+            curve={'curveMonotoneX'}
+            data={[{x: 1, y: 30}, {x: 2, y: 40}, {x: 3, y: 60}, {x: 4, y: 120}]}
+            strokeDasharray={[7, 3]}
+          />
+        </XYPlot>
             </Segment>
         )
     }
