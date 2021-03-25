@@ -19,6 +19,7 @@
 import os
 import io
 import json
+from collections import Counter
 import numpy as np
 import tensorflow as tf
 from tensorflow import keras
@@ -100,7 +101,11 @@ def statistics():
         response = table.scan(ExclusiveStartKey=response['LastEvaluatedKey'])
         data.extend(response['Items'])
 
-    return json.dumps(data)
+    hashable_data = list(map(lambda x: x.get('Cause') + '_' + x.get('Date'), data))
+    counted_data = list(Counter(hashable_data).items())
+    output_data = list(map(lambda x: ({'Cause': x[0].split('_')[0], 'Date': x[0].split('_')[1]}, x[1]), counted_data))
+
+    return json.dumps(output_data)
 
 @application.route('/hello', methods=['GET'])
 @cross_origin()
