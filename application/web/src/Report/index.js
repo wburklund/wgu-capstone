@@ -64,11 +64,10 @@ class Report extends React.Component {
 
       for (let key of causeGroups.keys()) {
         let groupData = causeGroups.get(key).map(d => ({ x: new Date(d[0].Date), y: d[1]}));
-        groupData.sort((a, b) => b.x - a.x)
+        groupData.sort((a, b) => a.x - b.x)
         displayStats[key] = groupData
       }
 
-      console.log(causeGroups)
       console.log(displayStats)
       
       return this.setState({'stats': displayStats})
@@ -81,7 +80,7 @@ class Report extends React.Component {
         <XYPlot width={800} height={600} xType='time'>
           <HorizontalGridLines />
           <VerticalGridLines />
-          <XAxis tickTotal={6}/>
+          <XAxis />
           <YAxis />
           <DiscreteColorLegend items={['Normal', 'Virus', 'Bacteria', 'Smoking']} orientation='horizontal' />
           <ChartLabel
@@ -92,7 +91,7 @@ class Report extends React.Component {
             yPercent={1.01}
           />
           <ChartLabel
-            text="Stock Price"
+            text="Cases"
             className="alt-y-label"
             includeMargin={false}
             xPercent={0.02}
