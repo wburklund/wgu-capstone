@@ -18,18 +18,8 @@
 
 import React from 'react';
 import { Segment, Grid, Button, Header, Dropdown } from 'semantic-ui-react';
-import {
-  XYPlot,
-  XAxis,
-  YAxis,
-  ChartLabel,
-  HorizontalGridLines,
-  VerticalGridLines,
-  LineSeriesCanvas,
-  DiscreteColorLegend,
-  Crosshair
-} from 'react-vis';
 import StatisticalAnalysis from './StatisticalAnalysis';
+import StatisticsPlot from './StatisticsPlot';
 
 // https://stackoverflow.com/questions/14446511/most-efficient-method-to-groupby-on-an-array-of-objects
 function groupBy(list, keyGetter) {
@@ -115,65 +105,13 @@ class Report extends React.Component {
   }
 
   render() {
-    const { stats, nearestX, selectedStat } = this.state;
-    let crosshairItems = [];
-    if (nearestX) {
-      let nearestTime = nearestX.x.getTime();
-      crosshairItems.push({ title: 'Date', value: nearestX.x.toDateString(), x: nearestX.x })
-      crosshairItems.push({ title: 'Normal', value: stats['Normal'].find(e => e.x.getTime() === nearestTime)?.y });
-      crosshairItems.push({ title: 'Bacteria', value: stats['Bacteria'].find(e => e.x.getTime() === nearestTime)?.y });
-      crosshairItems.push({ title: 'Virus', value: stats['Virus'].find(e => e.x.getTime() === nearestTime)?.y });
-      crosshairItems.push({ title: 'Smoking', value: stats['Smoking'].find(e => e.x.getTime() === nearestTime)?.y });
-    }
+    const { stats } = this.state;
 
     return (
       <Segment placeholder style={{ height: '100%', width: '100%', paddingTop: '15px' }}>
         <Grid columns={2} style={{ height: '100%' }}>
           <Grid.Column style={{ position: 'relative' }}>
-            <XYPlot width={800} height={600} xType='time' onMouseLeave={() => this.setState({'nearestX': null})}>
-              <HorizontalGridLines />
-              <VerticalGridLines />
-              <XAxis />
-              <YAxis />
-              <DiscreteColorLegend items={['Normal', 'Virus', 'Bacteria', 'Smoking']} orientation='horizontal' />
-              <ChartLabel
-                text="Time"
-                className="alt-x-label"
-                includeMargin={false}
-                xPercent={0.5}
-                yPercent={1.01}
-              />
-              <ChartLabel
-                text="Cases"
-                className="alt-y-label"
-                includeMargin={false}
-                xPercent={0.02}
-                yPercent={0.5}
-                style={{ transform: 'rotate(-90)' }}
-              />
-              <LineSeriesCanvas
-                className="first-series"
-                data={stats.Normal}
-                onNearestX={x => this.setState({'nearestX': x})}
-              />
-              <LineSeriesCanvas
-                className="second-series"
-                data={stats.Virus}
-              />
-              <LineSeriesCanvas
-                className="third-series"
-                data={stats.Bacteria}
-              />
-              <LineSeriesCanvas
-                className="fourth-series"
-                data={stats.Smoking}
-              />
-            {nearestX &&
-              <Crosshair
-                values={crosshairItems}
-                titleFormat={items => ({ title: 'Date', value: items[0].value })}
-                itemsFormat={items => items.slice(1)} />}              
-            </XYPlot>
+            <StatisticsPlot data={stats} />
           </Grid.Column>
           <Grid.Column>
             <StatisticalAnalysis data={stats} />
