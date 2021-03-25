@@ -170,8 +170,8 @@ class Report extends React.Component {
             {nearestX &&
               <Crosshair
                 values={crosshairItems}
-                titleFormat={(items) => ({ title: 'Date', value: new Date(items[0].x).toDateString() })}
-                itemsFormat={(items) => items.slice(1)} />}              
+                titleFormat={items => ({ title: 'Date', value: items[0].value })}
+                itemsFormat={items => items.slice(1)} />}              
             </XYPlot>
           </Grid.Column>
           <Grid.Column style={{ position: 'relative' }}>
