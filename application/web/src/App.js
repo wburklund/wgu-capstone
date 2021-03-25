@@ -54,10 +54,11 @@ class App extends React.Component {
                 <Login setAccessKey={this.setAccessKey} />
               </Route>
               <Route path="/scan">
-                {/* {this.state?.accessKey == null && <Redirect to={"/login"} />} */}
+                {this.state?.accessKey == null && <Redirect to={"/login"} />}
                 <Scan accessKey={this.state?.accessKey} />
               </Route>
               <Route path="/report">
+                {this.state?.accessKey == null && <Redirect to={"/login"} />}
                 <Report accessKey={this.state?.accessKey} />
               </Route>
               <Route>
