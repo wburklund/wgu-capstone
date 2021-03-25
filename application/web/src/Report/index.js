@@ -44,6 +44,21 @@ function groupBy(list, keyGetter) {
   return map;
 }
 
+function getDateRange(startDate, endDate) {
+  let dateRange = []
+  let workingDate = new Date(startDate)
+
+  while (workingDate < endDate) {
+    dateRange.push(workingDate)
+    let nextDate = new Date(workingDate)
+    nextDate.setUTCDate(nextDate.getUTCDate() + 1)
+    workingDate = nextDate
+  }
+  
+  dateRange.push(new Date(endDate))
+  return dateRange
+}
+
 async function statistics(accessKey) {
   const response = await fetch("http://capstone-api.wburklund.com/statistics", {
     headers: {
@@ -59,13 +74,32 @@ class Report extends React.Component {
 
   componentDidMount() {
     statistics(this.props.accessKey).then(stats => {
+      // Parse dates
+      for (let stat of stats) {
+        stat[0].Date = (new Date(stat[0].Date)).getTime()
+      }
+
+      // Create array of default values (0) for dates within our data's date range
+      let allDates = [...stats].map(d => d[0].Date)
+      let minDate = allDates.reduce((a, b) => a < b ? a : b ); 
+      let maxDate = allDates.reduce((a, b) => a > b ? a : b );
+      let dateRange = getDateRange(minDate, maxDate).map(d => d.getTime())
+      let defaultValues = dateRange.map(d => [d, 0])
+
+      // Group data by cause
       let causeGroups = groupBy(stats, x => x[0].Cause);
       let displayStats = {}
 
       for (let key of causeGroups.keys()) {
-        let groupData = causeGroups.get(key).map(d => ({ x: new Date(d[0].Date), y: d[1]}));
-        groupData.sort((a, b) => a.x - b.x)
-        displayStats[key] = groupData
+        // Map this cause group's data to [Date, Count] pairs
+        let groupData = causeGroups.get(key).map(d => [d[0].Date, d[1]]);
+        // Merge default values with group data
+        let fullGroupData = new Map([...defaultValues, ...groupData])
+        let groupStats = [...fullGroupData]
+        groupStats.sort()
+        // Display actual dates
+        let displayGroupStats = groupStats.map(d => ({ x: new Date(d[0]), y: d[1]}));
+        displayStats[key] = displayGroupStats
       }
 
       console.log(displayStats)
