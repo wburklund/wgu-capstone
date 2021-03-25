@@ -17,7 +17,7 @@
 */
 
 import React from 'react';
-import { Segment, Grid, Button, Header, Dropdown } from 'semantic-ui-react';
+import { Segment, Grid } from 'semantic-ui-react';
 import StatisticalAnalysis from './StatisticalAnalysis';
 import StatisticsPlot from './StatisticsPlot';
 

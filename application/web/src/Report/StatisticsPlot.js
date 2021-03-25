@@ -17,7 +17,6 @@
 */
 
 import React from 'react';
-import { Segment, Grid, Button, Header, Dropdown } from 'semantic-ui-react';
 import {
   XYPlot,
   XAxis,
@@ -36,7 +35,7 @@ const initialState = {
 
 class StatisticsPlot extends React.Component {
   state = initialState;
-  
+
   render() {
     let { data } = this.props;
     let { nearestX } = this.state;
@@ -48,7 +47,6 @@ class StatisticsPlot extends React.Component {
       crosshairItems.push({ title: 'Normal', value: data.Normal.find(e => e.x.getTime() === nearestTime)?.y });
       crosshairItems.push({ title: 'Bacteria', value: data.Bacteria.find(e => e.x.getTime() === nearestTime)?.y });
       crosshairItems.push({ title: 'Virus', value: data.Virus.find(e => e.x.getTime() === nearestTime)?.y });
-      crosshairItems.push({ title: 'Smoking', value: data.Smoking.find(e => e.x.getTime() === nearestTime)?.y });
     }
 
     return (
@@ -57,7 +55,7 @@ class StatisticsPlot extends React.Component {
         <VerticalGridLines />
         <XAxis />
         <YAxis />
-        <DiscreteColorLegend items={['Normal', 'Virus', 'Bacteria', 'Smoking']} orientation='horizontal' />
+        <DiscreteColorLegend items={['Normal', 'Viral Pneumonia', 'Bacterial Pneumonia']} />
         <ChartLabel
           text="Time"
           className="alt-x-label"
@@ -85,10 +83,6 @@ class StatisticsPlot extends React.Component {
         <LineSeriesCanvas
           className="third-series"
           data={data.Bacteria}
-        />
-        <LineSeriesCanvas
-          className="fourth-series"
-          data={data.Smoking}
         />
         {nearestX &&
           <Crosshair
