@@ -83,6 +83,7 @@ def predict():
         return 'Normal'
 
 @application.route('/statistics', methods=['GET'])
+@cross_origin()
 def statistics():
     if request.headers.get('X-API-KEY') != api_key:
         abort(403)
