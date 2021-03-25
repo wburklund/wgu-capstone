@@ -29,9 +29,52 @@ import {
   DiscreteColorLegend
 } from 'react-vis';
 
+// https://stackoverflow.com/questions/14446511/most-efficient-method-to-groupby-on-an-array-of-objects
+function groupBy(list, keyGetter) {
+  const map = new Map();
+  list.forEach((item) => {
+       const key = keyGetter(item);
+       const collection = map.get(key);
+       if (!collection) {
+           map.set(key, [item]);
+       } else {
+           collection.push(item);
+       }
+  });
+  return map;
+}
+
+async function statistics(accessKey) {
+  const response = await fetch("http://capstone-api.wburklund.com/statistics", {
+    headers: {
+      'X-API-KEY': accessKey
+    },
+  }).then(response => response.json());
+  return response;
+}
+
 const Line = LineSeriesCanvas;
 
 class Report extends React.Component {
+
+  componentDidMount() {
+    statistics(this.props.accessKey).then(stats => {
+      let causeGroups = groupBy(stats, (x) => x[0].Cause);
+      let displayStats = {}
+
+      for (let key of causeGroups.keys()) {
+        let groupData = causeGroups.get(key).map(d => ({ x: new Date(d[0].Date), y: d[1]}));
+        groupData.sort((a, b) => b.x - a.x)
+        displayStats[key] = groupData
+      }
+
+      console.log(causeGroups)
+      console.log(displayStats)
+      
+      return this.setState({'stats': displayStats})
+    })
+  }
+
   render() {
     return (
       <Segment placeholder style={{ height: '100%', width: '100%', paddingTop: '15px' }}>
@@ -58,19 +101,27 @@ class Report extends React.Component {
           />
           <Line
             className="first-series"
-            data={[{ x: new Date('01/01/2021'), y: 30 }, { x: new Date('01/15/2021'), y: 40 }, { x: new Date('01/29/2021'), y: 60 }, { x: new Date('02/13/2021'), y: 120 }]}
+            curve={'curveMonotoneX'}
+            data={this.state?.stats['Normal']}
           />
-          <Line className="second-series" data={[{ x: new Date('01/01/2021'), y: 25 }, { x: new Date('01/15/2021'), y: 35 }, { x: new Date('01/29/2021'), y: 55 }, { x: new Date('02/13/2021'), y: 100 }]} />
+          <Line
+            className="second-series"
+            curve={'curveMonotoneX'}
+            data={this.state?.stats['Virus']}
+          />
           <Line
             className="third-series"
             curve={'curveMonotoneX'}
-            data={[{ x: new Date('01/01/2021'), y: 30 }, { x: new Date('01/15/2021'), y: 40 }, { x: new Date('01/29/2021'), y: 60 }, { x: new Date('02/13/2021'), y: 120 }]}
-            strokeDasharray={[7, 3]}
+            data={this.state?.stats['Bacteria']}
           />
-          <Line className="second-series" data={[{ x: new Date('01/01/2021'), y: 10 }, { x: new Date('01/15/2021'), y: 15 }, { x: new Date('01/29/2021'), y: 20 }, { x: new Date('02/13/2021'), y: 25 }]} />
+          <Line
+            className="fourth-series"
+            curve={'curveMonotoneX'}
+            data={this.state?.stats['Smoking']}
+          />
         </XYPlot>
       </Segment>
-    )
+    );
   }
 }
 
