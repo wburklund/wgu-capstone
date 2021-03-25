@@ -17,7 +17,7 @@
 */
 
 import React from 'react';
-import { Segment, Grid, Button } from 'semantic-ui-react';
+import { Segment, Grid, Button, Header, Dropdown } from 'semantic-ui-react';
 import {
   XYPlot,
   XAxis,
@@ -29,6 +29,7 @@ import {
   DiscreteColorLegend,
   Crosshair
 } from 'react-vis';
+import StatisticsDisplay from './StatisticsDisplay';
 
 // https://stackoverflow.com/questions/14446511/most-efficient-method-to-groupby-on-an-array-of-objects
 function groupBy(list, keyGetter) {
@@ -71,7 +72,7 @@ async function statistics(accessKey) {
 
 const initialState = {
   stats: {},
-  nearestX: null
+  nearestX: null,
 }
 
 class Report extends React.Component {
@@ -114,7 +115,7 @@ class Report extends React.Component {
   }
 
   render() {
-    const { stats, nearestX } = this.state;
+    const { stats, nearestX, selectedStat } = this.state;
     let crosshairItems = [];
     if (nearestX) {
       let nearestTime = nearestX.x.getTime();
@@ -152,20 +153,20 @@ class Report extends React.Component {
               />
               <LineSeriesCanvas
                 className="first-series"
-                data={stats['Normal']}
+                data={stats.Normal}
                 onNearestX={x => this.setState({'nearestX': x})}
               />
               <LineSeriesCanvas
                 className="second-series"
-                data={stats['Virus']}
+                data={stats.Virus}
               />
               <LineSeriesCanvas
                 className="third-series"
-                data={stats['Bacteria']}
+                data={stats.Bacteria}
               />
               <LineSeriesCanvas
                 className="fourth-series"
-                data={stats['Smoking']}
+                data={stats.Smoking}
               />
             {nearestX &&
               <Crosshair
@@ -174,12 +175,8 @@ class Report extends React.Component {
                 itemsFormat={items => items.slice(1)} />}              
             </XYPlot>
           </Grid.Column>
-          <Grid.Column style={{ position: 'relative' }}>
-            <div style={{ position: 'absolute', left: '50%', top: '50%', transform: 'translate(-50%, -50%)' }}>
-              <Button>
-                Scan Image
-              </Button>
-            </div>
+          <Grid.Column>
+            <StatisticsDisplay data={stats} />
           </Grid.Column>
         </Grid>
       </Segment>
