@@ -36,6 +36,12 @@ api_key = os.environ['API_KEY']
 model_filename = 'model.h5'
 model = None
 
+def authorize():
+    if not request.headers.get('X-API-KEY'):
+        abort(401)
+    if request.headers.get('X-API-KEY') != api_key:
+        abort(403)
+
 def has_pneumonia(image_data):
     im = Image.open(io.BytesIO(image_data))
     im = im.convert('RGB')
@@ -52,8 +58,7 @@ application = Flask(__name__)
 @application.route('/refresh', methods=['PUT'])
 @cross_origin()
 def refresh():
-    if request.headers.get('X-API-KEY') != api_key:
-        abort(403)
+    authorize()
 
     _refresh()
 
@@ -74,8 +79,7 @@ def _refresh():
 @application.route('/predict', methods=['POST'])
 @cross_origin()
 def predict():
-    if request.headers.get('X-API-KEY') != api_key:
-        abort(403)
+    authorize()
 
     image_data = flask.request.get_data()
     if has_pneumonia(image_data):
@@ -86,8 +90,7 @@ def predict():
 @application.route('/statistics', methods=['GET'])
 @cross_origin()
 def statistics():
-    if request.headers.get('X-API-KEY') != api_key:
-        abort(403)
+    authorize()
 
     dynamodb = boto3.resource('dynamodb')
     table = dynamodb.Table('CapstoneMetadatabase')
@@ -110,8 +113,8 @@ def statistics():
 @application.route('/hello', methods=['GET'])
 @cross_origin()
 def hello():
-    if request.headers.get('X-API-KEY') != api_key:
-        abort(403)
+    authorize()
+    
     return 'Hello, world!'
 
 _refresh()
