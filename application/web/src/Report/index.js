@@ -59,7 +59,7 @@ class Report extends React.Component {
 
   componentDidMount() {
     statistics(this.props.accessKey).then(stats => {
-      let causeGroups = groupBy(stats, (x) => x[0].Cause);
+      let causeGroups = groupBy(stats, x => x[0].Cause);
       let displayStats = {}
 
       for (let key of causeGroups.keys()) {
