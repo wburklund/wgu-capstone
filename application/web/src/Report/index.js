@@ -29,7 +29,7 @@ import {
   DiscreteColorLegend,
   Crosshair
 } from 'react-vis';
-import StatisticsDisplay from './StatisticsDisplay';
+import StatisticalAnalysis from './StatisticalAnalysis';
 
 // https://stackoverflow.com/questions/14446511/most-efficient-method-to-groupby-on-an-array-of-objects
 function groupBy(list, keyGetter) {
@@ -176,7 +176,7 @@ class Report extends React.Component {
             </XYPlot>
           </Grid.Column>
           <Grid.Column>
-            <StatisticsDisplay data={stats} />
+            <StatisticalAnalysis data={stats} />
           </Grid.Column>
         </Grid>
       </Segment>

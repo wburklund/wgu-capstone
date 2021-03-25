@@ -27,12 +27,10 @@ const statisticOptions = [
     {
       text: 'Virus',
       value: 'Virus'
-    },  {
+    },
+    {
       text: 'Bacteria',
       value: 'Bacteria'
-    },  {
-      text: 'Smoking',
-      value: 'Smoking'
     }
 ]
 
@@ -40,7 +38,7 @@ const initialState = {
     selectedStat: 'Normal'
 }
 
-class StatisticsDisplay extends React.Component {
+class StatisticalAnalysis extends React.Component {
     state = initialState
 
     render() {
@@ -62,4 +60,4 @@ class StatisticsDisplay extends React.Component {
     }
 }
 
-export default StatisticsDisplay;
+export default StatisticalAnalysis;
