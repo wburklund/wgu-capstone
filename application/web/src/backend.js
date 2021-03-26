@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const backend = axios.create();
-const apiBaseUrl = "http://capstone-api.wburklund.com";
+const apiBaseUrl = "https://capstone-api.wburklund.com";
 
 let cachedAccessKey = null;
 const getAccessKey = () => cachedAccessKey;

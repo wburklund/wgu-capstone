@@ -27,13 +27,9 @@ resource "aws_route53_record" "capstone_api" {
 
   zone_id = data.aws_route53_zone.domain.zone_id
   name    = "capstone-api.${data.aws_route53_zone.domain.name}"
-  records = ["0.0.0.0"]
+  records = [ aws_lb.capstone_api.dns_name ]
   ttl     = 60
-  type    = "A"
-
-  lifecycle {
-    ignore_changes = [records]
-  }
+  type    = "CNAME"
 }
 
 resource "aws_route53_record" "capstone_pipeline" {

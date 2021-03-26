@@ -17,12 +17,13 @@
 */
 
 resource "aws_autoscaling_group" "capstone_api" {
-  availability_zones   = ["us-east-2a"]
   desired_capacity     = 1
   max_size             = 1
   min_size             = 1
   name                 = "capstone"
   launch_configuration = aws_launch_configuration.capstone_api.name
+  target_group_arns = [ aws_lb_target_group.capstone_api.arn ]
+  vpc_zone_identifier = [ "subnet-cba8aba3" ]
 
   tag {
     key                 = "AmazonECSManaged"
@@ -39,13 +40,45 @@ resource "aws_instance" "capstone_model_run" {
 }
 
 resource "aws_launch_configuration" "capstone_api" {
-  associate_public_ip_address = true
   iam_instance_profile        = aws_iam_instance_profile.capstone_api.name
   image_id                    = "ami-02ef98ccecbf47e86"
   instance_type               = "t3.small"
   name                        = "capstone_api"
   security_groups             = [aws_security_group.capstone_api.id]
   user_data                   = file("assets/capstone_api_user_data.sh")
+}
+
+resource "aws_lb_listener" "capstone_api" {
+  certificate_arn = data.aws_acm_certificate.wildcard.arn
+  load_balancer_arn = aws_lb.capstone_api.arn
+  port = 443
+  protocol = "HTTPS"
+  ssl_policy        = "ELBSecurityPolicy-2016-08"
+
+  default_action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.capstone_api.arn
+  }  
+}
+
+resource "aws_lb_target_group" "capstone_api" {
+  port = 80
+  protocol = "HTTP"
+  vpc_id = "vpc-a99f84c1"
+
+  health_check {
+    path = "/hello"
+    matcher = "401-403"
+  }
+}
+
+resource "aws_lb" "capstone_api" {
+  subnet_mapping {
+    subnet_id = "subnet-cba8aba3"
+  }
+  subnet_mapping {
+    subnet_id = "subnet-df1961a5"
+  }
 }
 
 resource "aws_security_group" "capstone_api" {
