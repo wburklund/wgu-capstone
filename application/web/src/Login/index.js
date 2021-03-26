@@ -19,15 +19,7 @@
 import React from 'react';
 import { Button, Header, Form, Segment, Message } from 'semantic-ui-react';
 import { Redirect } from 'react-router-dom';
-
-async function hello(accessKey) {
-    const response = await fetch("http://capstone-api.wburklund.com/hello", {
-        headers: {
-            'X-API-KEY': accessKey
-        }
-    })
-    return response
-}
+import { login } from '../backend';
 
 class Login extends React.Component {
     state = {}
@@ -40,9 +32,9 @@ class Login extends React.Component {
     }
 
     handleSubmit = () => {
-        hello(this.state.accessKey).then(
+        login(this.state.accessKey).then(
             () => {
-                this.props.setAccessKey(this.state.accessKey)
+                this.props.handleLogin()
                 this.setState({ authSuccess: true })
             },
             () => this.setState({ authError: true })

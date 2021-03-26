@@ -24,16 +24,24 @@ import Report from './Report'
 import Scan from './Scan';
 import React from 'react';
 import { ReactComponent as Athena } from './athena.svg'
+import { getAccessKey, resetAccessKey } from './backend'
 
 class App extends React.Component {
-  setAccessKey = (accessKey) => this.setState({ 'accessKey': accessKey });
+  handleLogin() {
+    this.forceUpdate()
+  }
+
+  handleLogout() {
+    resetAccessKey();
+    this.forceUpdate();
+  }
 
   render() {
     return (
       <div className="App">
         <Grid style={{ width: '100vw' }}>
           <Grid.Row style={{ width: '100vw', height: '95vh', paddingTop: 0, paddingBottom: 0 }}>
-            {/* {this.state?.accessKey && */
+            {getAccessKey() &&
               <span style={{ position: 'relative' }}>
                 <Menu size="large" className="fixed" style={{ height: '52px' }}>
                   <Athena style={{ width: '50px', height: '50px', position: 'absolute', left: '50vw', transform: 'translate(-50%, 0)' }} />
@@ -44,23 +52,25 @@ class App extends React.Component {
                   <Menu className="right">
                     <Link className="item" to="/about">About</Link>
                     <a className="item" href="mailto:waburklund@gmail.com">Contact</a>
-                    <Link className="item" to="/" onClick={() => this.setAccessKey(null)}>Logout</Link>
+                    <Link className="item" to="/" onClick={() => this.handleLogout()}>Logout</Link>
                   </Menu>
                 </Menu>
               </span>
             }
             <Switch>
               <Route path="/login">
-                <Login setAccessKey={this.setAccessKey} />
+                <Login handleLogin={() => this.handleLogin()} />
               </Route>
-              <Route path="/scan">
-                {this.state?.accessKey == null && <Redirect to={"/login"} />}
-                <Scan accessKey={this.state?.accessKey} />
-              </Route>
-              <Route path="/report">
-                {this.state?.accessKey == null && <Redirect to={"/login"} />}
-                <Report accessKey={this.state?.accessKey} />
-              </Route>
+              {getAccessKey() &&
+                <>
+                  <Route path="/scan">
+                    <Scan />
+                  </Route>
+                  <Route path="/report">
+                    <Report />
+                  </Route>
+                </>
+              }
               <Route>
                 <Redirect to="/login" />
               </Route>

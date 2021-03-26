@@ -20,6 +20,7 @@ import React from 'react';
 import { Segment, Grid } from 'semantic-ui-react';
 import StatisticalAnalysis from './StatisticalAnalysis';
 import StatisticsPlot from './StatisticsPlot';
+import { statistics } from '../backend';
 
 // https://stackoverflow.com/questions/14446511/most-efficient-method-to-groupby-on-an-array-of-objects
 function groupBy(list, keyGetter) {
@@ -51,15 +52,6 @@ function getDateRange(startDate, endDate) {
   return dateRange
 }
 
-async function statistics(accessKey) {
-  const response = await fetch("http://capstone-api.wburklund.com/statistics", {
-    headers: {
-      'X-API-KEY': accessKey
-    },
-  }).then(response => response.json());
-  return response;
-}
-
 const initialState = {
   stats: {},
   nearestX: null,
@@ -69,7 +61,7 @@ class Report extends React.Component {
   state = initialState
 
   componentDidMount() {
-    statistics(this.props.accessKey).then(stats => {
+    statistics().then(stats => {
       // Parse dates
       for (let stat of stats) {
         stat[0].Date = (new Date(stat[0].Date)).getTime()

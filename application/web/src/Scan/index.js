@@ -19,18 +19,7 @@
 import React from 'react';
 import { Button, Header, Image, Segment, Grid, Input, Dimmer, Loader, Icon } from 'semantic-ui-react';
 import Xray from './x-ray.png'
-
-async function predict(accessKey, file) {
-  let fullFile = await file.arrayBuffer();
-  const response = await fetch("http://capstone-api.wburklund.com/predict", {
-    headers: {
-      'X-API-KEY': accessKey
-    },
-    method: 'POST',
-    body: fullFile
-  }).then(response => response.text());
-  return response;
-}
+import { predict } from '../backend';
 
 class Scan extends React.Component {
   handleFileChange = async (event) => {
@@ -41,7 +30,7 @@ class Scan extends React.Component {
 
   handleScanButtonClick = async () => {
     this.setState({'scanning': true})
-    let resp = await predict(this.props.accessKey, this.state.image)
+    let resp = await predict(this.state.image)
     this.setState({'scanResult': resp, 'scanning': false})
   }
 
