@@ -17,7 +17,7 @@
 */
 
 import React from 'react';
-import { Button, Header, Image, Segment, Grid, Input, Dimmer, Loader } from 'semantic-ui-react';
+import { Button, Header, Image, Segment, Grid, Input, Dimmer, Loader, Icon } from 'semantic-ui-react';
 import Xray from './x-ray.png'
 
 async function predict(accessKey, file) {
@@ -50,11 +50,21 @@ class Scan extends React.Component {
       switch(this.state?.scanResult) {
         case undefined:
         case null:
-          return "Click the button below to scan this image."
+          return <Header>Click the button below to scan this image.</Header>
         case 'Normal':
-          return "The scan did not find signs of pneumonia."
+          return (
+            <>
+              <Icon name='check square' color='green' size='massive' />
+              <Header style={{color: 'green'}}>The scan did not find signs of pneumonia.</Header>
+            </>
+          )
         case 'Pneumonia':
-          return "The scan found signs of pneumonia."
+          return (
+            <>
+              <Icon name='warning sign' color='red' size='massive' />
+              <Header style={{color: 'red'}}>The scan found signs of pneumonia.</Header>
+            </>
+          )
       }
     }
 
@@ -64,7 +74,7 @@ class Scan extends React.Component {
               <>
                 <Header icon>
                   <Image src={Xray} />
-                  <br></br>
+                  <br />
                   Please upload a chest X-ray image.
                 </Header>
                 <Button as='label' color='blue' htmlFor='fileInput'>Select Image</Button>
@@ -81,7 +91,7 @@ class Scan extends React.Component {
                 </Grid.Column>
                 <Grid.Column style={{position: 'relative'}}>
                   <div style={{position: 'absolute', left: '50%', top: '50%', transform: 'translate(-50%, -50%)'}}>
-                  <Header>{getScanMessage()}</Header>
+                    {getScanMessage()}
                   {this.state?.scanResult == null ?
                     <Button onClick={this.handleScanButtonClick}>
                       Scan Image
