@@ -93,6 +93,7 @@ class Report extends React.Component {
         let fullGroupData = new Map([...defaultValues, ...groupData])
         let groupStats = [...fullGroupData]
         groupStats.sort()
+        groupStats = groupStats.slice(1)
         // Display actual dates
         let displayGroupStats = groupStats.map(d => ({ x: new Date(d[0]), y: d[1] }));
         displayStats[key] = displayGroupStats
