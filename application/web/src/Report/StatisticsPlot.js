@@ -45,8 +45,8 @@ class StatisticsPlot extends React.Component {
       let nearestTime = nearestX.x.getTime();
       crosshairItems.push({ title: 'Date', value: nearestX.x.toDateString(), x: nearestX.x })
       crosshairItems.push({ title: 'Normal', value: data.Normal.find(e => e.x.getTime() === nearestTime)?.y });
-      crosshairItems.push({ title: 'Bacteria', value: data.Bacteria.find(e => e.x.getTime() === nearestTime)?.y });
-      crosshairItems.push({ title: 'Virus', value: data.Virus.find(e => e.x.getTime() === nearestTime)?.y });
+      crosshairItems.push({ title: 'Viral Pneumonia', value: data.Virus.find(e => e.x.getTime() === nearestTime)?.y });
+      crosshairItems.push({ title: 'Bacterial Pneumonia', value: data.Bacteria.find(e => e.x.getTime() === nearestTime)?.y });
     }
 
     return (

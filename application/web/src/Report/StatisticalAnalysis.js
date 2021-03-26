@@ -25,11 +25,11 @@ const statisticOptions = [
     value: 'Normal'
   },
   {
-    text: 'Virus',
+    text: 'Viral Pneumonia',
     value: 'Virus'
   },
   {
-    text: 'Bacteria',
+    text: 'Bacterial Pneumonia',
     value: 'Bacteria'
   }
 ]
@@ -48,7 +48,6 @@ class StatisticalAnalysis extends React.Component {
     if (!selectedData) {
       return <div />
     }
-    let mean = selectedData.reduce((a, d) => a + d.y, 0) / selectedData.length
 
     let sortData = [...selectedData]
     sortData.sort((a, b) => a.y - b.y)
@@ -62,10 +61,14 @@ class StatisticalAnalysis extends React.Component {
     } else {
       median = sortData[midIndex].y
     }
-    let min = sortData[0].y
-    let max = sortData[sortData.length - 1].y
     let q1 = sortData[q1Index].y
     let q3 = sortData[q3Index].y
+    let min = sortData[0].y
+    let max = sortData[sortData.length - 1].y
+
+    let mean = selectedData.reduce((a, d) => a + d.y, 0) / selectedData.length
+    let variance = selectedData.reduce((a, d) => a + Math.pow(d.y - mean, 2), 0) / (selectedData.length - 1) 
+    let standardDeviation = Math.sqrt(variance)
 
     return (
       <React.Fragment>
@@ -87,38 +90,51 @@ class StatisticalAnalysis extends React.Component {
             <List celled size="big">
               <List.Item>
                 <List.Content>
-                  <List.Header>Mean</List.Header>
-                  {mean.toFixed(2)} cases/day
-                    </List.Content>
-              </List.Item>
-              <List.Item>
-                <List.Content>
                   <List.Header>Median</List.Header>
                   {median.toFixed(2)} cases/day
-                    </List.Content>
-              </List.Item>
-              <List.Item>
-                <List.Content>
-                  <List.Header>Range</List.Header>
-                  {min}-{max} cases/day
-                    </List.Content>
+                </List.Content>
               </List.Item>
               <List.Item>
                 <List.Content>
                   <List.Header>First Quartile</List.Header>
                   {q1} cases/day
-                    </List.Content>
+                </List.Content>
               </List.Item>
               <List.Item>
                 <List.Content>
                   <List.Header>Third Quartile</List.Header>
                   {q3} cases/day
-                    </List.Content>
+                </List.Content>
               </List.Item>
+              <List.Item>
+                <List.Content>
+                  <List.Header>Range</List.Header>
+                  {min}-{max} cases/day
+                </List.Content>
+              </List.Item>              
             </List>
           </Grid.Column>
           <Grid.Column>
-            {JSON.stringify(data[selectedStat].slice(0, 20))}
+            <List celled size="big">
+              <List.Item>
+                <List.Content>
+                  <List.Header>Mean</List.Header>
+                  {mean.toFixed(2)} cases/day
+                </List.Content>
+              </List.Item>
+              <List.Item>
+                <List.Content>
+                  <List.Header>Variance</List.Header>
+                  {variance.toFixed(2)} (cases/day)²
+                </List.Content>
+              </List.Item> 
+              <List.Item>
+                <List.Content>
+                  <List.Header>Standard Deviation</List.Header>
+                  {standardDeviation.toFixed(2)} cases/day
+                </List.Content>
+              </List.Item>              
+            </List>
           </Grid.Column>
         </Grid>
 
