@@ -19,3 +19,9 @@
 data "aws_acm_certificate" "wildcard" {
   domain = "wburklund.com"
 }
+
+data "aws_acm_certificate" "wildcard_useast1" {
+  provider = aws.us_east_1
+
+  domain = "wburklund.com"
+}

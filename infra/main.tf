@@ -45,3 +45,26 @@ variable "api_key" {
   sensitive = true
   type      = string
 }
+
+variable "upload_directory" {
+  default = "../application/web/build/"
+}
+
+variable "mime_types" {
+  default = {
+    css   = "text/css"
+    eot   = "application/vnd.ms-fontobject"
+    htm   = "text/html"
+    html  = "text/html"
+    jpg   = "image/jpeg"
+    js    = "application/javascript"
+    json  = "application/json"
+    map   = "application/javascript"
+    png   = "image/png"
+    svg   = "image/svg+xml"
+    ttf   = "font/ttf"
+    txt   = "text/plain"
+    woff  = "application/x-font-woff"
+    woff2 = "font/woff2"
+  }
+}

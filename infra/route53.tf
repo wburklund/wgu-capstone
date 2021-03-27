@@ -45,3 +45,17 @@ resource "aws_route53_record" "capstone_pipeline" {
     evaluate_target_health = true
   }
 }
+
+resource "aws_route53_record" "capstone_web" {
+    provider = aws.us_east_1
+
+    name = "capstone.${data.aws_route53_zone.domain.name}"
+    type = "A"
+    zone_id = data.aws_route53_zone.domain.zone_id
+
+    alias {
+        evaluate_target_health = false
+        name = aws_cloudfront_distribution.capstone_web.domain_name
+        zone_id = aws_cloudfront_distribution.capstone_web.hosted_zone_id
+    }
+}

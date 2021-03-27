@@ -85,3 +85,33 @@ resource "aws_s3_bucket" "capstone_web_assets" {
     enabled = true
   }
 }
+
+resource "aws_s3_bucket_object" "capstone_web_assets" {
+    for_each = fileset(var.upload_directory, "**/*.*")
+
+    bucket = aws_s3_bucket.capstone_web_assets.bucket
+    key = replace(each.value, var.upload_directory, "")
+    source = "${var.upload_directory}${each.value}"
+    etag = filemd5("${var.upload_directory}${each.value}")
+    content_type  = lookup(var.mime_types, split(".", each.value)[length(split(".", each.value)) - 1])
+}
+
+resource "aws_s3_bucket_policy" "capstone_web_assets" {
+  bucket = aws_s3_bucket.capstone_web_assets.bucket
+
+  policy = <<EOF
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Principal": {
+                "AWS": "arn:aws:iam::cloudfront:user/CloudFront Origin Access Identity ${aws_cloudfront_origin_access_identity.capstone_web.id}"
+            },
+            "Action": "s3:GetObject",
+            "Resource": "${aws_s3_bucket.capstone_web_assets.arn}/*"
+        }
+    ]
+}
+EOF
+}
