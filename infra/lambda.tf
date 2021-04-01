@@ -129,8 +129,10 @@ resource "aws_lambda_function" "stage5_deploy" {
 
   environment {
     variables = {
+      "api_key"            = var.api_key,
       "destination_bucket" = aws_s3_bucket.capstone_api_assets.bucket,
       "model_key"          = "model.h5",
+      "refresh_url"        = "https://capstone-api.wburklund.com/refresh",
       "source_bucket"      = aws_s3_bucket.capstone_deploy_artifacts.bucket
     }
   }

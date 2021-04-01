@@ -21,6 +21,7 @@ package main
 import (
 	"context"
 	"fmt"
+	"net/http"
 	"net/url"
 	"os"
 
@@ -32,11 +33,12 @@ import (
 )
 
 func HandleRequest(ctx context.Context, request events.APIGatewayProxyRequest) (string, error) {
-	// TODO: Trigger model refresh on API server
-
 	sourceBucket := os.Getenv("source_bucket")
 	key := os.Getenv("model_key")
 	destinationBucket := os.Getenv("destination_bucket")
+
+	apiKey := os.Getenv("api_key")
+	refreshUrl := os.Getenv("refresh_url")
 
 	sess, err := session.NewSession()
 	svc := s3.New(sess)
@@ -52,6 +54,11 @@ func HandleRequest(ctx context.Context, request events.APIGatewayProxyRequest) (
 		fmt.Fprintf(os.Stderr, "Error occurred while waiting for item %q to be copied to bucket %q, %v\n", key, destinationBucket, err)
 		os.Exit(1)
 	}
+
+	client := &http.Client{}
+	req, _ := http.NewRequest("PUT", refreshUrl, nil)
+	req.Header.Set("X-API-KEY", apiKey)	
+	res, _ := client.Do(req)
 
 	return fmt.Sprintf("Deploy successful."), nil
 }
