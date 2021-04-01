@@ -87,13 +87,13 @@ resource "aws_s3_bucket" "capstone_web_assets" {
 }
 
 resource "aws_s3_bucket_object" "capstone_web_assets" {
-    for_each = fileset(var.upload_directory, "**/*.*")
+  for_each = fileset(var.upload_directory, "**/*.*")
 
-    bucket = aws_s3_bucket.capstone_web_assets.bucket
-    key = replace(each.value, var.upload_directory, "")
-    source = "${var.upload_directory}${each.value}"
-    etag = filemd5("${var.upload_directory}${each.value}")
-    content_type  = lookup(var.mime_types, split(".", each.value)[length(split(".", each.value)) - 1])
+  bucket       = aws_s3_bucket.capstone_web_assets.bucket
+  key          = replace(each.value, var.upload_directory, "")
+  source       = "${var.upload_directory}${each.value}"
+  etag         = filemd5("${var.upload_directory}${each.value}")
+  content_type = lookup(var.mime_types, split(".", each.value)[length(split(".", each.value)) - 1])
 }
 
 resource "aws_s3_bucket_policy" "capstone_web_assets" {

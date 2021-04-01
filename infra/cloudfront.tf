@@ -17,57 +17,64 @@
 */
 
 resource "aws_cloudfront_distribution" "capstone_web" {
-    aliases = [
-        "capstone.wburklund.com"
+  aliases = [
+    "capstone.wburklund.com"
+  ]
+  default_root_object = "index.html"
+  enabled             = true
+  is_ipv6_enabled     = true
+  price_class         = "PriceClass_100"
+
+  custom_error_response {
+    error_caching_min_ttl = 10
+    error_code            = 403
+    response_code         = 200
+    response_page_path    = "/index.html"
+  }
+
+  default_cache_behavior {
+    allowed_methods = [
+      "GET",
+      "HEAD",
     ]
-    default_root_object = "index.html"
-    enabled = true
-    is_ipv6_enabled = true
-    price_class = "PriceClass_100"
+    cached_methods = [
+      "GET",
+      "HEAD",
+    ]
+    target_origin_id       = "capstone.wburklund.com"
+    viewer_protocol_policy = "redirect-to-https"
 
-    default_cache_behavior {
-        allowed_methods = [
-            "GET",
-            "HEAD",
-        ]
-        cached_methods = [
-            "GET",
-            "HEAD",
-        ]
-        target_origin_id = "capstone.wburklund.com"
-        viewer_protocol_policy = "redirect-to-https"
-
-        forwarded_values {
-            cookies {
-                forward = "none"
-            }
-            query_string = false
-        }
+    forwarded_values {
+      cookies {
+        forward = "none"
+      }
+      query_string = false
     }
+  }
 
-    origin {
-        domain_name = "${aws_s3_bucket.capstone_web_assets.bucket}.s3.amazonaws.com"
-        origin_id = "capstone.wburklund.com"
+  origin {
+    domain_name = "${aws_s3_bucket.capstone_web_assets.bucket}.s3.amazonaws.com"
+    origin_id   = "capstone.wburklund.com"
 
-        s3_origin_config {
-            origin_access_identity = aws_cloudfront_origin_access_identity.capstone_web.cloudfront_access_identity_path
-        }
+    s3_origin_config {
+      origin_access_identity = aws_cloudfront_origin_access_identity.capstone_web.cloudfront_access_identity_path
     }
+  }
 
-    restrictions {
-        geo_restriction {
-          restriction_type = "none"
-        }
+  restrictions {
+    geo_restriction {
+      restriction_type = "none"
     }
+  }
 
-    viewer_certificate {
-        acm_certificate_arn = data.aws_acm_certificate.wildcard_useast1.arn
-        cloudfront_default_certificate = false
-        minimum_protocol_version = "TLSv1.2_2019"
-        ssl_support_method = "sni-only"
-    }
+  viewer_certificate {
+    acm_certificate_arn            = data.aws_acm_certificate.wildcard_useast1.arn
+    cloudfront_default_certificate = false
+    minimum_protocol_version       = "TLSv1.2_2019"
+    ssl_support_method             = "sni-only"
+  }
 }
 
 resource "aws_cloudfront_origin_access_identity" "capstone_web" {
-    comment = "access-identity-"
+  comment = "access-identity-"
 }
