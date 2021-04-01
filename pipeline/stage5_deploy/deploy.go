@@ -58,7 +58,7 @@ func HandleRequest(ctx context.Context, request events.APIGatewayProxyRequest) (
 	client := &http.Client{}
 	req, _ := http.NewRequest("PUT", refreshUrl, nil)
 	req.Header.Set("X-API-KEY", apiKey)	
-	res, _ := client.Do(req)
+	_, _ := client.Do(req)
 
 	return fmt.Sprintf("Deploy successful."), nil
 }
