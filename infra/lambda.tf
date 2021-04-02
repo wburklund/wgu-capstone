@@ -125,7 +125,7 @@ resource "aws_lambda_function" "stage5_deploy" {
   s3_bucket        = data.aws_s3_bucket.capstone_code_store.bucket
   s3_key           = "stage5_deploy.zip"
   source_code_hash = chomp(data.aws_s3_bucket_object.stage5_deploy_hash.body)
-  timeout          = 10
+  timeout          = 120
 
   environment {
     variables = {
