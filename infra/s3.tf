@@ -115,3 +115,8 @@ resource "aws_s3_bucket_policy" "capstone_web_assets" {
 }
 EOF
 }
+
+resource "aws_s3_account_public_access_block" "capstone_account_level_block" {
+  block_public_acls   = true
+  block_public_policy = true
+}
