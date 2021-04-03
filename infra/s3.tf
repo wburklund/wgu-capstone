@@ -54,24 +54,73 @@ data "aws_s3_bucket_object" "stage5_deploy_hash" {
   key    = "stage5_deploy.zip.sha256.txt"
 }
 
+resource "aws_kms_key" "capstone" {
+  description = "Capstone"
+}
+
 resource "aws_s3_bucket" "capstone_model_input" {
   bucket = "capstone-model-input"
+
+  server_side_encryption_configuration {
+    rule {
+      apply_server_side_encryption_by_default {
+        kms_master_key_id = aws_kms_key.capstone.arn
+        sse_algorithm     = "aws:kms"
+      }
+    }
+  }  
 }
 
 resource "aws_s3_bucket" "capstone_model_output" {
   bucket = "capstone-model-output"
+
+  server_side_encryption_configuration {
+    rule {
+      apply_server_side_encryption_by_default {
+        kms_master_key_id = aws_kms_key.capstone.arn
+        sse_algorithm     = "aws:kms"
+      }
+    }
+  }    
 }
 
 resource "aws_s3_bucket" "capstone_deploy_artifacts" {
   bucket = "capstone-deploy-artifacts"
+
+  server_side_encryption_configuration {
+    rule {
+      apply_server_side_encryption_by_default {
+        kms_master_key_id = aws_kms_key.capstone.arn
+        sse_algorithm     = "aws:kms"
+      }
+    }
+  }    
 }
 
 resource "aws_s3_bucket" "capstone_pipeline_lambdas" {
   bucket = "capstone-pipeline-lambdas"
+
+  server_side_encryption_configuration {
+    rule {
+      apply_server_side_encryption_by_default {
+        kms_master_key_id = aws_kms_key.capstone.arn
+        sse_algorithm     = "aws:kms"
+      }
+    }
+  }    
 }
 
 resource "aws_s3_bucket" "capstone_api_assets" {
   bucket = "capstone-api-assets"
+  
+  server_side_encryption_configuration {
+    rule {
+      apply_server_side_encryption_by_default {
+        kms_master_key_id = aws_kms_key.capstone.arn
+        sse_algorithm     = "aws:kms"
+      }
+    }
+  }
 
   versioning {
     enabled = true
@@ -80,6 +129,15 @@ resource "aws_s3_bucket" "capstone_api_assets" {
 
 resource "aws_s3_bucket" "capstone_web_assets" {
   bucket = "capstone-web-assets"
+
+  server_side_encryption_configuration {
+    rule {
+      apply_server_side_encryption_by_default {
+        kms_master_key_id = aws_kms_key.capstone.arn
+        sse_algorithm     = "aws:kms"
+      }
+    }
+  }  
 
   versioning {
     enabled = true
