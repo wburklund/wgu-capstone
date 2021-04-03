@@ -54,18 +54,13 @@ data "aws_s3_bucket_object" "stage5_deploy_hash" {
   key    = "stage5_deploy.zip.sha256.txt"
 }
 
-resource "aws_kms_key" "capstone" {
-  description = "Capstone"
-}
-
 resource "aws_s3_bucket" "capstone_model_input" {
   bucket = "capstone-model-input"
 
   server_side_encryption_configuration {
     rule {
       apply_server_side_encryption_by_default {
-        kms_master_key_id = aws_kms_key.capstone.arn
-        sse_algorithm     = "aws:kms"
+        sse_algorithm     = "AES256"
       }
     }
   }  
@@ -77,8 +72,7 @@ resource "aws_s3_bucket" "capstone_model_output" {
   server_side_encryption_configuration {
     rule {
       apply_server_side_encryption_by_default {
-        kms_master_key_id = aws_kms_key.capstone.arn
-        sse_algorithm     = "aws:kms"
+        sse_algorithm     = "AES256"
       }
     }
   }    
@@ -90,8 +84,7 @@ resource "aws_s3_bucket" "capstone_deploy_artifacts" {
   server_side_encryption_configuration {
     rule {
       apply_server_side_encryption_by_default {
-        kms_master_key_id = aws_kms_key.capstone.arn
-        sse_algorithm     = "aws:kms"
+        sse_algorithm     = "AES256"
       }
     }
   }    
@@ -103,8 +96,7 @@ resource "aws_s3_bucket" "capstone_pipeline_lambdas" {
   server_side_encryption_configuration {
     rule {
       apply_server_side_encryption_by_default {
-        kms_master_key_id = aws_kms_key.capstone.arn
-        sse_algorithm     = "aws:kms"
+        sse_algorithm     = "AES256"
       }
     }
   }    
@@ -116,8 +108,7 @@ resource "aws_s3_bucket" "capstone_api_assets" {
   server_side_encryption_configuration {
     rule {
       apply_server_side_encryption_by_default {
-        kms_master_key_id = aws_kms_key.capstone.arn
-        sse_algorithm     = "aws:kms"
+        sse_algorithm     = "AES256"
       }
     }
   }
@@ -133,8 +124,7 @@ resource "aws_s3_bucket" "capstone_web_assets" {
   server_side_encryption_configuration {
     rule {
       apply_server_side_encryption_by_default {
-        kms_master_key_id = aws_kms_key.capstone.arn
-        sse_algorithm     = "aws:kms"
+        sse_algorithm     = "AES256"
       }
     }
   }  
