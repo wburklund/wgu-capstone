@@ -46,7 +46,7 @@ int main() {
 	// Calculate begin and end range of times a record may be augmented with
 	time_t now = time(nullptr);
 	time_t end = round_next_day(now);
-	time_t begin = end - (30 * SECONDS_PER_DAY);
+	time_t begin = end - (35 * SECONDS_PER_DAY);
 
 	// Seed random number generator with the current time
 	srand(now);
@@ -78,9 +78,10 @@ time_t round_next_day(time_t time) {
 
 // Select a random time_t (aka "long long") between begin and end
 time_t random_time(time_t begin, time_t end) {
-	int diff_seconds = (int)difftime(end, begin);
-	int random_diff = rand32() % diff_seconds;
-	return begin + random_diff;
+	long long diff_seconds = (long long)difftime(end, begin);
+	diff_seconds = pow(diff_seconds, 1.25);
+	long long random_diff = rand32() % diff_seconds;
+	return begin + pow(random_diff, 0.8);
 }
 
 // We need 32 bits of randomness. rand() is only specified to return 16 bits...
