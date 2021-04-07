@@ -16,7 +16,6 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-import './App.css';
 import { Switch, Link, Route, Redirect } from 'react-router-dom'
 import { Menu, Grid } from 'semantic-ui-react';
 import Login from './Login';
