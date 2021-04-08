@@ -49,7 +49,7 @@ class App extends React.Component {
                     <Link className="item" to="/report">Report</Link>
                   </Menu>
                   <Menu className="right">
-                    <a className="item" href="mailto:waburklund@gmail.com">Contact</a>
+                    <a className="item" href="mailto:wburkl1@wgu.edu">Contact</a>
                     <Link className="item" to="/" onClick={() => this.handleLogout()}>Logout</Link>
                   </Menu>
                 </Menu>
