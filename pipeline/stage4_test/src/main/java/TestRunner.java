@@ -86,7 +86,7 @@ public class TestRunner {
             {
                 String correctLabel = fileLabels.get(nextLine[0]);
                 int column = labelDictionary.get(correctLabel);
-                totalScore += Double.parseDouble(nextLine[column]);
+                totalScore += Double.parseDouble(nextLine[column]) > 0.5 ? 1 : 0;
                 totalPredictions += 1;
             }
         } catch (IOException e) {
