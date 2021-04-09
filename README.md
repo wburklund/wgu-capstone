@@ -31,7 +31,7 @@
 
 ## About The Project
 
-<img src="./images/MLOps_Pipeline.png" alt="Pipeline" width="1224" height="800">
+<img src="./images/MLOps_Pipeline.png" alt="Pipeline" width="840" height="550">
 
 For my Bachelor of Science in Computer Science capstone project, I decided to apply the Inception-v4 network to scan chest X-ray images for pneumonia. I used this project as a trial run for creating a production-grade machine learning system. As such, the project includes a 5-stage MLOps pipeline implemented in AWS as well as a simple web application.
 
