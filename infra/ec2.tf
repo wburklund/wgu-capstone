@@ -32,6 +32,8 @@ resource "aws_autoscaling_group" "capstone_api" {
   }
 }
 
+resource "aws_ebs_encryption_by_default" "capstone" {}
+
 resource "aws_instance" "capstone_model_run" {
   ami                  = "ami-0a714e270d06489a9"
   iam_instance_profile = aws_iam_instance_profile.capstone_model_run.name
